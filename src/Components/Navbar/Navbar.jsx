@@ -128,32 +128,6 @@ const Navbar = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {categories.map((category) => (
-          <Box key={category.id}>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handleCategoryClick(category)}>
-                <ListItemText primary={category.name} />
-              </ListItemButton>
-            </ListItem>
-            {expandedCategory === category && (
-              <List component="div" disablePadding>
-                {category.subcategories.map((subcategory) => (
-                  <ListItemButton
-                    key={subcategory.id}
-                    sx={{ pl: 4 }}
-                    onClick={() => {
-                      navigate(`/category/${category.id}/${subcategory.id}`);
-                      setMobileDrawerOpen(false);
-                    }}
-                  >
-                    <ListItemText primary={subcategory.name} />
-                  </ListItemButton>
-                ))}
-              </List>
-            )}
-          </Box>
-        ))}
-        <Divider />
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             navigate('/profile');
@@ -215,9 +189,11 @@ const Navbar = () => {
       <Toolbar sx={{ 
         justifyContent: 'space-between',
         flexDirection: 'row',
-        padding: isMobile ? '0 8px' : '0 16px'
+        padding: isMobile ? '0 8px' : '0 16px',
+        position: 'relative',
+        minHeight: isMobile ? '64px' : '64px'
       }}>
-        {/* Logo */}
+        {/* Logo - Start (Right) */}
         <Box 
           component="img"
           src={zuziLogo}
@@ -226,36 +202,79 @@ const Navbar = () => {
             width: isMobile ? '40px' : '50px',
             height: 'auto',
             borderRadius: '10%',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            zIndex: 2
           }}
           onClick={() => navigate('/')}
         />
 
-        {/* Mobile Icons */}
+        {/* Mobile Icons - End (Left) */}
         {isMobile && (
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
-            gap: 2,
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)'
+            gap: 1,
+            zIndex: 2
           }}>
             <IconButton onClick={handleNotificationsOpen}>
               <Badge badgeContent={3} color="error">
                 <NotificationsIcon sx={{ color: colors.secondary }} />
               </Badge>
             </IconButton>
-
             <IconButton onClick={() => navigate('/chat')}>
               <Badge badgeContent={2} color="error">
                 <ChatIcon sx={{ color: colors.secondary }} />
               </Badge>
             </IconButton>
+            <IconButton onClick={toggleDrawer(true)}>
+              <MenuIcon sx={{ color: colors.secondary }} />
+            </IconButton>
           </Box>
         )}
 
-        {/* Categories - Hidden on Mobile */}
+        {/* Categories - Mobile Horizontal Scroll */}
+        {isMobile && (
+          <Box sx={{ 
+            display: 'flex', 
+            overflowX: 'auto',
+            gap: 1,
+            position: 'absolute',
+            top: '64px',
+            left: 0,
+            right: 0,
+            padding: '8px',
+            backgroundColor: 'white',
+            zIndex: 1,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none'
+          }}>
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                onClick={() => navigate(`/category/${category.id}`)}
+                sx={{
+                  color: activeCategory === category.id ? colors.primary : colors.secondary,
+                  fontSize: '0.9rem',
+                  fontWeight: activeCategory === category.id ? 700 : 400,
+                  whiteSpace: 'nowrap',
+                  minWidth: 'auto',
+                  padding: '6px 12px',
+                  '&:hover': {
+                    color: colors.primary
+                  }
+                }}
+              >
+                {category.name}
+              </Button>
+            ))}
+          </Box>
+        )}
+
+        {/* Categories - Desktop */}
         {!isMobile && (
           <Box sx={{ display: 'flex', gap: 1 }}>
             {categories.map((category) => (
@@ -277,7 +296,7 @@ const Navbar = () => {
           </Box>
         )}
 
-        {/* Profile, Notifications, and Chat - Hidden on Mobile */}
+        {/* Profile, Notifications, and Chat - Desktop */}
         {!isMobile && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton onClick={handleNotificationsOpen}>
@@ -298,18 +317,6 @@ const Navbar = () => {
               </Avatar>
             </IconButton>
           </Box>
-        )}
-
-        {/* Mobile Menu Button */}
-        {isMobile && (
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon sx={{ color: colors.secondary }} />
-          </IconButton>
         )}
 
         {/* Mobile Drawer */}
