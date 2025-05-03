@@ -1,16 +1,23 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActionArea,
+  Button,
+} from '@mui/material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
 
 const Subcategory = () => {
-  const { categoryId, subcategoryId } = useParams();
+  const { categoryId } = useParams();
   const navigate = useNavigate();
-  
-  // In a real app, you would fetch items based on categoryId and subcategoryId
-  // For now, we'll use sample data
+
   const items = sampleListings[categoryId] || [];
 
   const handleItemClick = (itemId) => {
@@ -18,21 +25,135 @@ const Subcategory = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        direction: 'rtl', // RTL layout
+        fontFamily: '"Arial", sans-serif',
+      }}
+    >
       <Navbar />
-      
-      <Box sx={{ 
-        flex: 1, 
-        p: { xs: 2, sm: 3, md: 4 }, 
-        maxWidth: '1400px', 
-        margin: '0 auto', 
-        width: '100%',
-        backgroundColor: '#f8f9fa'
-      }}>
-        
-        
-        <Grid 
-          container 
+
+      {/* סרגל סינון */}
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          backgroundColor: '#ffffff',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+          p: { xs: 2, sm: 3 },
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            mb: 2,
+            color: '#333',
+          }}
+        >
+          סינון
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            alignItems: 'center',
+          }}
+        >
+          <Box sx={{ flex: 1, minWidth: 200 }}>
+            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+              כותרת
+            </Typography>
+            <input
+              type="text"
+              placeholder="חפש לפי כותרת..."
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '14px',
+                direction: 'rtl',
+              }}
+            />
+          </Box>
+
+          <Box sx={{ flex: 1, minWidth: 150 }}>
+            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+              מחיר
+            </Typography>
+            <select
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '14px',
+                direction: 'rtl',
+              }}
+            >
+              <option value="">הכל</option>
+              <option value="low">מהנמוך לגבוה</option>
+              <option value="high">מהגבוה לנמוך</option>
+            </select>
+          </Box>
+
+          <Box sx={{ flex: 1, minWidth: 200 }}>
+            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+              מיקום
+            </Typography>
+            <input
+              type="text"
+              placeholder="הכנס מיקום..."
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '14px',
+                direction: 'rtl',
+              }}
+            />
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ textTransform: 'none', borderRadius: '8px' }}
+            >
+              חיפוש
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ textTransform: 'none', borderRadius: '8px' }}
+            >
+              איפוס
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* רשימת פריטים */}
+      <Box
+        sx={{
+          flex: 1,
+          p: { xs: 2, sm: 3, md: 4 },
+          maxWidth: '1400px',
+          margin: '0 auto',
+          width: '100%',
+          backgroundColor: '#f8f9fa',
+        }}
+      >
+        <Grid
+          container
           spacing={{ xs: 2, sm: 3, md: 4 }}
           sx={{
             display: 'flex',
@@ -40,19 +161,9 @@ const Subcategory = () => {
           }}
         >
           {items.map((item) => (
-            <Grid 
-              item 
-              xs={12} 
-              sm={6} 
-              md={4}
-              lg={3}
-              key={item.id}
-              sx={{
-                display: 'flex',
-              }}
-            >
-              <Card 
-                sx={{ 
+            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+              <Card
+                sx={{
                   width: '100%',
                   borderRadius: '12px',
                   overflow: 'hidden',
@@ -60,57 +171,56 @@ const Subcategory = () => {
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': {
                     transform: 'translateY(-8px)',
-                    boxShadow: '0 12px 24px rgba(0,0,0,0.12)'
-                  }
+                    boxShadow: '0 12px 24px rgba(0,0,0,0.12)',
+                  },
                 }}
               >
-                <CardActionArea 
+                <CardActionArea
                   onClick={() => handleItemClick(item.id)}
                   sx={{ height: '100%' }}
                 >
                   <CardMedia
                     component="img"
-                    sx={{ 
+                    sx={{
                       aspectRatio: '32/9',
                       objectFit: 'cover',
                     }}
                     image={item.image}
                     alt={item.name}
                   />
-                  <CardContent 
-                    sx={{ 
+                  <CardContent
+                    sx={{
                       p: 1,
                       backgroundColor: '#fff',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 1
+                      gap: 1,
+                      direction: 'rtl',
                     }}
                   >
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
+                    <Typography
+                      variant="h6"
+                      sx={{
                         fontWeight: 600,
                         fontSize: '0.9rem',
                         color: '#222',
-                        flex: 1
+                        flex: 1,
                       }}
                     >
                       {item.name}
                     </Typography>
-                    <Typography 
-                      variant="body2" 
-                      color="text.secondary"
-                      sx={{ 
+                    <Typography
+                      variant="body2"
+                      sx={{
                         fontSize: '0.75rem',
                         fontWeight: 600,
-
                         color: '#222',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
-                        textOverflow: 'ellipsis'
+                        textOverflow: 'ellipsis',
                       }}
                     >
-                      ${item.description}
+                      ₪{item.description}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

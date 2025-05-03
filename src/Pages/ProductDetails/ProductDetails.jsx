@@ -6,7 +6,7 @@ import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ProductCard from '../../Components/ProductDetails/ProductCard';
@@ -88,7 +88,7 @@ const ProductDetails = () => {
       <Navbar />
       
       <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        <Grid container spacing={4}>
+        <Grid container spacing={4}  direction="row-reverse">
           {/* Image Slider */}
           <Grid item xs={12} md={6}>
             <Paper 
@@ -174,94 +174,82 @@ const ProductDetails = () => {
 
           {/* Product Details */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ p: 2 }}>
-              <Typography variant="h4" gutterBottom>
-                {product.name}
-              </Typography>
-              
-              <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-                ${product.price}
-              </Typography>
-              
-              <Typography variant="body1" paragraph>
-                {product.description}
-              </Typography>
-              
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                Location: {product.location}
-              </Typography>
+  <Box sx={{ p: 2 }} dir="rtl">
+    <Typography variant="h4" gutterBottom>
+      {product.name}
+    </Typography>
 
-              {/* Action Buttons */}
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 3,
-                justifyContent: 'center',
-                mt: 4,
-                flexDirection: isMobile ? 'column' : 'row',
-                alignItems: 'center'
-              }}>
-                <Box sx={{ 
-                  display: 'flex', 
-                  gap: 3,
-                  justifyContent: 'center',
-                  width: isMobile ? '100%' : 'auto'
-                }}>
-                  <Tooltip title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-                    <IconButton 
-                      onClick={handleFavorite}
-                      sx={{ 
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                        width: isMobile ? '64px' : 56,
-                        height: isMobile ? '64px' : 56,
-                        '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.08)'
-                        }
-                      }}
-                    >
-                      {isFavorite ? (
-                        <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
-                      ) : (
-                        <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Skip to next product">
-                    <IconButton 
-                      onClick={handleSkip}
-                      sx={{ 
-                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                        width: isMobile ? '64px' : 56,
-                        height: isMobile ? '64px' : 56,
-                        '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.08)'
-                        }
-                      }}
-                    >
-                      <SkipNextIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </Box>
-            </Box>
-          </Grid>
+    <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
+      ${product.price}
+    </Typography>
 
-          {/* Similar Products Section */}
-          {/* <Grid item xs={12}>
-            <Divider sx={{ my: 4 }} />
-            <Typography variant="h5" gutterBottom>
-              Similar Products
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {similarProducts.map((similarProduct) => (
-                <ProductCard
-                  key={similarProduct.id}
-                  product={similarProduct}
-                  onFavorite={handleFavorite}
-                  onSkip={handleSkip}
-                />
-              ))}
-            </Box>
-          </Grid> */}
+    <Typography variant="body1" paragraph>
+      {product.description}
+    </Typography>
+
+    <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+      מיקום: {product.location}
+    </Typography>
+
+    {/* Action Buttons */}
+    <Box
+      sx={{
+        display: 'flex',
+        gap: 3,
+        justifyContent: 'center',
+        mt: 4,
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: 'center',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 3,
+          justifyContent: 'center',
+          width: isMobile ? '100%' : 'auto',
+        }}
+      >
+        <Tooltip title={isFavorite ? "הסר מהמועדפים" : "הוסף למועדפים"}>
+          <IconButton
+            onClick={handleFavorite}
+            sx={{
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              width: isMobile ? '64px' : 56,
+              height: isMobile ? '64px' : 56,
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.08)',
+              },
+            }}
+          >
+            {isFavorite ? (
+              <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
+            )}
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="דלג למוצר הבא">
+          <IconButton
+            onClick={handleSkip}
+            sx={{
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              width: isMobile ? '64px' : 56,
+              height: isMobile ? '64px' : 56,
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.08)',
+              },
+            }}
+          >
+            <ArrowCircleLeftIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    </Box>
+  </Box>
+</Grid>
+
         </Grid>
       </Box>
 

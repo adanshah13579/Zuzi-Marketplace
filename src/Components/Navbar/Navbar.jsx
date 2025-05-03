@@ -20,7 +20,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemButton
+  ListItemButton,
+  Collapse
 } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -29,6 +30,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatIcon from '@mui/icons-material/Chat';
 import MenuIcon from '@mui/icons-material/Menu';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import zuziLogo from '../../assets/Zuzi.jpg';
 import colors from '../../Style/colors';
 import { categories } from '../../data/data';
@@ -39,6 +42,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
+  const [mobileExpandedCategory, setMobileExpandedCategory] = useState(null);
+
   const [categoryMenu, setCategoryMenu] = useState({
     anchorEl: null,
     category: null
@@ -46,6 +51,7 @@ const Navbar = () => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,60 +129,98 @@ const Navbar = () => {
 
   const drawerContent = (
     <Box
-      sx={{ width: 250 }}
+      sx={{
+        width: 250,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+      }}
       role="presentation"
+      onClick={(e) => e.stopPropagation()} // Prevent backdrop click
       onKeyDown={toggleDrawer(false)}
     >
       <List>
+        {categories.map((category) => (
+          <Box key={category.id}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => setExpandedCategory(prev => prev === category.id ? null : category.id)}>
+                <ListItemText
+                  primary={category.name}
+                  sx={{
+                    color: activeCategory === category.id ? colors.primary : colors.secondary,
+                    fontWeight: activeCategory === category.id ? 700 : 400,
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+  
+            {expandedCategory === category.id && category.subcategories?.length > 0 && (
+              <List component="div" disablePadding sx={{ pl: 2 }}>
+                {category.subcategories.map((sub) => (
+                  <ListItemButton
+                    key={sub.id}
+                    sx={{ pl: 2 }}
+                    onClick={() => {
+                      navigate(`/category/${category.id}/sub/${sub.id}`);
+                      setMobileDrawerOpen(false); // Close drawer after click
+                    }}
+                  >
+                    <ListItemText primary={sub.name} />
+                  </ListItemButton>
+                ))}
+              </List>
+            )}
+          </Box>
+        ))}
+  
+        <Divider sx={{ my: 1 }} />
+  
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             navigate('/profile');
             setMobileDrawerOpen(false);
           }}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
+            <ListItemIcon><PersonIcon /></ListItemIcon>
             <ListItemText primary="פרופיל" />
           </ListItemButton>
         </ListItem>
+  
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             navigate('/favorites');
             setMobileDrawerOpen(false);
           }}>
-            <ListItemIcon>
-              <FavoriteIcon />
-            </ListItemIcon>
+            <ListItemIcon><FavoriteIcon /></ListItemIcon>
             <ListItemText primary="פריטים מועדפים" />
           </ListItemButton>
         </ListItem>
-        <Divider />
+  
+        <Divider sx={{ my: 1 }} />
+  
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             handleLogin();
             setMobileDrawerOpen(false);
           }}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
+            <ListItemIcon><PersonIcon /></ListItemIcon>
             <ListItemText primary="התחברות" />
           </ListItemButton>
         </ListItem>
+  
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             handleSignup();
             setMobileDrawerOpen(false);
           }}>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
+            <ListItemIcon><PersonIcon /></ListItemIcon>
             <ListItemText primary="הרשמה" />
           </ListItemButton>
         </ListItem>
       </List>
     </Box>
   );
-
+  
   return (
     <AppBar 
       position="sticky" 
@@ -193,146 +237,207 @@ const Navbar = () => {
         position: 'relative',
         minHeight: isMobile ? '64px' : '64px'
       }}>
-        {/* Logo - Start (Right) */}
-        <Box 
-          component="img"
-          src={zuziLogo}
-          alt="Zuzi Logo"
-          sx={{ 
-            width: isMobile ? '40px' : '50px',
-            height: 'auto',
-            borderRadius: '10%',
-            cursor: 'pointer',
-            zIndex: 2
-          }}
-          onClick={() => navigate('/')}
-        />
-
-        {/* Mobile Icons - End (Left) */}
+        {/* Mobile Layout */}
         {isMobile && (
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 1,
-            zIndex: 2
-          }}>
-            <IconButton onClick={handleNotificationsOpen}>
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={() => navigate('/chat')}>
-              <Badge badgeContent={2} color="error">
-                <ChatIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={toggleDrawer(true)}>
-              <MenuIcon sx={{ color: colors.secondary }} />
-            </IconButton>
-          </Box>
+          <>
+            {/* Logo - Start (Right) */}
+            <Box 
+              component="img"
+              src={zuziLogo}
+              alt="Zuzi Logo"
+              sx={{ 
+                width: '40px',
+                height: 'auto',
+                borderRadius: '10%',
+                cursor: 'pointer',
+                zIndex: 2
+              }}
+              onClick={() => navigate('/')}
+            />
+
+            {/* Center Categories */}
+            <Box sx={{ 
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              position: 'relative'
+            }}>
+              <Box sx={{ 
+                display: 'flex', 
+                overflowX: 'auto',
+                gap: 1,
+                padding: '8px',
+                '&::-webkit-scrollbar': { display: 'none' },
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
+                justifyContent: 'center',
+                maxWidth: '100%'
+              }}>
+                {categories.map((category) => (
+                  <Button
+                    key={category.id}
+                    onClick={() =>
+                      setMobileExpandedCategory(prev =>
+                        prev === category.id ? null : category.id
+                      )
+                    }
+                    endIcon={mobileExpandedCategory === category.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    sx={{
+                      color: mobileExpandedCategory === category.id ? colors.primary : colors.secondary,
+                      fontSize: '0.9rem',
+                      fontWeight: mobileExpandedCategory === category.id ? 700 : 400,
+                      whiteSpace: 'nowrap',
+                      minWidth: 'auto',
+                    }}
+                  >
+                    {category.name}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+
+            {/* Mobile Icons - End (Left) */}
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              zIndex: 2
+            }}>
+             
+              <IconButton onClick={() => navigate('/chat')}>
+                <Badge badgeContent={2} color="error">
+                  <ChatIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={handleNotificationsOpen}>
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={toggleDrawer(true)}>
+                <MenuIcon sx={{ color: colors.secondary }} />
+              </IconButton>
+            </Box>
+          </>
         )}
 
-        {/* Categories - Mobile Horizontal Scroll */}
-        {isMobile && (
+        {/* Desktop Layout */}
+        {!isMobile && (
+          <>
+            {/* Logo - Start (Right) */}
+            <Box 
+              component="img"
+              src={zuziLogo}
+              alt="Zuzi Logo"
+              sx={{ 
+                width: '50px',
+                height: 'auto',
+                borderRadius: '10%',
+                cursor: 'pointer',
+                zIndex: 2
+              }}
+              onClick={() => navigate('/')}
+            />
+
+            {/* Categories - Desktop */}
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  onMouseEnter={(e) => handleCategoryMenuOpen(e, category)}
+                  sx={{
+                    color: activeCategory === category.id ? colors.primary : colors.secondary,
+                    fontSize: '0.9rem',
+                    fontWeight: activeCategory === category.id ? 700 : 400,
+                    '&:hover': {
+                      color: colors.primary
+                    }
+                  }}
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </Box>
+
+            {/* Profile, Notifications, and Chat - Desktop */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <IconButton onClick={handleNotificationsOpen}>
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+
+              <IconButton onClick={() => navigate('/chat')}>
+                <Badge badgeContent={2} color="error">
+                  <ChatIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+
+              <IconButton onClick={handleProfileMenuOpen}>
+                <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
+                  <PersonIcon />
+                </Avatar>
+              </IconButton>
+            </Box>
+          </>
+        )}
+
+        {/* Subcategories Dropdown for Mobile (Column View) */}
+        {isMobile && mobileExpandedCategory && (
           <Box sx={{ 
-            display: 'flex', 
-            overflowX: 'auto',
-            gap: 1,
             position: 'absolute',
-            top: '64px',
+            top: '100%',
             left: 0,
             right: 0,
-            padding: '8px',
             backgroundColor: 'white',
-            zIndex: 1,
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            '&::-webkit-scrollbar': {
-              display: 'none'
-            },
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none'
+            zIndex: 10,
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            maxHeight: '300px',
+            overflowY: 'auto'
           }}>
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                onClick={() => navigate(`/category/${category.id}`)}
-                sx={{
-                  color: activeCategory === category.id ? colors.primary : colors.secondary,
-                  fontSize: '0.9rem',
-                  fontWeight: activeCategory === category.id ? 700 : 400,
-                  whiteSpace: 'nowrap',
-                  minWidth: 'auto',
-                  padding: '6px 12px',
-                  '&:hover': {
-                    color: colors.primary
-                  }
-                }}
-              >
-                {category.name}
-              </Button>
-            ))}
+            <List>
+              {categories
+                .find(c => c.id === mobileExpandedCategory)
+                ?.subcategories.map((sub) => (
+                  <ListItem 
+                    key={sub.id}
+                    disablePadding
+                  >
+                    <ListItemButton
+                      onClick={() => {
+                        navigate(`/category/${mobileExpandedCategory}/sub/${sub.id}`);
+                        setMobileExpandedCategory(null);
+                      }}
+                      sx={{
+                        py: 1,
+                        textAlign: 'right',
+                        '&:hover': {
+                          backgroundColor: colors.primary + '10',
+                        }
+                      }}
+                    >
+                      <ListItemText 
+                        primary={sub.name}
+                        primaryTypographyProps={{
+                          fontSize: '0.9rem'
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+              ))}
+            </List>
           </Box>
         )}
 
-        {/* Categories - Desktop */}
-        {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                onMouseEnter={(e) => handleCategoryMenuOpen(e, category)}
-                sx={{
-                  color: activeCategory === category.id ? colors.primary : colors.secondary,
-                  fontSize: '0.9rem',
-                  fontWeight: activeCategory === category.id ? 700 : 400,
-                  '&:hover': {
-                    color: colors.primary
-                  }
-                }}
-              >
-                {category.name}
-              </Button>
-            ))}
-          </Box>
-        )}
-
-        {/* Profile, Notifications, and Chat - Desktop */}
-        {!isMobile && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton onClick={handleNotificationsOpen}>
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-
-            <IconButton onClick={() => navigate('/chat')}>
-              <Badge badgeContent={2} color="error">
-                <ChatIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-
-            <IconButton onClick={handleProfileMenuOpen}>
-              <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
-                <PersonIcon />
-              </Avatar>
-            </IconButton>
-          </Box>
-        )}
-
-        {/* Mobile Drawer */}
-        <Drawer
-          anchor="right"
-          open={mobileDrawerOpen}
-          onClose={toggleDrawer(false)}
-        >
-          {drawerContent}
-        </Drawer>
+        
 
         {/* Profile Menu */}
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          dir='rtl'
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
@@ -394,7 +499,7 @@ const Navbar = () => {
           <MenuItem>התראה חדשה 3</MenuItem>
         </Menu>
 
-        {/* Category Submenu */}
+        {/* Category Submenu for Desktop */}
         <Menu
           anchorEl={categoryMenu.anchorEl}
           open={Boolean(categoryMenu.anchorEl)}
@@ -475,4 +580,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

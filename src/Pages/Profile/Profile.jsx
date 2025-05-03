@@ -477,16 +477,18 @@ const Profile = () => {
                   </Grid>
                 </Grid>
 
-                <Box sx={{ mt: 6, display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={{ mt: 6, display: 'flex', justifyContent: 'flex-start',  }}>
                   <Button
                     type="submit"
                     variant="contained"
                     startIcon={<SaveIcon />}
+                    dir='ltr'
                     sx={{
                       bgcolor: colors.primary,
                       color: 'white',
                       px: 6,
                       py: 2,
+                      gap:2,
                       fontSize: '18px',
                       '&:hover': {
                         bgcolor: colors.primary,
