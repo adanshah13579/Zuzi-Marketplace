@@ -93,10 +93,17 @@ const Navbar = () => {
   };
 
   const handleCategoryMenuOpen = (event, category) => {
-    setCategoryMenu({
-      anchorEl: event.currentTarget,
-      category
-    });
+    // Close any previously open menu first
+    if (categoryMenu.anchorEl && categoryMenu.category?.id === category.id) {
+      // If clicking the same category that's already open, close it
+      handleMenuClose();
+    } else {
+      // Otherwise open the new category menu
+      setCategoryMenu({
+        anchorEl: event.currentTarget,
+        category
+      });
+    }
   };
 
   const handleMenuClose = () => {
@@ -158,11 +165,14 @@ const Navbar = () => {
             {expandedCategory === category.id && category.subcategories?.length > 0 && (
               <List component="div" disablePadding sx={{ pl: 2 }}>
                 {category.subcategories.map((sub) => (
+                  
                   <ListItemButton
                     key={sub.id}
                     sx={{ pl: 2 }}
                     onClick={() => {
-                      navigate(`/category/${category.id}/sub/${sub.id}`);
+                      navigate(`/category/${category.id}/${sub.id}`);
+                      
+
                       setMobileDrawerOpen(false); // Close drawer after click
                     }}
                   >
@@ -277,16 +287,12 @@ const Navbar = () => {
                 {categories.map((category) => (
                   <Button
                     key={category.id}
-                    onClick={() =>
-                      setMobileExpandedCategory(prev =>
-                        prev === category.id ? null : category.id
-                      )
-                    }
-                    endIcon={mobileExpandedCategory === category.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    onClick={(e) => handleCategoryMenuOpen(e, category)}
+                    endIcon={<ExpandMoreIcon />}
                     sx={{
-                      color: mobileExpandedCategory === category.id ? colors.primary : colors.secondary,
+                      color: activeCategory === category.id ? colors.primary : colors.secondary,
                       fontSize: '0.9rem',
-                      fontWeight: mobileExpandedCategory === category.id ? 700 : 400,
+                      fontWeight: activeCategory === category.id ? 700 : 400,
                       whiteSpace: 'nowrap',
                       minWidth: 'auto',
                     }}
@@ -304,15 +310,14 @@ const Navbar = () => {
               gap: 1,
               zIndex: 2
             }}>
-             
-              <IconButton onClick={() => navigate('/chat')}>
-                <Badge badgeContent={2} color="error">
-                  <ChatIcon sx={{ color: colors.secondary }} />
-                </Badge>
-              </IconButton>
               <IconButton onClick={handleNotificationsOpen}>
                 <Badge badgeContent={3} color="error">
                   <NotificationsIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={() => navigate('/chat')}>
+                <Badge badgeContent={2} color="error">
+                  <ChatIcon sx={{ color: colors.secondary }} />
                 </Badge>
               </IconButton>
               <IconButton onClick={toggleDrawer(true)}>
@@ -383,54 +388,91 @@ const Navbar = () => {
           </>
         )}
 
-        {/* Subcategories Dropdown for Mobile (Column View) */}
-        {isMobile && mobileExpandedCategory && (
-          <Box sx={{ 
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: 'white',
-            zIndex: 10,
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            maxHeight: '300px',
-            overflowY: 'auto'
-          }}>
-            <List>
-              {categories
-                .find(c => c.id === mobileExpandedCategory)
-                ?.subcategories.map((sub) => (
-                  <ListItem 
-                    key={sub.id}
-                    disablePadding
-                  >
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(`/category/${mobileExpandedCategory}/sub/${sub.id}`);
-                        setMobileExpandedCategory(null);
-                      }}
-                      sx={{
-                        py: 1,
-                        textAlign: 'right',
-                        '&:hover': {
-                          backgroundColor: colors.primary + '10',
-                        }
-                      }}
-                    >
-                      <ListItemText 
-                        primary={sub.name}
-                        primaryTypographyProps={{
-                          fontSize: '0.9rem'
-                        }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
+        {/* Category Menu for both Mobile and Desktop */}
+        <Menu
+          anchorEl={categoryMenu.anchorEl}
+          open={Boolean(categoryMenu.anchorEl)}
+          onClose={handleMenuClose}
+          onMouseLeave={isMobile ? undefined : handleMenuClose} // Only use mouseleave for desktop
+          TransitionComponent={Fade}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          PaperProps={{
+            sx: {
+              width: 250,
+              maxHeight: 400,
+              overflow: 'hidden',
+              direction: 'rtl',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
+            }
+          }}
+          className="category-menu"
+        >
+          {categoryMenu.category && (
+            <Box sx={{ 
+              maxHeight: 400,
+              overflowY: 'auto',
+              direction: 'rtl',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
+            }}>
+              <Typography 
+                variant="subtitle1" 
+                sx={{ 
+                  p: 2, 
+                  fontWeight: 'bold',
+                  color: colors.primary,
+                  borderBottom: `1px solid ${colors.primary}20`,
+                  textAlign: 'right'
+                }}
+              >
+                {categoryMenu.category.name}
+              </Typography>
+              <Divider />
+              {categoryMenu.category.subcategories.map((subcategory) => (
+                <MenuItem 
+                  key={subcategory.id}
+                  onClick={() => {
+                    navigate(`/category/${categoryMenu.category.id}/${subcategory.id}`);
+                    handleMenuClose();
+                  }}
+                  sx={{
+                    py: 1.5,
+                    px: 2,
+                    textAlign: 'right',
+                    '&:hover': {
+                      backgroundColor: colors.primary + '20',
+                      transform: 'translateX(5px)',
+                      transition: 'all 0.2s ease'
+                    }
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {subcategory.name}
+                  </Typography>
+                </MenuItem>
               ))}
-            </List>
-          </Box>
-        )}
+            </Box>
+          )}
+        </Menu>
 
-        
+        {/* Mobile Drawer */}
+        <Drawer
+          anchor="right"
+          open={mobileDrawerOpen}
+          onClose={toggleDrawer(false)}
+        >
+          {drawerContent}
+        </Drawer>
 
         {/* Profile Menu */}
         <Menu
@@ -494,87 +536,12 @@ const Navbar = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem>התראה חדשה 1</MenuItem>
-          <MenuItem>התראה חדשה 2</MenuItem>
-          <MenuItem>התראה חדשה 3</MenuItem>
+          <MenuItem>התראה חדשה</MenuItem>
+          <MenuItem>התראה חדשה</MenuItem>
+          <MenuItem>התראה חדשה</MenuItem>
         </Menu>
 
-        {/* Category Submenu for Desktop */}
-        <Menu
-          anchorEl={categoryMenu.anchorEl}
-          open={Boolean(categoryMenu.anchorEl)}
-          onClose={handleMenuClose}
-          onMouseLeave={handleMenuClose}
-          TransitionComponent={Fade}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          PaperProps={{
-            sx: {
-              width: 250,
-              maxHeight: 400,
-              overflow: 'hidden',
-              direction: 'rtl',
-              '&::-webkit-scrollbar': {
-                display: 'none'
-              }
-            }
-          }}
-          className="category-menu"
-        >
-          {categoryMenu.category && (
-            <Box sx={{ 
-              maxHeight: 400,
-              overflowY: 'auto',
-              direction: 'rtl',
-              '&::-webkit-scrollbar': {
-                display: 'none'
-              }
-            }}>
-              <Typography 
-                variant="subtitle1" 
-                sx={{ 
-                  p: 2, 
-                  fontWeight: 'bold',
-                  color: colors.primary,
-                  borderBottom: `1px solid ${colors.primary}20`,
-                  textAlign: 'right'
-                }}
-              >
-                {categoryMenu.category.name}
-              </Typography>
-              <Divider />
-              {categoryMenu.category.subcategories.map((subcategory) => (
-                <MenuItem 
-                  key={subcategory.id}
-                  onClick={() => {
-                    navigate(`/category/${categoryMenu.category.id}/${subcategory.id}`);
-                    handleMenuClose();
-                  }}
-                  sx={{
-                    py: 1.5,
-                    px: 2,
-                    textAlign: 'right',
-                    '&:hover': {
-                      backgroundColor: colors.primary + '20',
-                      transform: 'translateX(5px)',
-                      transition: 'all 0.2s ease'
-                    }
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {subcategory.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Box>
-          )}
-        </Menu>
+
       </Toolbar>
     </AppBar>
   );
