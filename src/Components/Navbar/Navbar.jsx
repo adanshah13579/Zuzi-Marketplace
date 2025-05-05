@@ -250,7 +250,31 @@ const Navbar = () => {
         {/* Mobile Layout */}
         {isMobile && (
           <>
-            {/* Logo - Start (Right) */}
+            {/* Profile Icons - Start (Left) */}
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              zIndex: 2
+            }}>
+              <IconButton onClick={toggleDrawer(true)}>
+                <MenuIcon sx={{ color: colors.secondary }} />
+              </IconButton>
+              <IconButton onClick={handleNotificationsOpen}>
+              
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={() => navigate('/chat')}>
+                <Badge badgeContent={2} color="error">
+                  <ChatIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+             
+            </Box>
+
+            {/* Logo - End (Right) */}
             <Box 
               component="img"
               src={zuziLogo}
@@ -264,86 +288,33 @@ const Navbar = () => {
               }}
               onClick={() => navigate('/')}
             />
-
-            {/* Center Categories */}
-            <Box sx={{ 
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
-              overflow: 'hidden',
-              position: 'relative'
-            }}>
-              <Box sx={{ 
-                display: 'flex', 
-                overflowX: 'auto',
-                gap: 1,
-                padding: '8px',
-                '&::-webkit-scrollbar': { display: 'none' },
-                msOverflowStyle: 'none',
-                scrollbarWidth: 'none',
-                justifyContent: 'center',
-                maxWidth: '100%'
-              }}>
-                {categories.map((category) => (
-                  <Button
-                    key={category.id}
-                    onClick={(e) => handleCategoryMenuOpen(e, category)}
-                    endIcon={<ExpandMoreIcon />}
-                    sx={{
-                      color: activeCategory === category.id ? colors.primary : colors.secondary,
-                      fontSize: '0.9rem',
-                      fontWeight: activeCategory === category.id ? 700 : 400,
-                      whiteSpace: 'nowrap',
-                      minWidth: 'auto',
-                    }}
-                  >
-                    {category.name}
-                  </Button>
-                ))}
-              </Box>
-            </Box>
-
-            {/* Mobile Icons - End (Left) */}
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              zIndex: 2
-            }}>
-              <IconButton onClick={handleNotificationsOpen}>
-                <Badge badgeContent={3} color="error">
-                  <NotificationsIcon sx={{ color: colors.secondary }} />
-                </Badge>
-              </IconButton>
-              <IconButton onClick={() => navigate('/chat')}>
-                <Badge badgeContent={2} color="error">
-                  <ChatIcon sx={{ color: colors.secondary }} />
-                </Badge>
-              </IconButton>
-              <IconButton onClick={toggleDrawer(true)}>
-                <MenuIcon sx={{ color: colors.secondary }} />
-              </IconButton>
-            </Box>
           </>
         )}
 
         {/* Desktop Layout */}
         {!isMobile && (
           <>
-            {/* Logo - Start (Right) */}
-            <Box 
-              component="img"
-              src={zuziLogo}
-              alt="Zuzi Logo"
-              sx={{ 
-                width: '50px',
-                height: 'auto',
-                borderRadius: '10%',
-                cursor: 'pointer',
-                zIndex: 2
-              }}
-              onClick={() => navigate('/')}
-            />
+            {/* Profile Icons - Start (Left) */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton onClick={handleProfileMenuOpen}>
+                <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
+                  <PersonIcon />
+                </Avatar>
+              </IconButton>
+              <IconButton onClick={handleNotificationsOpen}>
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+
+              <IconButton onClick={() => navigate('/chat')}>
+                <Badge badgeContent={2} color="error">
+                  <ChatIcon sx={{ color: colors.secondary }} />
+                </Badge>
+              </IconButton>
+
+             
+            </Box>
 
             {/* Categories - Desktop */}
             <Box sx={{ display: 'flex', gap: 1 }}>
@@ -365,27 +336,69 @@ const Navbar = () => {
               ))}
             </Box>
 
-            {/* Profile, Notifications, and Chat - Desktop */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <IconButton onClick={handleNotificationsOpen}>
-                <Badge badgeContent={3} color="error">
-                  <NotificationsIcon sx={{ color: colors.secondary }} />
-                </Badge>
-              </IconButton>
-
-              <IconButton onClick={() => navigate('/chat')}>
-                <Badge badgeContent={2} color="error">
-                  <ChatIcon sx={{ color: colors.secondary }} />
-                </Badge>
-              </IconButton>
-
-              <IconButton onClick={handleProfileMenuOpen}>
-                <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
-                  <PersonIcon />
-                </Avatar>
-              </IconButton>
-            </Box>
+            {/* Logo - End (Right) */}
+            <Box 
+              component="img"
+              src={zuziLogo}
+              alt="Zuzi Logo"
+              sx={{ 
+                width: '50px',
+                height: 'auto',
+                borderRadius: '10%',
+                cursor: 'pointer',
+                zIndex: 2
+              }}
+              onClick={() => navigate('/')}
+            />
           </>
+        )}
+
+        {/* Categories Row for Mobile */}
+        {isMobile && (
+          <Box sx={{ 
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            backgroundColor: 'white',
+            borderTop: '1px solid rgba(0,0,0,0.1)',
+            padding: '8px 0',
+            overflowX: 'auto',
+            whiteSpace: 'nowrap',
+            '&::-webkit-scrollbar': { display: 'none' },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none'
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 1,
+              padding: '0 8px'
+            }}>
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  onClick={(e) => handleCategoryMenuOpen(e, category)}
+                  endIcon={<ExpandMoreIcon />}
+                  sx={{
+                    color: activeCategory === category.id ? colors.primary : colors.secondary,
+                    fontSize: '0.9rem',
+                    fontWeight: activeCategory === category.id ? 700 : 400,
+                    whiteSpace: 'nowrap',
+                    minWidth: 'auto',
+                    padding: '4px 8px',
+                    borderRadius: '10px',
+                    border: `1px solid ${colors.secondary}20`,
+                    '&:hover': {
+                      backgroundColor: colors.primary + '10',
+                      borderColor: colors.primary
+                    }
+                  }}
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </Box>
+          </Box>
         )}
 
         {/* Category Menu for both Mobile and Desktop */}

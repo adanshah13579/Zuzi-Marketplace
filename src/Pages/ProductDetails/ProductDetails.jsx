@@ -19,6 +19,11 @@ const ProductDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   
+  // Format price with commas
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('he-IL').format(price);
+  };
+  
   // Get all products
   const allProducts = Object.values(sampleListings).flat();
   
@@ -180,7 +185,7 @@ const ProductDetails = () => {
     </Typography>
 
     <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-      ${product.price}
+      ₪{formatPrice(product.price)}
     </Typography>
 
     <Typography variant="body1" paragraph>

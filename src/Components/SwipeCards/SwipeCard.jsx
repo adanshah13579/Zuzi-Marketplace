@@ -21,6 +21,11 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
 
+  // Format price with commas
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('he-IL').format(price);
+  };
+
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
     // Here you would typically update the global state or make an API call
@@ -131,7 +136,7 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
             textAlign: 'right'
           }}
         >
-          ₪{product.price}
+          ₪{formatPrice(product.price)}
         </Typography>
       </CardContent>
     </Card>

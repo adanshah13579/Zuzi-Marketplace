@@ -10,6 +10,11 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Format price with commas
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('he-IL').format(price);
+  };
+
   const handleNextImage = (e) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
@@ -149,7 +154,7 @@ const ProductCard = ({ product }) => {
               fontWeight: 700
             }}
           >
-            ₪{product.price}
+            ₪{formatPrice(product.price)}
           </Typography>
           
           <Chip
