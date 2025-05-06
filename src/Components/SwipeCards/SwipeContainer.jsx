@@ -42,7 +42,7 @@ const SwipeContainer = () => {
               flexWrap: 'wrap',
               gap: 3,
               width: '100%',
-              px: 4,
+              px: { xs: 0, sm: 4 },
               justifyContent: 'flex-start'
             }}>
               {categoryListings.map((product) => (
@@ -50,7 +50,7 @@ const SwipeContainer = () => {
                   key={product.id} 
                   sx={{ 
                     width: isMobile ? '100%' : 'calc(25% - 24px)',
-                    minWidth: 250,
+                    minWidth: { xs: '100%', sm: 250 },
                     flexShrink: 0
                   }}
                 >

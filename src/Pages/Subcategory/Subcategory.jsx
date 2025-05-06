@@ -188,41 +188,51 @@ const Subcategory = () => {
                     image={item.image}
                     alt={item.name}
                   />
-                  <CardContent
-                    sx={{
-                      p: 1,
-                      backgroundColor: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      direction: 'rtl',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: '0.9rem',
-                        color: '#222',
-                        flex: 1,
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        color: '#222',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      ₪{item.description}
-                    </Typography>
-                  </CardContent>
+                 <CardContent
+  sx={{
+    p: 1,
+    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column', // stack title and description vertically
+    alignItems: 'flex-start',
+    direction: 'rtl', // if needed
+    gap: 0.5,
+    '@media (min-width:600px)': {
+      flexDirection: 'row', // side-by-side on larger screens
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+  }}
+>
+  <Typography
+    variant="h6"
+    sx={{
+      fontWeight: 600,
+      fontSize: '0.9rem',
+      color: '#222',
+      width: '100%',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    }}
+  >
+    {item.name}
+  </Typography>
+  <Typography
+    variant="body2"
+    sx={{
+      fontSize: '0.75rem',
+      fontWeight: 600,
+      color: '#222',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }}
+  >
+    ₪{item.description}
+  </Typography>
+</CardContent>
+
                 </CardActionArea>
               </Card>
             </Grid>

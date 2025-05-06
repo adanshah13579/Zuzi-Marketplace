@@ -94,7 +94,11 @@ export const sampleListings = {
       description: 'דירה מרווחת בקומה 3, 120 מ"ר, מרפסת גדולה, חניה',
       price: 2500000,
       location: 'תל אביב',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 4,
+      floor: 3,
+      size: 120,
+      parking: true
     },
     {
       id: 2,
@@ -102,7 +106,11 @@ export const sampleListings = {
       description: 'בית 5 חדרים, 200 מ"ר, גינה גדולה, 2 חניות',
       price: 3500000,
       location: 'רעננה',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 5,
+      floor: 0,
+      size: 200,
+      parking: true
     },
     {
       id: 3,
@@ -110,7 +118,11 @@ export const sampleListings = {
       description: 'דירת גן 3 חדרים, 100 מ"ר, גינה פרטית, חניה',
       price: 1800000,
       location: 'פתח תקווה',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 3,
+      floor: 0,
+      size: 100,
+      parking: true
     },
     {
       id: 4,
@@ -118,7 +130,11 @@ export const sampleListings = {
       description: 'דירה בקומה 5, 90 מ"ר, מרפסת, חניה',
       price: 1200000,
       location: 'חיפה',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 3,
+      floor: 5,
+      size: 90,
+      parking: true
     }
   ],
   2: [ // Real Estate for Rent
@@ -128,7 +144,11 @@ export const sampleListings = {
       description: 'דירה 3 חדרים, 90 מ"ר, מרפסת, חניה',
       price: 4500,
       location: 'חיפה',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 3,
+      floor: 2,
+      size: 90,
+      parking: true
     },
     {
       id: 6,
@@ -136,7 +156,11 @@ export const sampleListings = {
       description: 'חדר במיקום מרכזי, שותפים שקטים, אינטרנט מהיר',
       price: 2000,
       location: 'ירושלים',
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 7,
@@ -144,7 +168,11 @@ export const sampleListings = {
       description: 'דירה 2 חדרים, 60 מ"ר, מרפסת, חניה',
       price: 6000,
       location: 'תל אביב',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 2,
+      floor: 4,
+      size: 60,
+      parking: true
     },
     {
       id: 8,
@@ -152,7 +180,11 @@ export const sampleListings = {
       description: 'בית 4 חדרים, 150 מ"ר, גינה, 2 חניות',
       price: 8000,
       location: 'מודיעין',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 4,
+      floor: 0,
+      size: 150,
+      parking: true
     }
   ],
   3: [ // Pets
@@ -162,7 +194,11 @@ export const sampleListings = {
       description: 'גור לברדור, זכר, בן 3 חודשים, מחוסן',
       price: 2500,
       location: 'תל אביב',
-      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 10,
@@ -170,7 +206,11 @@ export const sampleListings = {
       description: 'חתול פרסי, נקבה, בת 6 חודשים, מחוסנת',
       price: 1800,
       location: 'רמת גן',
-      image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false  
     },
     {
       id: 11,
@@ -178,7 +218,11 @@ export const sampleListings = {
       description: 'תוכי אפרור, זכר, בן שנה, מאולף',
       price: 3000,
       location: 'חיפה',
-      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 12,
@@ -186,7 +230,11 @@ export const sampleListings = {
       description: 'זוג דגי זהב, בריאים, עם אקווריום',
       price: 200,
       location: 'ירושלים',
-      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     }
   ],
   4: [ // Second-hand Products
@@ -196,7 +244,11 @@ export const sampleListings = {
       description: 'ספה 3 מושבים, מצב מעולה, צבע אפור',
       price: 800,
       location: 'חולון',
-      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 14,
@@ -204,7 +256,11 @@ export const sampleListings = {
       description: 'MacBook Pro 2020, 16GB RAM, 512GB SSD',
       price: 4500,
       location: 'תל אביב',
-      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 15,
@@ -212,7 +268,11 @@ export const sampleListings = {
       description: 'ארון בגדים 3 דלתות, מצב טוב, צבע לבן',
       price: 500,
       location: 'רמת גן',
-      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 16,
@@ -220,7 +280,11 @@ export const sampleListings = {
       description: 'טלוויזיה 55 אינץK 4K',
       price: 2000,
       location: 'חיפה',
-      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     }
   ],
   5: [ // Professionals
@@ -230,7 +294,11 @@ export const sampleListings = {
       description: 'בעל מקצוע מנוסה לשיפוצים, תיקונים והתקנות',
       price: 150,
       location: 'תל אביב',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 18,
@@ -238,7 +306,11 @@ export const sampleListings = {
       description: 'שירותי הובלה מקצועיים בכל הארץ',
       price: 300,
       location: 'מרכז',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 19,
@@ -246,7 +318,11 @@ export const sampleListings = {
       description: 'נגר מקצועי לכל סוגי העבודות',
       price: 200,
       location: 'ירושלים',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     },
     {
       id: 20,
@@ -254,7 +330,11 @@ export const sampleListings = {
       description: 'אינסטלטור מקצועי לכל סוגי התיקונים',
       price: 180,
       location: 'חיפה',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
+      rooms: 1,
+      floor: 3,
+      size: 25,
+      parking: false
     }
   ]
 };

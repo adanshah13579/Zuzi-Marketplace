@@ -9,6 +9,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import BedIcon from '@mui/icons-material/Bed';
+import FloorIcon from '@mui/icons-material/Layers';
+import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import InfoIcon from '@mui/icons-material/Info';
 import ProductCard from '../../Components/ProductDetails/ProductCard';
 
 const ProductDetails = () => {
@@ -178,82 +183,136 @@ const ProductDetails = () => {
           </Grid>
 
           {/* Product Details */}
-          <Grid item xs={12} md={6}>
-  <Box sx={{ p: 2 }} dir="rtl">
-    <Typography variant="h4" gutterBottom>
-      {product.name}
-    </Typography>
+          <Grid item xs={12} md={7}>
+            <Box 
+              sx={{ 
+                p: 3,
+                borderRight: '1px solid',
+                borderColor: 'divider',
+                height: '100%'
+              }}
+            >
+              <Box sx={{ p: 2 }} dir="rtl">
+                <Typography variant="h4" gutterBottom>
+                  {product.name}
+                </Typography>
 
-    <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-      ₪{formatPrice(product.price)}
-    </Typography>
+                <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
+                  ₪{formatPrice(product.price)}
+                </Typography>
 
-    <Typography variant="body1" paragraph>
-      {product.description}
-    </Typography>
+                <Typography variant="body1" paragraph>
+                  {product.description}
+                </Typography>
 
-    <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-      מיקום: {product.location}
-    </Typography>
+                {/* Property Details */}
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: 1, 
+                  mb: 4,
+                  flexWrap: 'wrap',
+                  '& > *': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                  }
+                }}>
+                  <Box>
+                    <InfoIcon color="action" sx={{ fontSize: 20 }} />
+                    <Typography variant="body2" color="text.secondary">
+                      פרטי הנכס
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <BedIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.rooms || '3'} חדרים
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <FloorIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      קומה {product.floor || '2'}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <SquareFootIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.size || '120'} מ"ר
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <LocalParkingIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.parking ? 'חניה' : 'ללא חניה'}
+                    </Typography>
+                  </Box>
+                </Box>
 
-    {/* Action Buttons */}
-    <Box
-      sx={{
-        display: 'flex',
-        gap: 3,
-        justifyContent: 'center',
-        mt: 4,
-        flexDirection: isMobile ? 'column' : 'row',
-        alignItems: 'center',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 3,
-          justifyContent: 'center',
-          width: isMobile ? '100%' : 'auto',
-        }}
-      >
-        <Tooltip title={isFavorite ? "הסר מהמועדפים" : "הוסף למועדפים"}>
-          <IconButton
-            onClick={handleFavorite}
-            sx={{
-              backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              width: isMobile ? '64px' : 56,
-              height: isMobile ? '64px' : 56,
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.08)',
-              },
-            }}
-          >
-            {isFavorite ? (
-              <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
-            ) : (
-              <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
-            )}
-          </IconButton>
-        </Tooltip>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+                  מיקום: {product.location}
+                </Typography>
 
-        <Tooltip title="דלג למוצר הבא">
-          <IconButton
-            onClick={handleSkip}
-            sx={{
-              backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              width: isMobile ? '64px' : 56,
-              height: isMobile ? '64px' : 56,
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.08)',
-              },
-            }}
-          >
-            <ArrowCircleLeftIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    </Box>
-  </Box>
-</Grid>
+                {/* Action Buttons */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    justifyContent: 'center',
+                    mt: 4,
+                    flexDirection: isMobile ? 'column' : 'row',
+                    alignItems: 'center',
+                   
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 3,
+                      justifyContent: 'center',
+                      width: isMobile ? '100%' : 'auto',
+                    }}
+                  >
+                    <Tooltip title={isFavorite ? "הסר מהמועדפים" : "הוסף למועדפים"}>
+                      <IconButton
+                        onClick={handleFavorite}
+                        sx={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          width: isMobile ? '64px' : 56,
+                          height: isMobile ? '64px' : 56,
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                          },
+                        }}
+                      >
+                        {isFavorite ? (
+                          <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
+                        ) : (
+                          <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="דלג למוצר הבא">
+                      <IconButton
+                        onClick={handleSkip}
+                        sx={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                          width: isMobile ? '64px' : 56,
+                          height: isMobile ? '64px' : 56,
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                          },
+                        }}
+                      >
+                        <ArrowCircleLeftIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
 
         </Grid>
       </Box>
