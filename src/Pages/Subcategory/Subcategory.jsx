@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardMedia,
   CardContent,
@@ -141,7 +140,7 @@ const Subcategory = () => {
         </Box>
       </Box>
 
-      {/* רשימת פריטים */}
+      {/* רשימת פריטים - Smart Pinterest-Style Grid */}
       <Box
         sx={{
           flex: 1,
@@ -152,92 +151,90 @@ const Subcategory = () => {
           backgroundColor: '#f8f9fa',
         }}
       >
-        <Grid
-          container
-          spacing={{ xs: 2, sm: 3, md: 4 }}
+        <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: 2.5,
+            direction: 'rtl',
           }}
         >
           {items.map((item) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-              <Card
-                sx={{
-                  width: '100%',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 12px 24px rgba(0,0,0,0.12)',
-                  },
+            <Card
+              key={item.id}
+              sx={{
+                height: '320px', // Fixed card height
+                borderRadius: '10px',
+                overflow: 'hidden',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.12)',
+                },
+              }}
+            >
+              <CardActionArea 
+                onClick={() => handleItemClick(item.id)}
+                sx={{ 
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
-                <CardActionArea
-                  onClick={() => handleItemClick(item.id)}
-                  sx={{ height: '100%' }}
+                <CardMedia
+                  component="img"
+                  sx={{
+                    height: '240px', // Fixed image height
+                    objectFit: 'cover',
+                  }}
+                  image={item.image}
+                  alt={item.name}
+                />
+                <CardContent
+                  sx={{
+                    p: 1.5,
+                    height: '100px', // Fixed content height
+                    backgroundColor: '#fff',
+                    direction: 'rtl',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
                 >
-                  <CardMedia
-                    component="img"
+                  <Typography
+                    variant="subtitle1"
                     sx={{
-                      aspectRatio: '32/9',
-                      objectFit: 'cover',
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      color: '#000', // Black text as requested
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1,
+                      
+                      WebkitBoxOrient: 'vertical',
                     }}
-                    image={item.image}
-                    alt={item.name}
-                  />
-                 <CardContent
-  sx={{
-    p: 1,
-    backgroundColor: '#fff',
-    display: 'flex',
-    flexDirection: 'column', // stack title and description vertically
-    alignItems: 'flex-start',
-    direction: 'rtl', // if needed
-    gap: 0.5,
-    '@media (min-width:600px)': {
-      flexDirection: 'row', // side-by-side on larger screens
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-  }}
->
-  <Typography
-    variant="h6"
-    sx={{
-      fontWeight: 600,
-      fontSize: '0.9rem',
-      color: '#222',
-      width: '100%',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    }}
-  >
-    {item.name}
-  </Typography>
-  <Typography
-    variant="body2"
-    sx={{
-      fontSize: '0.75rem',
-      fontWeight: 600,
-      color: '#222',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    }}
-  >
-    ₪{item.description}
-  </Typography>
-</CardContent>
-
-                </CardActionArea>
-              </Card>
-            </Grid>
+                  >
+                    {item.name}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                  
+                      color: '#000', // Black text as requested
+                      mt: 0.5,
+                    }}
+                  >
+                    ₪{item.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       </Box>
 
       <Footer />
