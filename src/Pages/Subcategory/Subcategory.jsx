@@ -8,6 +8,9 @@ import {
   CardContent,
   CardActionArea,
   Button,
+  MenuItem,
+  Select,
+  TextField,
 } from '@mui/material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
@@ -29,132 +32,124 @@ const Subcategory = () => {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        direction: 'rtl', // RTL layout
+        direction: 'ltr',
         fontFamily: '"Arial", sans-serif',
       }}
     >
       <Navbar />
 
-      {/* סרגל סינון */}
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-          backgroundColor: '#ffffff',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
-          p: { xs: 2, sm: 3 },
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 600,
-            mb: 2,
-            color: '#333',
-          }}
-        >
-          סינון
-        </Typography>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 2,
-            alignItems: 'center',
-          }}
-        >
-          <Box sx={{ flex: 1, minWidth: 200 }}>
-            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-              כותרת
-            </Typography>
-            <input
-              type="text"
-              placeholder="חפש לפי כותרת..."
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                fontSize: '14px',
-                direction: 'rtl',
-              }}
-            />
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: 150 }}>
-            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-              מחיר
-            </Typography>
-            <select
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                fontSize: '14px',
-                direction: 'rtl',
-              }}
-            >
-              <option value="">הכל</option>
-              <option value="low">מהנמוך לגבוה</option>
-              <option value="high">מהגבוה לנמוך</option>
-            </select>
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: 200 }}>
-            <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-              מיקום
-            </Typography>
-            <input
-              type="text"
-              placeholder="הכנס מיקום..."
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                fontSize: '14px',
-                direction: 'rtl',
-              }}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ textTransform: 'none', borderRadius: '8px' }}
-            >
-              חיפוש
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              sx={{ textTransform: 'none', borderRadius: '8px' }}
-            >
-              איפוס
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-
-      {/* רשימת פריטים - Smart Pinterest-Style Grid */}
+      {/* Main layout: Cards Left, Filters Right */}
       <Box
         sx={{
           flex: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row-reverse' },
           p: { xs: 2, sm: 3, md: 4 },
+          gap: 3,
           maxWidth: '1400px',
           margin: '0 auto',
           width: '100%',
           backgroundColor: '#f8f9fa',
         }}
       >
+        {/* Filters Right */}
         <Box
           sx={{
+            width: { xs: '100%', md: '300px' },
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+            p: 3,
+            borderRadius: 2,
+            height: 'fit-content',
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#333' }}>
+            סינון
+          </Typography>
+
+          {/* Title Search */}
+          <TextField
+            label="כותרת"
+            fullWidth
+            size="small"
+            placeholder="חפש לפי כותרת..."
+            sx={{ mb: 2 }}
+            inputProps={{ style: { direction: 'rtl' } }}
+          />
+
+          {/* Price Range */}
+          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+            <TextField
+              label="מינ'"
+              type="number"
+              size="small"
+              fullWidth
+              inputProps={{ style: { direction: 'rtl' } }}
+            />
+            <TextField
+              label="מקס'"
+              type="number"
+              size="small"
+              fullWidth
+              inputProps={{ style: { direction: 'rtl' } }}
+            />
+          </Box>
+
+          {/* Price Sort */}
+          <Select
+            fullWidth
+            size="small"
+            defaultValue=""
+            displayEmpty
+            sx={{ mb: 2 }}
+          >
+            <MenuItem value="">מיין לפי מחיר</MenuItem>
+            <MenuItem value="low">מהנמוך לגבוה</MenuItem>
+            <MenuItem value="high">מהגבוה לנמוך</MenuItem>
+          </Select>
+
+          {/* Rooms Filter */}
+          <Select
+            fullWidth
+            size="small"
+            defaultValue=""
+            displayEmpty
+            sx={{ mb: 2 }}
+          >
+            <MenuItem value="">מס' חדרים</MenuItem>
+            <MenuItem value="1">1 חדר</MenuItem>
+            <MenuItem value="2">2 חדרים</MenuItem>
+            <MenuItem value="3">3 חדרים</MenuItem>
+            <MenuItem value="4+">4+ חדרים</MenuItem>
+          </Select>
+
+          {/* Location Filter */}
+          <TextField
+            label="מיקום"
+            fullWidth
+            size="small"
+            placeholder="הכנס מיקום..."
+            inputProps={{ style: { direction: 'rtl' } }}
+            sx={{ mb: 2 }}
+          />
+
+          {/* Filter Buttons */}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button variant="contained" color="primary" sx={{ flex: 1 }}>
+              חיפוש
+            </Button>
+            <Button variant="outlined" color="secondary" sx={{ flex: 1 }}>
+              איפוס
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Cards Left */}
+        <Box
+          sx={{
+            flex: 1,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
             gap: 2.5,
             direction: 'rtl',
           }}
@@ -163,7 +158,7 @@ const Subcategory = () => {
             <Card
               key={item.id}
               sx={{
-                height: '320px', // Fixed card height
+                height: '320px',
                 borderRadius: '10px',
                 overflow: 'hidden',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
@@ -174,9 +169,9 @@ const Subcategory = () => {
                 },
               }}
             >
-              <CardActionArea 
+              <CardActionArea
                 onClick={() => handleItemClick(item.id)}
-                sx={{ 
+                sx={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -185,7 +180,7 @@ const Subcategory = () => {
                 <CardMedia
                   component="img"
                   sx={{
-                    height: '240px', // Fixed image height
+                    height: '240px',
                     objectFit: 'cover',
                   }}
                   image={item.image}
@@ -194,7 +189,7 @@ const Subcategory = () => {
                 <CardContent
                   sx={{
                     p: 1.5,
-                    height: '100px', // Fixed content height
+                    height: '100px',
                     backgroundColor: '#fff',
                     direction: 'rtl',
                     display: 'flex',
@@ -207,12 +202,11 @@ const Subcategory = () => {
                     sx={{
                       fontWeight: 600,
                       fontSize: '0.9rem',
-                      color: '#000', // Black text as requested
+                      color: '#000',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       display: '-webkit-box',
                       WebkitLineClamp: 1,
-                      
                       WebkitBoxOrient: 'vertical',
                     }}
                   >
@@ -223,8 +217,7 @@ const Subcategory = () => {
                     sx={{
                       fontSize: '0.85rem',
                       fontWeight: 500,
-                  
-                      color: '#000', // Black text as requested
+                      color: '#000',
                       mt: 0.5,
                     }}
                   >

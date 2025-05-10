@@ -6,7 +6,6 @@ import {
   Fade,
   Slide,
   Container,
-  Stack,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -63,7 +62,7 @@ export default function EnhancedHeroSlider() {
   const buttonText = slide.isDark ? '#000' : '#fff';
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+    <Box sx={{ position: 'relative', width: '100%', height: { xs: '55vh', sm: '60vh', md: '70vh', lg: '50vh' }, overflow: 'hidden' }}>
       <Fade in={showSlide} timeout={1000}>
         <Box
           sx={{
@@ -108,19 +107,44 @@ export default function EnhancedHeroSlider() {
           />
 
           {/* Slide Content */}
-          <Container maxWidth="md" sx={{ textAlign: 'center', zIndex: 1 }}>
+          <Container
+            maxWidth="md"
+            sx={{
+              textAlign: 'center',
+              zIndex: 1,
+              px: { xs: 2, sm: 4, md: 0 },
+            }}
+          >
             <Slide direction="up" in={showSlide} timeout={800}>
               <Box>
                 <Typography
-                  variant={isMobile ? 'h3' : 'h2'}
-                  sx={{ fontWeight: 700, mb: 2, textTransform: 'uppercase', color: textColor }}
+                  sx={{
+                    fontWeight: 700,
+                    mb: 2,
+                    textTransform: 'uppercase',
+                    color: textColor,
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                  }}
                 >
                   {slide.title}
                 </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 500, mb: 2, color: textColor }}>
+                <Typography
+                  sx={{
+                    fontWeight: 500,
+                    mb: 2,
+                    color: textColor,
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
+                  }}
+                >
                   {slide.subtitle}
                 </Typography>
-                <Typography variant="h6" sx={{ mb: 4, color: textColor }}>
+                <Typography
+                  sx={{
+                    mb: 4,
+                    color: textColor,
+                    fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
+                  }}
+                >
                   {slide.description}
                 </Typography>
                 <Button
@@ -130,8 +154,9 @@ export default function EnhancedHeroSlider() {
                     backgroundColor: buttonBg,
                     color: buttonText,
                     fontWeight: 600,
-                    px: 5,
-                    py: 1.5,
+                    px: { xs: 3, sm: 4, md: 5 },
+                    py: { xs: 1, sm: 1.25, md: 1.5 },
+                    fontSize: { xs: '0.875rem', sm: '1rem', md: '1.125rem' },
                     borderRadius: 4,
                     boxShadow: '0px 4px 20px rgba(0,0,0,0.3)',
                     '&:hover': {
@@ -144,41 +169,6 @@ export default function EnhancedHeroSlider() {
               </Box>
             </Slide>
           </Container>
-
-          {/* Dot Navigation */}
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              position: 'absolute',
-              bottom: 24,
-              left: 0,
-              right: 0,
-              justifyContent: 'center',
-              zIndex: 2,
-            }}
-          >
-            {slides.map((_, i) => (
-              <Box
-                key={i}
-                onClick={() => {
-                  setShowSlide(false);
-                  setTimeout(() => {
-                    setCurrentSlide(i);
-                    setShowSlide(true);
-                  }, 400);
-                }}
-                sx={{
-                  width: i === currentSlide ? 24 : 12,
-                  height: 12,
-                  borderRadius: 999,
-                  bgcolor: i === currentSlide ? buttonBg : 'rgba(255, 255, 255, 0.3)',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                }}
-              />
-            ))}
-          </Stack>
         </Box>
       </Fade>
 

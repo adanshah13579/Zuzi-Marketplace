@@ -16,7 +16,8 @@ import {
   useTheme,
   useMediaQuery,
   AppBar,
-  Toolbar
+  Toolbar,
+  InputAdornment
 } from '@mui/material';
 import {
   Send as SendIcon,
@@ -37,7 +38,6 @@ const Chat = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Sample chat data
   const chats = [
     {
       id: 1,
@@ -55,7 +55,6 @@ const Chat = () => {
       unread: 0,
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
     },
-    // Add more sample chats as needed
   ];
 
   const messages = [
@@ -73,57 +72,47 @@ const Chat = () => {
       time: '10:32',
       isReceived: false
     },
-    // Add more sample messages as needed
   ];
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      // Here you would typically send the message to your backend
       console.log('Sending message:', message);
       setMessage('');
     }
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
       minHeight: '100vh',
       backgroundColor: colors.background,
-      direction: 'ltr',
+      direction: 'rtl',
       fontFamily: "'Poppins', sans-serif"
+
     }}>
-      {/* Header */}
-      <AppBar 
-        position="fixed" 
-        sx={{ 
+      <AppBar
+        position="fixed"
+        sx={{
           backgroundColor: 'white',
+                direction: 'ltr',
+
           boxShadow: 'none',
           borderBottom: `1px solid ${colors.primary}20`
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {isMobile && selectedChat ? (
-              <IconButton 
-                edge="start" 
-                onClick={() => setSelectedChat(null)}
-                sx={{ color: colors.secondary }}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-            ) : (
-              <IconButton 
-                edge="start" 
-                onClick={() => navigate(-1)}
-                sx={{ color: colors.secondary }}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-            )}
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <IconButton
+              edge="start"
+              onClick={() => selectedChat && isMobile ? setSelectedChat(null) : navigate(-1)}
+              sx={{ color: colors.secondary }}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              sx={{
                 color: colors.secondary,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -134,11 +123,11 @@ const Chat = () => {
               חזרה
             </Typography>
           </Box>
-          <Box 
+          <Box
             component="img"
             src={zuziLogo}
             alt="Zuzi Logo"
-            sx={{ 
+            sx={{
               width: '40px',
               height: '40px',
               borderRadius: '10%',
@@ -149,24 +138,25 @@ const Chat = () => {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ 
-        display: 'flex', 
+      <Box sx={{
+        display: 'flex',
         height: 'calc(100vh - 64px)',
-        mt: '64px'
+        mt: '64px',
+        flexDirection: 'row'
       }}>
-        {/* Chat List - Always visible on desktop, conditionally visible on mobile */}
-        <Paper 
-          elevation={0} 
-          sx={{ 
+        {/* Chat List */}
+        <Paper
+          elevation={0}
+          sx={{
             width: isMobile ? '100%' : '30%',
             display: selectedChat && isMobile ? 'none' : 'block',
-            borderRight: `2px solid ${colors.secondary}20`,
+            borderLeft: `2px solid ${colors.secondary}20`,
             borderRadius: 0
           }}
         >
-          {/* Search Bar */}
-          <Box sx={{ 
-            p: 2, 
+          {/* Search */}
+          <Box sx={{
+            p: 2,
             borderBottom: `1px solid ${colors.primary}20`,
             backgroundColor: 'white'
           }}>
@@ -176,7 +166,11 @@ const Chat = () => {
               variant="outlined"
               size="small"
               InputProps={{
-                endAdornment: <SearchIcon sx={{ color: colors.tertiary, mr: 1 }} />
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon sx={{ color: colors.tertiary }} />
+                  </InputAdornment>
+                )
               }}
               sx={{
                 '& .MuiOutlinedInput-root': {
@@ -188,7 +182,6 @@ const Chat = () => {
             />
           </Box>
 
-          {/* Chat List */}
           <List sx={{ p: 0 }}>
             {chats.map((chat) => (
               <ListItem
@@ -206,10 +199,10 @@ const Chat = () => {
                   }
                 }}
               >
-                <ListItemAvatar>
+                <ListItemAvatar sx={{ml:2}}>
                   <Badge
                     overlap="circular"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                     badgeContent={chat.unread}
                     color="error"
                   >
@@ -218,15 +211,15 @@ const Chat = () => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="subtitle1" sx={{ 
-                        fontWeight: 600, 
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="subtitle1" sx={{
+                        fontWeight: 600,
                         textAlign: 'right',
                         fontFamily: "'Poppins', sans-serif"
                       }}>
                         {chat.name}
                       </Typography>
-                      <Typography variant="caption" sx={{ 
+                      <Typography variant="caption" sx={{
                         color: colors.tertiary,
                         fontFamily: "'Poppins', sans-serif"
                       }}>
@@ -235,39 +228,34 @@ const Chat = () => {
                     </Box>
                   }
                   secondary={
-                    <Typography sx={{ 
+                    <Typography sx={{
                       textAlign: 'right',
-                      fontFamily: "'Poppins', sans-serif"
+                      fontFamily: "'Poppins', sans-serif",
+                      color: chat.unread > 0 ? colors.secondary : colors.tertiary,
+                      fontWeight: chat.unread > 0 ? 600 : 400
                     }}>
                       {chat.lastMessage}
                     </Typography>
                   }
-                  secondaryTypographyProps={{
-                    sx: {
-                      color: chat.unread > 0 ? colors.secondary : colors.tertiary,
-                      fontWeight: chat.unread > 0 ? 600 : 400
-                    }
-                  }}
                 />
               </ListItem>
             ))}
           </List>
         </Paper>
 
-        {/* Chat Area - Always visible on desktop, conditionally visible on mobile */}
-        {selectedChat ? (
-          <Box sx={{ 
-            flex: 1, 
-            display: 'flex', 
+        {/* Chat Area */}
+        {selectedChat && (
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
             flexDirection: 'column',
             width: isMobile ? '100%' : '70%'
           }}>
-            {/* Chat Header */}
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 2, 
-                display: 'flex', 
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2,
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 borderRadius: 0,
@@ -278,14 +266,14 @@ const Chat = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Avatar src={selectedChat.avatar} />
                 <Box>
-                  <Typography variant="subtitle1" sx={{ 
-                    fontWeight: 600, 
+                  <Typography variant="subtitle1" sx={{
+                    fontWeight: 600,
                     textAlign: 'right',
                     fontFamily: "'Poppins', sans-serif"
                   }}>
                     {selectedChat.name}
                   </Typography>
-                  <Typography variant="caption" sx={{ 
+                  <Typography variant="caption" sx={{
                     color: colors.tertiary,
                     textAlign: 'right',
                     fontFamily: "'Poppins', sans-serif"
@@ -299,10 +287,10 @@ const Chat = () => {
               </IconButton>
             </Paper>
 
-            {/* Messages Area */}
-            <Box sx={{ 
-              flex: 1, 
-              p: 2, 
+            {/* Messages */}
+            <Box sx={{
+              flex: 1,
+              p: 2,
               overflowY: 'auto',
               backgroundColor: colors.background
             }}>
@@ -323,25 +311,21 @@ const Chat = () => {
                       backgroundColor: msg.isReceived ? 'white' : colors.primary,
                       color: msg.isReceived ? colors.secondary : 'white',
                       borderRadius: 2,
-                      border: `1px solid ${msg.isReceived ? colors.primary + '20' : 'transparent'}`
+                      border: `1px solid ${msg.isReceived ? colors.primary + '20' : 'transparent'}`,
+                      textAlign: 'right'
                     }}
                   >
-                    <Typography variant="body1" sx={{ 
-                      textAlign: 'right',
+                    <Typography variant="body1" sx={{
                       fontFamily: "'Poppins', sans-serif"
                     }}>
                       {msg.text}
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        display: 'block',
-                        textAlign: 'left',
-                        mt: 1,
-                        color: msg.isReceived ? colors.tertiary : 'rgba(255,255,255,0.7)',
-                        fontFamily: "'Poppins', sans-serif"
-                      }}
-                    >
+                    <Typography variant="caption" sx={{
+                      display: 'block',
+                      textAlign: 'left',
+                      mt: 1,
+                      color: msg.isReceived ? colors.tertiary : 'white'
+                    }}>
                       {msg.time}
                     </Typography>
                   </Paper>
@@ -349,24 +333,22 @@ const Chat = () => {
               ))}
             </Box>
 
-            {/* Message Input */}
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 2, 
-                display: 'flex', 
-                alignItems: 'center',
-                gap: 1,
-                borderRadius: 0,
+            {/* Input Area */}
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2,
                 borderTop: `1px solid ${colors.primary}20`,
-                backgroundColor: 'white'
+                backgroundColor: 'white',
+                display: 'flex',
+                gap: 1
               }}
             >
               <IconButton>
-                <EmojiEmotionsIcon />
+                <EmojiEmotionsIcon sx={{ color: colors.secondary }} />
               </IconButton>
               <IconButton>
-                <AttachFileIcon />
+                <AttachFileIcon sx={{ color: colors.secondary }} />
               </IconButton>
               <TextField
                 fullWidth
@@ -375,7 +357,7 @@ const Chat = () => {
                 size="small"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
@@ -384,40 +366,16 @@ const Chat = () => {
                   }
                 }}
               />
-              <IconButton 
-                onClick={handleSendMessage}
-                disabled={!message.trim()}
-                sx={{ 
-                  color: message.trim() ? colors.primary : colors.tertiary 
-                }}
-              >
-                <SendIcon />
-              </IconButton>
+             <IconButton onClick={handleSendMessage}>
+  <SendIcon sx={{ color: colors.primary, transform: 'scaleX(-1)' }} />
+</IconButton>
+
             </Paper>
           </Box>
-        ) : (
-          // Empty state when no chat is selected (only visible on desktop)
-          !isMobile && (
-            <Box sx={{ 
-              flex: 1, 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              backgroundColor: colors.background
-            }}>
-              <Typography variant="h6" sx={{ 
-                color: colors.tertiary, 
-                textAlign: 'right',
-                fontFamily: "'Poppins', sans-serif"
-              }}>
-                בחר שיחה מהרשימה
-              </Typography>
-            </Box>
-          )
         )}
       </Box>
     </Box>
   );
 };
 
-export default Chat; 
+export default Chat;

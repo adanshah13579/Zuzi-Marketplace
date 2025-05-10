@@ -29,12 +29,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatIcon from '@mui/icons-material/Chat';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add'; // Added for the Post Ad button
+import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import zuziLogo from '../../assets/Zuzi.jpg';
 import colors from '../../Style/colors';
 import { categories } from '../../data/data';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+
 
 const Navbar = () => {
   const theme = useTheme();
@@ -337,42 +340,109 @@ const Navbar = () => {
     </Box>
   );
   
-  
-  
   return (
-    <AppBar 
-    position="sticky" 
+ <AppBar 
+  position="sticky" 
+  sx={{ 
+    backgroundColor: 'white',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    direction: 'rtl'
+  }}
+>
+  <Toolbar
     sx={{ 
-      backgroundColor: 'white',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      direction: 'rtl'
+      justifyContent: 'space-between',
+      padding: isMobile ? '0 8px' : '0 16px',
+      position: 'relative',
+      minHeight: isMobile ? '64px' : '64px'
     }}
   >
-    <Toolbar
-      sx={{ 
-        justifyContent: 'space-between',
-        padding: isMobile ? '0 8px' : '0 16px',
-        position: 'relative',
-        minHeight: isMobile ? '64px' : '64px'
-      }}
-    >
-      {/* Right Side - Logo */}
-      <Box 
-        component="img"
-        src={zuziLogo}
-        alt="Zuzi Logo"
-        sx={{ 
-          width: isMobile ? '40px' : '50px',
-          height: 'auto',
-          borderRadius: '10%',
-          cursor: 'pointer',
-          zIndex: 2
-        }}
-        onClick={() => navigate('/')}
-      />
-  
-      {/* Middle - Categories */}
-      {!isMobile && (
+    {/* Mobile view layout */}
+    {isMobile && (
+      <>
+        {/* Right end - Menu icon */}
+        <IconButton onClick={toggleDrawer(true)} sx={{ order: 1 }}>
+          <MenuIcon sx={{ color: colors.primary }} />
+        </IconButton>
+        
+        {/* Center area - Logo with Post Ad button to its right */}
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          flex: 1,
+          order: 2,gap:8
+        }}>
+          {/* Post Ad button on right of logo */}
+          <Button
+            variant=""
+            size="small"
+            onClick={handlePostAd}
+            sx={{
+              backgroundColor: "#fff",
+              color: colors.primary,
+              borderRadius: '4px',
+              minWidth: 'auto',
+              border:"1px solid #f4c724",
+              padding: '4px 4px',
+              mr: 3, // Increased margin-right for more spacing between button and logo
+              '&:hover': {
+                backgroundColor: colors.primary + 'dd'
+              },
+              fontWeight: 600
+            }}
+          >
+            <AddIcon fontSize="small" />
+          </Button>
+          
+          {/* Logo in center */}
+          <Box 
+            component="img"
+            src={zuziLogo}
+            alt="Zuzi Logo"
+            sx={{ 
+              width: '40px',
+              height: 'auto',
+              borderRadius: '10%',
+              cursor: 'pointer',
+              zIndex: 2
+            }}
+            onClick={() => navigate('/')}
+          />
+          
+          {/* Favorites icon on left of logo */}
+          <IconButton onClick={() => navigate('/favorites')} size="small" sx={{ ml: 3 }}> {/* Increased margin-left for more spacing */}
+            <FavoriteBorderIcon sx={{ color: colors.primary, fontSize: '28px' }} />
+          </IconButton>
+        </Box>
+        
+        {/* Left end - Chat icon */}
+        <IconButton onClick={() => navigate('/chat')} size="small" sx={{ order: 3 }}>
+          <Badge badgeContent={2} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '10px' } }}>
+            <ChatBubbleOutlineIcon sx={{ color: colors.primary, fontSize: '22px' }} />
+          </Badge>
+        </IconButton>
+      </>
+    )}
+    
+    {/* Desktop view layout - unchanged */}
+    {!isMobile && (
+      <>
+        {/* Right Side - Logo */}
+        <Box 
+          component="img"
+          src={zuziLogo}
+          alt="Zuzi Logo"
+          sx={{ 
+            width: '50px',
+            height: 'auto',
+            borderRadius: '10%',
+            cursor: 'pointer',
+            zIndex: 2
+          }}
+          onClick={() => navigate('/')}
+        />
+    
         <Box sx={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
             {categories.map((category) => (
@@ -393,228 +463,195 @@ const Navbar = () => {
             ))}
           </Box>
         </Box>
-      )}
-      
-      {/* Left Side - Icons */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        {/* Post Ad Button */}
-        <Button
-  variant="contained"
-  startIcon={<AddIcon />}
-  onClick={handlePostAd}
-  sx={{
-    backgroundColor: colors.primary,
-    color: 'white',
-    borderRadius: '4px',
-    '&:hover': {
-      backgroundColor: colors.primary + 'dd'
-    },
-    fontWeight: 600,
-    display: isMobile ? 'none' : 'flex', // Hide on mobile, show on desktop
-    gap: '8px' // Add gap between icon and text
-  }}
->
-  פרסם מודעה
-</Button>
+        
+        {/* Left Side - User actions */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
+          <IconButton onClick={() => navigate('/chat')}>
+            <Badge badgeContent={2} color="error">
+              <ChatBubbleOutlineIcon sx={{ color: colors.primary }} />
+            </Badge>
+          </IconButton>
+          <IconButton onClick={() => navigate('/favorites')}>
+            <FavoriteBorderIcon sx={{ color: colors.primary }} />
+          </IconButton>
+          <IconButton onClick={handleProfileMenuOpen}>
+            <Avatar sx={{ bgcolor: "#fff", color:colors.primary,width: 30, height: 30,border:"1px solid  #f4c724 " }}>
+              <PersonIcon />
+            </Avatar>
+          </IconButton>
 
-
-        {/* Mobile */}
-        {isMobile && (
-          <>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handlePostAd}
-              sx={{
-                backgroundColor: colors.primary,
-                color: 'white',
-                borderRadius: '4px',
-                minWidth: 'auto',
-                padding: '4px 8px',
-                '&:hover': {
-                  backgroundColor: colors.primary + 'dd'
-                },
-                fontWeight: 600
-              }}
-            >
-              <AddIcon fontSize="small" />
-            </Button>
-            <IconButton onClick={() => navigate('/chat')}>
-              <Badge badgeContent={2} color="error">
-                <ChatIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={toggleDrawer(true)}>
-              <MenuIcon sx={{ color: colors.secondary }} />
-            </IconButton>
-          </>
-        )}
-  
-        {/* Desktop */}
-        {!isMobile && (
-          <>
-            <IconButton onClick={() => navigate('/chat')}>
-              <Badge badgeContent={2} color="error">
-                <ChatIcon sx={{ color: colors.secondary }} />
-              </Badge>
-            </IconButton>
-            <IconButton onClick={handleProfileMenuOpen}>
-              <Avatar sx={{ bgcolor: colors.primary, width: 32, height: 32 }}>
-                <PersonIcon />
-              </Avatar>
-            </IconButton>
-          </>
-        )}
-      </Box>
-  
-      {/* Mobile Categories Row */}
-      {isMobile && (
-        <Box sx={{ 
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          right: 0,
-          backgroundColor: 'white',
-          borderTop: '1px solid rgba(0,0,0,0.1)',
-          padding: '8px 0',
-          overflowX: 'auto',
-          whiteSpace: 'nowrap',
-          '&::-webkit-scrollbar': { display: 'none' },
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none'
-        }}>
-          <Box sx={{ 
-            display: 'flex', 
-            gap: 1,
-            padding: '0 8px'
-          }}>
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                onClick={(e) => handleCategoryMenuOpen(e, category)}
-                endIcon={<ExpandMoreIcon />}
-                sx={{
-                  color: activeCategory === category.id ? colors.primary : colors.secondary,
-                  fontSize: '0.9rem',
-                  fontWeight: activeCategory === category.id ? 700 : 400,
-                  whiteSpace: 'nowrap',
-                  minWidth: 'auto',
-                  padding: '4px 8px',
-                  borderRadius: '10px',
-                  border: `1px solid ${colors.secondary}20`,
-                  '&:hover': {
-                    backgroundColor: colors.primary + '10',
-                    borderColor: colors.primary
-                  }
-                }}
-              >
-                {category.name}
-              </Button>
-            ))}
-          </Box>
-        </Box>
-      )}
-    </Toolbar>
-  
-    {/* Category Dropdown Menu */}
-    <Menu
-      anchorEl={categoryMenu.anchorEl}
-      open={Boolean(categoryMenu.anchorEl)}
-      onClose={handleMenuClose}
-      onMouseLeave={isMobile ? undefined : handleMenuClose}
-      TransitionComponent={Fade}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-      PaperProps={{
-        sx: {
-          width: 250,
-          maxHeight: 400,
-          overflow: 'hidden',
-          direction: 'rtl',
-          '&::-webkit-scrollbar': { display: 'none' }
-        }
-      }}
-      className="category-menu"
-    >
-      {categoryMenu.category && (
-        <Box sx={{ maxHeight: 400, overflowY: 'auto', direction: 'rtl' }}>
-          <Typography 
-            variant="subtitle1" 
-            sx={{ 
-              p: 2, 
-              fontWeight: 'bold',
+          <Button
+            startIcon={<AddIcon />}
+            onClick={handlePostAd}
+            sx={{
+              backgroundColor: "#fff",
               color: colors.primary,
-              borderBottom: `1px solid ${colors.primary}20`,
-              textAlign: 'right'
+              borderRadius: '6px',
+              gap:0.8,
+              border:"1px solid #f4c724",
+              padding: '4px 4px',
+              height: '32px',
+              fontSize: '0.7rem',
+              '&:hover': {
+                // backgroundColor: colors.primary + 'dd'
+              },
+              fontWeight: 500
             }}
           >
-            {categoryMenu.category.name}
-          </Typography>
-          <Divider />
-          {categoryMenu.category.subcategories.map((subcategory) => (
-            <MenuItem 
-              key={subcategory.id}
-              onClick={() => {
-                navigate(`/category/${categoryMenu.category.id}/${subcategory.id}`);
-                handleMenuClose();
-              }}
+            פרסם מודעה
+          </Button>
+        </Box>
+      </>
+    )}
+    
+    {/* Mobile Categories Row */}
+    {isMobile && (
+      <Box sx={{ 
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
+        borderTop: '1px solid rgba(0,0,0,0.1)',
+        padding: '8px 0',
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        '&::-webkit-scrollbar': { display: 'none' },
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none'
+      }}>
+        <Box sx={{ 
+          display: 'flex', 
+          gap: 1,
+          padding: '0 8px'
+        }}>
+          {categories.map((category) => (
+            <Button
+              key={category.id}
+              onClick={(e) => handleCategoryMenuOpen(e, category)}
+              endIcon={<ExpandMoreIcon />}
               sx={{
-                py: 1.5,
-                px: 2,
-                textAlign: 'right',
+                color: activeCategory === category.id ? colors.primary : colors.secondary,
+                fontSize: '0.9rem',
+                fontWeight: activeCategory === category.id ? 700 : 400,
+                whiteSpace: 'nowrap',
+                minWidth: 'auto',
+                padding: '4px 8px',
+                borderRadius: '10px',
+                border: `1px solid ${colors.secondary}20`,
                 '&:hover': {
-                  backgroundColor: colors.primary + '20',
-                  transform: 'translateX(5px)',
-                  transition: 'all 0.2s ease'
+                  backgroundColor: colors.primary + '10',
+                  borderColor: colors.primary
                 }
               }}
             >
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {subcategory.name}
-              </Typography>
-            </MenuItem>
+              {category.name}
+            </Button>
           ))}
         </Box>
-      )}
-    </Menu>
-  
-    {/* Mobile Drawer */}
-    <Drawer
-      anchor="right"
-      open={mobileDrawerOpen}
-      onClose={toggleDrawer(false)}
-    >
-      {drawerContent}
-    </Drawer>
-  
-    {/* Profile Menu */}
-    <Menu
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleMenuClose}
-      dir='rtl'
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-    >
-      <MenuItem onClick={() => { navigate('/profile'); handleMenuClose(); }}>
-        <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
-        פרופיל
-      </MenuItem>
-      <MenuItem onClick={() => { navigate('/favorites'); handleMenuClose(); }}>
-        <ListItemIcon><FavoriteIcon fontSize="small" /></ListItemIcon>
-        פריטים מועדפים
-      </MenuItem>
-      <Divider />
-      <MenuItem onClick={handleLogin}>
-        <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
-        התחברות
-      </MenuItem>
-      <MenuItem onClick={handleSignup}>
-        <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
-        הרשמה
-      </MenuItem>
-    </Menu>
-  </AppBar>
+      </Box>
+    )}
+  </Toolbar>
+
+  {/* Category Dropdown Menu */}
+  <Menu
+    anchorEl={categoryMenu.anchorEl}
+    open={Boolean(categoryMenu.anchorEl)}
+    onClose={handleMenuClose}
+    onMouseLeave={isMobile ? undefined : handleMenuClose}
+    TransitionComponent={Fade}
+    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+    PaperProps={{
+      sx: {
+        width: 250,
+        maxHeight: 400,
+        overflow: 'hidden',
+        direction: 'rtl',
+        '&::-webkit-scrollbar': { display: 'none' }
+      }
+    }}
+    className="category-menu"
+  >
+    {categoryMenu.category && (
+      <Box sx={{ maxHeight: 400, overflowY: 'auto', direction: 'rtl' }}>
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            p: 2, 
+            fontWeight: 'bold',
+            color: colors.primary,
+            borderBottom: `1px solid ${colors.primary}20`,
+            textAlign: 'right'
+          }}
+        >
+          {categoryMenu.category.name}
+        </Typography>
+        <Divider />
+        {categoryMenu.category.subcategories.map((subcategory) => (
+          <MenuItem 
+            key={subcategory.id}
+            onClick={() => {
+              navigate(`/category/${categoryMenu.category.id}/${subcategory.id}`);
+              handleMenuClose();
+            }}
+            sx={{
+              py: 1.5,
+              px: 2,
+              textAlign: 'right',
+              '&:hover': {
+                backgroundColor: colors.primary + '20',
+                transform: 'translateX(5px)',
+                transition: 'all 0.2s ease'
+              }
+            }}
+          >
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              {subcategory.name}
+            </Typography>
+          </MenuItem>
+        ))}
+      </Box>
+    )}
+  </Menu>
+
+  {/* Mobile Drawer */}
+  <Drawer
+    anchor="right"
+    open={mobileDrawerOpen}
+    onClose={toggleDrawer(false)}
+  >
+    {drawerContent}
+  </Drawer>
+
+  {/* Profile Menu */}
+  <Menu
+    anchorEl={anchorEl}
+    open={Boolean(anchorEl)}
+    onClose={handleMenuClose}
+    dir='rtl'
+    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+  >
+    <MenuItem onClick={() => { navigate('/profile'); handleMenuClose(); }}>
+      <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
+      פרופיל
+    </MenuItem>
+    <MenuItem onClick={() => { navigate('/favorites'); handleMenuClose(); }}>
+      <ListItemIcon><FavoriteIcon fontSize="small" /></ListItemIcon>
+      פריטים מועדפים
+    </MenuItem>
+    <Divider />
+    <MenuItem onClick={handleLogin}>
+      <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
+      התחברות
+    </MenuItem>
+    <MenuItem onClick={handleSignup}>
+      <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
+      הרשמה
+    </MenuItem>
+  </Menu>
+</AppBar>
   );
 };
 
