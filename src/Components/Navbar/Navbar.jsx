@@ -449,41 +449,49 @@ const Navbar = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
           <IconButton onClick={() => navigate('/chat')}>
             <Badge badgeContent={2} color="error">
-              <ChatBubbleOutlineIcon sx={{ color: colors.primary }} />
+              <ChatBubbleOutlineIcon sx={{ color:"#6C757D" }} />
             </Badge>
           </IconButton>
           <IconButton onClick={() => navigate('/favorites')}>
-            <FavoriteBorderIcon sx={{ color: colors.primary }} />
+            <FavoriteBorderIcon sx={{  color:"#6C757D" }} />
           </IconButton>
           <IconButton onClick={handleProfileMenuOpen}>
-            <Avatar sx={{ bgcolor: "#fff", color:colors.primary,width: 30, height: 30,border:"1px solid  #f4c724 " }}>
+            <Avatar sx={{ bgcolor: "#fff", color:"#6C757D",width: 30, height: 30,border:"1px solid  #6C757D " }}>
               <PersonIcon />
             </Avatar>
           </IconButton>
 
-          <Button
-            startIcon={<AddIcon />}
-            onClick={() => {
-              handlePostAd();
-              navigate("/post-ad");
-            }}
-            sx={{
-              backgroundColor: "#fff",
-              color: colors.primary,
-              borderRadius: '6px',
-              gap:0.8,
-              border:"1px solid #f4c724",
-              padding: '4px 4px',
-              height: '32px',
-              fontSize: '0.7rem',
-              '&:hover': {
-                // backgroundColor: colors.primary + 'dd'
-              },
-              fontWeight: 500
-            }}
-          >
-            פרסם מודעה
-          </Button>
+  <Button
+  startIcon={<AddIcon />}
+  onClick={() => {
+    handlePostAd();
+    navigate("/select-category");
+  }}
+  sx={{
+    background: 'linear-gradient(0deg, #393E46 0%, #6C757D 100%)', // dark grey to muted grey
+    color: '#fff',
+    borderRadius: '1rem',
+    gap: 0.8,
+    padding: '6px 9px',
+    height: '36px',
+    fontSize: '0.7rem',
+    fontWeight: 500,
+    boxShadow: '0 0.7em 1.5em -0.5em #393e4698',
+    textTransform: 'none',
+    '&:hover': {
+      background: 'linear-gradient(0deg, #2e343b 0%, #5a6268 100%)',
+      boxShadow: '0 0.5em 1.5em -0.5em #393e4698',
+    },
+    '&:active': {
+      boxShadow: '0 0.3em 1em -0.5em #393e4698',
+    }
+  }}
+>
+  פרסם מודעה
+</Button>
+
+
+
         </Box>
       </>
     )}

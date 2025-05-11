@@ -16,43 +16,37 @@ const Footer = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-const categories = [
-  {
-    title: 'אלקטרוניקה',
-    items: ['אודיו', 'טאבלטים', 'אביזרים', 'סמארטפונים', 'מחשבים ניידים']
-  },
-  {
-    title: 'ריהוט',
-    items: ['חוץ', 'סלון', 'מטבח', 'משרד', 'חדר שינה']
-  },
-  {
-    title: 'ביגוד',
-    items: ['גברים', 'נשים', 'הנעלה', 'ילדים', 'אביזרים']
-  },
-  {
-    title: 'ספורט',
-    items: ['חוץ', 'כושר', 'ספורט ימי', 'ספורט חורף', 'ספורט קבוצתי']
-  }
-];
-
-
-  // Sort categories based on the length of the title (from shortest to longest)
-  const sortedCategories = categories.sort((a, b) => a.title.length - b.title.length);
+  const categories = [
+    {
+      title: 'אלקטרוניקה',
+      items: ['אודיו', 'טאבלטים', 'אביזרים', 'סמארטפונים', 'מחשבים ניידים']
+    },
+    {
+      title: 'ריהוט',
+      items: ['חוץ', 'סלון', 'מטבח', 'משרד', 'חדר שינה']
+    },
+    {
+      title: 'ביגוד',
+      items: ['גברים', 'נשים', 'הנעלה', 'ילדים', 'אביזרים']
+    },
+    {
+      title: 'ספורט',
+      items: ['חוץ', 'כושר', 'ספורט ימי', 'ספורט חורף', 'ספורט קבוצתי']
+    }
+  ];
 
   const companyLinks = [
-        { name: 'בלוג', href: '/blog' },
+    { name: 'בלוג', href: '/blog' },
     { name: 'קריירה', href: '/careers' },
-
     { name: 'אודותינו', href: '/about' },
     { name: 'עיתונות', href: '/press' },
   ];
 
   const supportLinks = [
     { name: 'מרכז עזרה', href: '/help' },
-     { name: 'תנאי שימוש', href: '/terms' },
+    { name: 'תנאי שימוש', href: '/terms' },
     { name: 'מרכז בטיחות', href: '/safety' },
     { name: 'הנחיות קהילה', href: '/guidelines' },
-   
     { name: 'מדיניות פרטיות', href: '/privacy' }
   ];
 
@@ -69,10 +63,8 @@ const categories = [
       }}
     >
       <Container maxWidth="lg">
-        
-        <Grid container spacing={10} sx={{ direction: 'ltr' }}>
-
-            {/* Logo and Social */}
+        <Grid container spacing={6} sx={{ direction: 'ltr' }}>
+          {/* Logo and Social */}
           <Grid item xs={12} md={4} order={{ xs: 1, md: 2 }}>
             <Box
               sx={{
@@ -136,11 +128,17 @@ const categories = [
           </Grid>
           
           {/* Categories */}
-          <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>
-            <Grid container spacing={3}>
-              {sortedCategories.map((category) => (
+          <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>
+            <Grid container spacing={4} justifyContent="space-between">
+              {categories.map((category) => (
                 <Grid item xs={6} sm={3} key={category.title}>
-                  <Box sx={{ textAlign: 'right', alignItems: 'flex-end' }}>
+                  <Box sx={{ 
+                    textAlign: 'right',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                    pr: { xs: 0, md: 4 }
+                  }}>
                     <Typography
                       variant="subtitle1"
                       sx={{
@@ -196,17 +194,16 @@ const categories = [
           </Grid>
 
           {/* Company and Support Links */}
-          <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2.5,
-                alignItems: 'flex-end',
-                textAlign: 'right'
-              }}
-            >
-              <Box>
+          <Grid container item xs={12} spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  textAlign: 'right'
+                }}
+              >
                 <Typography
                   variant="subtitle1"
                   sx={{
@@ -251,20 +248,17 @@ const categories = [
                   ))}
                 </Box>
               </Box>
-            </Box>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2.5,
-                alignItems: 'flex-end',
-                textAlign: 'right'
-              }}
-            >
-              <Box>
+            <Grid item xs={12} sm={6}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  textAlign: 'right'
+                }}
+              >
                 <Typography
                   variant="subtitle1"
                   sx={{
@@ -309,11 +303,9 @@ const categories = [
                   ))}
                 </Box>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
-
         </Grid>
-        
       </Container>
     </Box>
   );

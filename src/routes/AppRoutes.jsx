@@ -8,6 +8,7 @@ import Chat from '../Pages/Chat/Chat';
 import Subcategory from '../Pages/Subcategory/Subcategory';
 import ProductDetails from '../Pages/ProductDetails/ProductDetails';
 import PostAd from '../Pages/PostadPage';
+import SelectCategory from '../Pages/SelectCategoryPage';
 
 const AppRoutes = () => {
   return (
@@ -19,7 +20,8 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductDetails />} />
       
       {/* Subcategory Page */}
-            {/* <Route path="/category/:categoryId/alllisting" element={<Category/>} /> */}
+            <Route path="/select-category" element={< SelectCategory/>} />
+           
 
       <Route path="/category/:categoryId/:subcategoryId" element={<Subcategory />} />
       <Route path="/post-ad" element={<PostAd />} />
