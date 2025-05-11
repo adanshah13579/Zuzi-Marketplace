@@ -7,6 +7,7 @@ import Profile from '../Pages/Profile/Profile';
 import Chat from '../Pages/Chat/Chat';
 import Subcategory from '../Pages/Subcategory/Subcategory';
 import ProductDetails from '../Pages/ProductDetails/ProductDetails';
+import PostAd from '../Pages/PostadPage';
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,9 @@ const AppRoutes = () => {
       
       {/* Subcategory Page */}
       <Route path="/category/:categoryId/:subcategoryId" element={<Subcategory />} />
+      <Route path="/post-ad" element={<PostAd />} />
+
+      
       
       {/* Favorites Page */}
       <Route path="/favorites" element={<Favorites />} />

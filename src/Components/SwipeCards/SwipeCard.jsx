@@ -15,28 +15,27 @@ import {
   Favorite as FavoriteIcon, 
   FavoriteBorder as FavoriteBorderIcon,
   Bed as BedIcon,
-  Layers as FloorIcon,
   SquareFoot as SquareFootIcon,
   LocalParking as LocalParkingIcon,
   Visibility as VisibilityIcon,
   Chat as ChatIcon
 } from '@mui/icons-material';
 import colors from '../../Style/colors';
+import { useNavigate } from 'react-router-dom';
 
 const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
+  const navigate = useNavigate();
 
-  // Format price with commas
   const formatPrice = (price) => {
     return new Intl.NumberFormat('he-IL').format(price);
   };
 
-  const handleFavorite = () => {
+  const handleFavorite = (e) => {
+    e.stopPropagation(); // prevent card navigation
     setIsFavorite(!isFavorite);
-    // Here you would typically update the global state or make an API call
-    // to save the favorite status
   };
 
   return (
@@ -50,12 +49,14 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
         display: 'flex',
         flexDirection: { xs: 'row', sm: 'column' },
         transition: 'transform 0.3s ease',
+        cursor: 'pointer',
         '&:hover': {
           transform: 'translateY(-5px)'
         }
       }}
+onClick={() => navigate(`/category/${product.id}/${product.subcategories?.[0]?.id}`)}
     >
-      {/* Image Section - Fixed Height */}
+      {/* Image */}
       <Box sx={{ 
         position: 'relative', 
         height: { xs: '100%', sm: 200 },
@@ -71,7 +72,6 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
             objectFit: 'cover'
           }}
         />
-        
         <Box sx={{ 
           position: 'absolute',
           top: 0,
@@ -102,11 +102,13 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
               fontWeight: 600,
               fontSize: '0.75rem'
             }}
+            onClick={() => navigate(`/category/${product.id}/${product.subcategories?.[0]?.id}`)}
+
           />
         </Box>
       </Box>
 
-      {/* Content Section - Fixed Height */}
+      {/* Content */}
       <CardContent sx={{ 
         p: { xs: 1.5, sm: 2 },
         backgroundColor: 'white',
@@ -148,7 +150,7 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
             {product.description}
           </Typography>
 
-          {/* Property Details */}
+          {/* Details Row */}
           {product.rooms && (
             <Box sx={{ 
               display: 'flex', 
@@ -199,7 +201,6 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
             ₪{formatPrice(product.price)}
           </Typography>
 
-          {/* Action Buttons - Fixed Height */}
           <Box sx={{ 
             display: 'flex', 
             gap: 1,
@@ -223,6 +224,7 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
                   marginLeft: 0.5
                 }
               }}
+              onClick={(e) => e.stopPropagation()}
             >
               צ'אט
             </Button>
@@ -241,6 +243,7 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
                   marginLeft: 0.5
                 }
               }}
+              onClick={(e) => e.stopPropagation()}
             >
               פרטים
             </Button>
@@ -251,4 +254,4 @@ const SwipeCard = ({ product, isFavorite: initialFavorite = false }) => {
   );
 };
 
-export default SwipeCard; 
+export default SwipeCard;

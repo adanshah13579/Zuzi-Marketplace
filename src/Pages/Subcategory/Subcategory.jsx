@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -8,9 +8,7 @@ import {
   CardContent,
   CardActionArea,
   Button,
-  MenuItem,
-  Select,
-  TextField,
+  Chip,
 } from '@mui/material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
@@ -21,6 +19,24 @@ const Subcategory = () => {
   const navigate = useNavigate();
 
   const items = sampleListings[categoryId] || [];
+
+  const [filters, setFilters] = useState([]);
+
+  const staticFilters = ['השכרה', 'ריהוט', 'חיות מחמד', 'רכב'];
+
+  const addFilter = (filter) => {
+    if (!filters.includes(filter)) {
+      setFilters([...filters, filter]);
+    }
+  };
+
+  const removeFilter = (filterToRemove) => {
+    setFilters(filters.filter(f => f !== filterToRemove));
+  };
+
+  const resetFilters = () => {
+    setFilters([]);
+  };
 
   const handleItemClick = (itemId) => {
     navigate(`/product/${itemId}`);
@@ -38,113 +54,118 @@ const Subcategory = () => {
     >
       <Navbar />
 
-      {/* Main layout: Cards Left, Filters Right */}
       <Box
         sx={{
-          flex: 1,
           display: 'flex',
-          flexDirection: { xs: 'column', md: 'row-reverse' },
+          flexDirection: { xs: 'row', md: "row-reverse" },
           p: { xs: 2, sm: 3, md: 4 },
           gap: 3,
-          maxWidth: '1400px',
-          margin: '0 auto',
           width: '100%',
-          backgroundColor: '#f8f9fa',
+          backgroundColor: '#fff',
         }}
       >
-        {/* Filters Right */}
         <Box
           sx={{
-            width: { xs: '100%', md: '300px' },
+            width: { xs: '100%', md: '22%' },
             backgroundColor: '#ffffff',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
-            p: 3,
+            p: 2,
             borderRadius: 2,
-            height: 'fit-content',
+            height: '100vh',
+            direction: 'rtl',
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#333' }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#333', textAlign: 'right' }}>
             סינון
           </Typography>
 
           {/* Title Search */}
-          <TextField
-            label="כותרת"
-            fullWidth
-            size="small"
+          <label style={{ display: 'block', marginBottom: '4px' }}>כותרת</label>
+          <input
+            type="text"
             placeholder="חפש לפי כותרת..."
-            sx={{ mb: 2 }}
-            inputProps={{ style: { direction: 'rtl' } }}
+            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
           />
 
           {/* Price Range */}
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            <TextField
-              label="מינ'"
+          <label style={{ display: 'block', marginBottom: '4px' }}>מחיר</label>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+            <input
               type="number"
-              size="small"
-              fullWidth
-              inputProps={{ style: { direction: 'rtl' } }}
+              placeholder="מינ'"
+              style={{ width: "35%", padding: '8px', direction: 'rtl' }}
             />
-            <TextField
-              label="מקס'"
+            <input
               type="number"
-              size="small"
-              fullWidth
-              inputProps={{ style: { direction: 'rtl' } }}
+              placeholder="מקס'"
+              style={{ width: "35%", padding: '8px', direction: 'rtl' }}
             />
-          </Box>
+          </div>
 
-          {/* Price Sort */}
-          <Select
-            fullWidth
-            size="small"
-            defaultValue=""
-            displayEmpty
-            sx={{ mb: 2 }}
-          >
-            <MenuItem value="">מיין לפי מחיר</MenuItem>
-            <MenuItem value="low">מהנמוך לגבוה</MenuItem>
-            <MenuItem value="high">מהגבוה לנמוך</MenuItem>
-          </Select>
-
-          {/* Rooms Filter */}
-          <Select
-            fullWidth
-            size="small"
-            defaultValue=""
-            displayEmpty
-            sx={{ mb: 2 }}
-          >
-            <MenuItem value="">מס' חדרים</MenuItem>
-            <MenuItem value="1">1 חדר</MenuItem>
-            <MenuItem value="2">2 חדרים</MenuItem>
-            <MenuItem value="3">3 חדרים</MenuItem>
-            <MenuItem value="4+">4+ חדרים</MenuItem>
-          </Select>
-
-          {/* Location Filter */}
-          <TextField
-            label="מיקום"
-            fullWidth
-            size="small"
-            placeholder="הכנס מיקום..."
-            inputProps={{ style: { direction: 'rtl' } }}
-            sx={{ mb: 2 }}
+          {/* Number of Rooms */}
+          <label style={{ display: 'block', marginBottom: '4px' }}>מס' חדרים</label>
+          <input
+            type="text"
+            placeholder="הכנס מספר חדרים"
+            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
           />
 
-          {/* Filter Buttons */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button variant="contained" color="primary" sx={{ flex: 1 }}>
+          {/* Location */}
+          <label style={{ display: 'block', marginBottom: '4px' }}>מיקום</label>
+          <input
+            type="text"
+            placeholder="הכנס מיקום..."
+            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
+          />
+
+          {/* Static Filters */}
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1, color: '#333' }}>
+            קטגוריות
+          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, mb: 2, flexWrap: "wrap" }}>
+            {staticFilters.map((label) => (
+              <Button
+                key={label}
+                variant="outlined"
+                onClick={() => addFilter(label)}
+                sx={{
+                  textAlign: 'right',
+                  alignSelf: 'flex-start',
+                  paddingX: 2,
+                }}
+              >
+                {label}
+              </Button>
+            ))}
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+            <Button variant="contained" color="primary" sx={{ width: "40%" }}>
               חיפוש
             </Button>
-            <Button variant="outlined" color="secondary" sx={{ flex: 1 }}>
+            <Button variant="outlined" color="secondary" sx={{ width: "40%" }} onClick={resetFilters}>
               איפוס
             </Button>
           </Box>
+
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1, color: '#333' }}>
+              פילטרים שנבחרו
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {filters.map((filter) => (
+                <Chip
+                  key={filter}
+                  label={filter}
+                  onDelete={() => removeFilter(filter)}
+                  variant="outlined"
+                  color="primary"
+                  sx={{ direction: 'rtl' }}
+                />
+              ))}
+            </Box>
+          </Box>
         </Box>
 
-        {/* Cards Left */}
         <Box
           sx={{
             flex: 1,

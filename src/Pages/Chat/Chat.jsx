@@ -322,7 +322,7 @@ const Chat = () => {
                     </Typography>
                     <Typography variant="caption" sx={{
                       display: 'block',
-                      textAlign: 'left',
+                      textAlign: 'right',
                       mt: 1,
                       color: msg.isReceived ? colors.tertiary : 'white'
                     }}>

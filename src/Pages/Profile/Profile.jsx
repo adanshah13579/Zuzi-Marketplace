@@ -372,7 +372,7 @@ const Profile = () => {
                             }
                           }}
                         >
-                          {showPassword.current ? <VisibilityOffIcon fontSize="large" /> : <VisibilityIcon fontSize="large" />}
+                          {showPassword.current ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
                         </IconButton>
                       </Box>
                     </Box>
@@ -421,7 +421,7 @@ const Profile = () => {
                             }
                           }}
                         >
-                          {showPassword.new ? <VisibilityOffIcon fontSize="large" /> : <VisibilityIcon fontSize="large" />}
+                          {showPassword.new ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
                         </IconButton>
                       </Box>
                     </Box>
@@ -470,7 +470,7 @@ const Profile = () => {
                             }
                           }}
                         >
-                          {showPassword.confirm ? <VisibilityOffIcon fontSize="large" /> : <VisibilityIcon fontSize="large" />}
+                          {showPassword.confirm ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
                         </IconButton>
                       </Box>
                     </Box>

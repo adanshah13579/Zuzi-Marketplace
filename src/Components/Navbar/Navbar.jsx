@@ -377,7 +377,10 @@ const Navbar = () => {
           <Button
             variant=""
             size="small"
-            onClick={handlePostAd}
+onClick={() => {
+  handlePostAd();
+  navigate("/post-ad");
+}}
             sx={{
               backgroundColor: "#fff",
               color: colors.primary,
@@ -391,6 +394,7 @@ const Navbar = () => {
               },
               fontWeight: 600
             }}
+          
           >
             <AddIcon fontSize="small" />
           </Button>
@@ -482,8 +486,10 @@ const Navbar = () => {
 
           <Button
             startIcon={<AddIcon />}
-            onClick={handlePostAd}
-            sx={{
+onClick={() => {
+  handlePostAd();
+  navigate("/post-ad");
+}}            sx={{
               backgroundColor: "#fff",
               color: colors.primary,
               borderRadius: '6px',
