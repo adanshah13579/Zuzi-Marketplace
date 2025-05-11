@@ -39,8 +39,8 @@ const PostAd = () => {
   return (
     <>
       <Navbar />
-      <Box dir="rtl" sx={{ width: '100%', maxWidth: '1200px', mx: 'auto', p: { xs: 2, sm: 3, md: 4 },mt:2 }}>
-        <Paper sx={{ p: { xs: 2, sm: 4 }, boxShadow: 'none' }}>
+      <Box dir="rtl" sx={{ width: '100%', maxWidth: '1200px', mx: 'auto', p: { xs: 2, sm: 3, md: 4 }, mt: 2 }}>
+        <Paper sx={{ p: { xs: 2, sm: 4 }, boxShadow: 'none', borderRadius: 2 }}>
           <Typography variant="h4" gutterBottom textAlign="right">פרסם מודעה</Typography>
 
           <form onSubmit={handleSubmit}>
@@ -54,23 +54,23 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="הזן כותרת"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <label>תיאור</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
+               <Grid item xs={12} sm={6}>
+                <label>מיקום</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
                   onChange={handleChange}
-                  rows={4}
                   required
-                  placeholder="כתוב תיאור מפורט"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  placeholder="לדוגמה: תל אביב"
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
 
+              
               <Grid item xs={12} sm={6}>
                 <label>מחיר</label>
                 <input
@@ -80,7 +80,7 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="₪"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
 
@@ -91,7 +91,7 @@ const PostAd = () => {
                   value={formData.category}
                   onChange={handleChange}
                   required
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 >
                   <option value="">בחר קטגוריה</option>
                   <option value="אלקטרוניקה">אלקטרוניקה</option>
@@ -101,6 +101,19 @@ const PostAd = () => {
                   <option value="אחר">אחר</option>
                 </select>
               </Grid>
+              <Grid item xs={12}>
+                <label>תיאור</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  required
+                  placeholder="כתוב תיאור מפורט"
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                />
+              </Grid>
+
 
               <Grid item xs={12} sm={6}>
                 <label>מצב</label>
@@ -109,25 +122,14 @@ const PostAd = () => {
                   value={formData.condition}
                   onChange={handleChange}
                   required
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 >
                   <option value="יד שנייה">יד שנייה</option>
                   <option value="חדש">חדש</option>
                 </select>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <label>מיקום</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  required
-                  placeholder="לדוגמה: תל אביב"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
-                />
-              </Grid>
+             
 
               <Grid item xs={12}>
                 <label>העלה תמונות</label>
@@ -146,7 +148,7 @@ const PostAd = () => {
                       alt="preview"
                       width={100}
                       height={100}
-                      style={{ objectFit: 'cover', marginLeft: '10px', marginBottom: '10px' }}
+                      style={{ objectFit: 'cover', marginLeft: '10px', marginBottom: '10px', borderRadius: '8px' }}
                     />
                   ))}
                 </Box>
@@ -161,7 +163,7 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="לדוגמה: דוד לוי"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
 
@@ -174,7 +176,7 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="name@email.com"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
 
@@ -187,19 +189,18 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="לדוגמה: 050-0000000"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px' }}
+                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
                 />
               </Grid>
-
-             
             </Grid>
-             <Grid item xs={12}>
-                <Box display="flex" justifyContent="start">
-                  <Button variant="contained" color="primary" type="submit" sx={{ py: 1.5, mt:2 }}>
-                    פרסם מודעה
-                  </Button>
-                </Box>
-              </Grid>
+
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="start">
+                <Button variant="contained" color="primary" type="submit" sx={{ py: 1.5, mt: 2, borderRadius: '8px' }}>
+                  פרסם מודעה
+                </Button>
+              </Box>
+            </Grid>
           </form>
         </Paper>
       </Box>

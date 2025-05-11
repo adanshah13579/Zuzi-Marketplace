@@ -118,7 +118,7 @@ const ProductDetails = () => {
     sx={{
       width: '100%',
       height: '100%',
-      objectFit: 'cover', // Ensures the image scales without distortion and fills the container
+      objectFit: 'cover', 
     }}
   />
   

@@ -89,6 +89,7 @@ const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  // Separate handlers for hover and click events
   const handleCategoryMenuOpen = (event, category) => {
     // Close any previously open menu first
     if (categoryMenu.anchorEl && categoryMenu.category?.id === category.id) {
@@ -101,6 +102,14 @@ const Navbar = () => {
         category
       });
     }
+  };
+  
+  // Handle category click to navigate
+  const handleCategoryClick = (categoryId) => {
+    // Navigate to the category's all-listings page
+    navigate(`/category/${categoryId}`);
+    // Close the menu
+    handleMenuClose();
   };
 
   const handleMenuClose = () => {
@@ -145,54 +154,21 @@ const Navbar = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {/* Post Ad Button in Drawer */}
-        {/* <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              handlePostAd();
-              setMobileDrawerOpen(false);
-            }}
-            sx={{ 
-              flexDirection: 'row-reverse',
-              backgroundColor: colors.primary,
-              color: 'white',
-              my: 1,
-              mx: 2,
-              borderRadius: 1,
-              '&:hover': {
-                backgroundColor: colors.primary + 'dd',
-              }
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: 'flex-end', 
-                minWidth: 0, 
-                ml: 2, 
-                order: 2,
-                color: 'white'
-              }}
-            >
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText 
-              primary="פרסם מודעה" 
-              sx={{ textAlign: 'right', order: 1 }}
-            />
-          </ListItemButton>
-        </ListItem> */}
-
         <Divider sx={{ my: 1 }} />
 
         {categories.map((category) => (
           <Box key={category.id}>
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() =>
+                onClick={() => {
+                  // Navigate to category page
+                  navigate(`/category/${category.id}`);
+                  
+                  // Toggle expanded state for subcategories
                   setExpandedCategory((prev) =>
                     prev === category.id ? null : category.id
-                  )
-                }
+                  );
+                }}
                 sx={{ flexDirection: 'row-reverse' }}
               >
                 <ListItemText
@@ -377,10 +353,10 @@ const Navbar = () => {
           <Button
             variant=""
             size="small"
-onClick={() => {
-  handlePostAd();
-  navigate("/post-ad");
-}}
+            onClick={() => {
+              handlePostAd();
+              navigate("/post-ad");
+            }}
             sx={{
               backgroundColor: "#fff",
               color: colors.primary,
@@ -452,6 +428,7 @@ onClick={() => {
             {categories.map((category) => (
               <Button
                 key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
                 onMouseEnter={(e) => handleCategoryMenuOpen(e, category)}
                 sx={{
                   color: activeCategory === category.id ? colors.primary : colors.secondary,
@@ -486,10 +463,11 @@ onClick={() => {
 
           <Button
             startIcon={<AddIcon />}
-onClick={() => {
-  handlePostAd();
-  navigate("/post-ad");
-}}            sx={{
+            onClick={() => {
+              handlePostAd();
+              navigate("/post-ad");
+            }}
+            sx={{
               backgroundColor: "#fff",
               color: colors.primary,
               borderRadius: '6px',
@@ -534,7 +512,13 @@ onClick={() => {
           {categories.map((category) => (
             <Button
               key={category.id}
-              onClick={(e) => handleCategoryMenuOpen(e, category)}
+              onClick={() => {
+                // On mobile, clicking the category should also navigate
+                handleCategoryClick(category.id);
+                // Show dropdown for subcategories
+                handleCategoryMenuOpen({ currentTarget: document.getElementById(`mobile-cat-${category.id}`) || null }, category);
+              }}
+              id={`mobile-cat-${category.id}`}
               endIcon={<ExpandMoreIcon />}
               sx={{
                 color: activeCategory === category.id ? colors.primary : colors.secondary,
@@ -564,7 +548,9 @@ onClick={() => {
     anchorEl={categoryMenu.anchorEl}
     open={Boolean(categoryMenu.anchorEl)}
     onClose={handleMenuClose}
-    onMouseLeave={isMobile ? undefined : handleMenuClose}
+    MenuListProps={{
+      onMouseLeave: handleMenuClose  // Close menu when mouse leaves
+    }}
     TransitionComponent={Fade}
     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
     transformOrigin={{ vertical: 'top', horizontal: 'center' }}

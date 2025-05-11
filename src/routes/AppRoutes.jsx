@@ -19,6 +19,8 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductDetails />} />
       
       {/* Subcategory Page */}
+            {/* <Route path="/category/:categoryId/alllisting" element={<Category/>} /> */}
+
       <Route path="/category/:categoryId/:subcategoryId" element={<Subcategory />} />
       <Route path="/post-ad" element={<PostAd />} />
 
