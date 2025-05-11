@@ -146,7 +146,7 @@ const Navbar = () => {
     >
       <List>
         {/* Post Ad Button in Drawer */}
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton
             onClick={() => {
               handlePostAd();
@@ -180,7 +180,7 @@ const Navbar = () => {
               sx={{ textAlign: 'right', order: 1 }}
             />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
 
         <Divider sx={{ my: 1 }} />
 

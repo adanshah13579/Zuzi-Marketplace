@@ -1,4 +1,4 @@
-import {
+import { 
   Box,
   Container,
   Grid,
@@ -16,37 +16,43 @@ const Footer = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const categories = [
-    {
-      title: 'אלקטרוניקה',
-      items: ['סמארטפונים', 'מחשבים ניידים', 'טאבלטים', 'אביזרים', 'אודיו']
-    },
-    {
-      title: 'ריהוט',
-      items: ['סלון', 'חדר שינה', 'מטבח', 'משרד', 'חוץ']
-    },
-    {
-      title: 'ביגוד',
-      items: ['גברים', 'נשים', 'ילדים', 'אביזרים', 'הנעלה']
-    },
-    {
-      title: 'ספורט',
-      items: ['כושר', 'חוץ', 'ספורט קבוצתי', 'ספורט ימי', 'ספורט חורף']
-    }
-  ];
+const categories = [
+  {
+    title: 'אלקטרוניקה',
+    items: ['אודיו', 'טאבלטים', 'אביזרים', 'סמארטפונים', 'מחשבים ניידים']
+  },
+  {
+    title: 'ריהוט',
+    items: ['חוץ', 'סלון', 'מטבח', 'משרד', 'חדר שינה']
+  },
+  {
+    title: 'ביגוד',
+    items: ['גברים', 'נשים', 'הנעלה', 'ילדים', 'אביזרים']
+  },
+  {
+    title: 'ספורט',
+    items: ['חוץ', 'כושר', 'ספורט ימי', 'ספורט חורף', 'ספורט קבוצתי']
+  }
+];
+
+
+  // Sort categories based on the length of the title (from shortest to longest)
+  const sortedCategories = categories.sort((a, b) => a.title.length - b.title.length);
 
   const companyLinks = [
-    { name: 'אודותינו', href: '/about' },
+        { name: 'בלוג', href: '/blog' },
     { name: 'קריירה', href: '/careers' },
+
+    { name: 'אודותינו', href: '/about' },
     { name: 'עיתונות', href: '/press' },
-    { name: 'בלוג', href: '/blog' }
   ];
 
   const supportLinks = [
     { name: 'מרכז עזרה', href: '/help' },
+     { name: 'תנאי שימוש', href: '/terms' },
     { name: 'מרכז בטיחות', href: '/safety' },
     { name: 'הנחיות קהילה', href: '/guidelines' },
-    { name: 'תנאי שימוש', href: '/terms' },
+   
     { name: 'מדיניות פרטיות', href: '/privacy' }
   ];
 
@@ -64,73 +70,17 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         
-        <Grid container spacing={10} sx={{ direction: 'rtl' }}>
-          
-          {/* Categories */}
-          <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>
-            <Grid container spacing={3}>
-              {categories.map((category) => (
-                <Grid item xs={6} sm={3} key={category.title}>
-                  <Box sx={{ textAlign: 'right', alignItems: 'flex-end' }}>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontWeight: 600,
-                        mb: 2,
-                        color: colors.primary,
-                        fontFamily: 'Poppins, sans-serif',
-                        fontSize: '1rem'
-                      }}
-                    >
-                      {category.title}
-                    </Typography>
-                    <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-                      {category.items.map((item) => (
-                        <Box
-                          component="li"
-                          key={item}
-                          sx={{
-                            mb: 1,
-                            '&:last-child': { mb: 0 }
-                          }}
-                        >
-                          <Link
-                            href="#"
-                            sx={{
-                              color: 'white',
-                              textDecoration: 'none',
-                              opacity: 0.8,
-                              fontFamily: 'Poppins, sans-serif',
-                              fontSize: '0.9rem',
-                              transition: 'all 0.3s ease',
-                              '&:hover': {
-                                color: colors.primary,
-                                opacity: 1,
-                                paddingRight: '6px'
-                              }
-                            }}
-                          >
-                            {item}
-                          </Link>
-                        </Box>
-                      ))}
-                    </Box>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-          
+        <Grid container spacing={10} sx={{ direction: 'ltr' }}>
 
-          {/* Logo and Social */}
+            {/* Logo and Social */}
           <Grid item xs={12} md={4} order={{ xs: 1, md: 2 }}>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'flex-start',
+                alignItems: 'flex-end',
                 gap: 1.5,
-                textAlign: 'left'
+                textAlign: 'right'
               }}
             >
               <Typography
@@ -183,6 +133,61 @@ const Footer = () => {
                 ))}
               </Box>
             </Box>
+          </Grid>
+          
+          {/* Categories */}
+          <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>
+            <Grid container spacing={3}>
+              {sortedCategories.map((category) => (
+                <Grid item xs={6} sm={3} key={category.title}>
+                  <Box sx={{ textAlign: 'right', alignItems: 'flex-end' }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 600,
+                        mb: 2,
+                        color: colors.primary,
+                        fontFamily: 'Poppins, sans-serif',
+                        fontSize: '1rem'
+                      }}
+                    >
+                      {category.title}
+                    </Typography>
+                    <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
+                      {category.items.map((item) => (
+                        <Box
+                          component="li"
+                          key={item}
+                          sx={{
+                            mb: 1,
+                            '&:last-child': { mb: 0 }
+                          }}
+                        >
+                          <Link
+                            href="#"
+                            sx={{
+                              color: 'white',
+                              textDecoration: 'none',
+                              opacity: 0.8,
+                              fontFamily: 'Poppins, sans-serif',
+                              fontSize: '0.9rem',
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                color: colors.primary,
+                                opacity: 1,
+                                paddingRight: '6px'
+                              }
+                            }}
+                          >
+                            {item}
+                          </Link>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
 
           {/* Divider */}
@@ -248,7 +253,6 @@ const Footer = () => {
               </Box>
             </Box>
           </Grid>
-          
 
           <Grid item xs={12} md={6}>
             <Box
@@ -308,9 +312,6 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          
-
-         
         </Grid>
         
       </Container>

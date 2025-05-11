@@ -100,87 +100,90 @@ const ProductDetails = () => {
       <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         <Grid container spacing={4}  direction="row-reverse">
           {/* Image Slider */}
-          <Grid item xs={12} md={6}>
-            <Paper 
-              elevation={3} 
-              sx={{ 
-                position: 'relative',
-                height: '400px',
-                overflow: 'hidden',
-                borderRadius: 2
-              }}
-            >
-              <Box
-                component="img"
-                src={images[currentImageIndex]}
-                alt={product.name}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-              
-              {/* Navigation Arrows */}
-              <IconButton
-                onClick={handlePrevImage}
-                sx={{
-                  position: 'absolute',
-                  left: 10,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
-                  }
-                }}
-              >
-                <ArrowBackIosNewIcon />
-              </IconButton>
-              
-              <IconButton
-                onClick={handleNextImage}
-                sx={{
-                  position: 'absolute',
-                  right: 10,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
-                  }
-                }}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
+         <Grid item xs={12} md={6}>
+  <Paper
+  elevation={3}
+  sx={{
+    position: 'relative',
+    height: '400px',  // Fixed height for the slider
+    width: '100%',    // Full width of its container
+    overflow: 'hidden',
+    borderRadius: 2,
+  }}
+>
+  <Box
+    component="img"
+    src={images[currentImageIndex]}
+    alt={product.name}
+    sx={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover', // Ensures the image scales without distortion and fills the container
+    }}
+  />
+  
+  {/* Navigation Arrows */}
+  <IconButton
+    onClick={handlePrevImage}
+    sx={{
+      position: 'absolute',
+      left: 10,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      },
+    }}
+  >
+    <ArrowBackIosNewIcon />
+  </IconButton>
 
-              {/* Image Dots */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: 20,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  display: 'flex',
-                  gap: 1
-                }}
-              >
-                {images.map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      backgroundColor: currentImageIndex === index ? 'primary.main' : 'white',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => setCurrentImageIndex(index)}
-                  />
-                ))}
-              </Box>
-            </Paper>
-          </Grid>
+  <IconButton
+    onClick={handleNextImage}
+    sx={{
+      position: 'absolute',
+      right: 10,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      },
+    }}
+  >
+    <ArrowForwardIosIcon />
+  </IconButton>
+
+  {/* Image Dots */}
+  <Box
+    sx={{
+      position: 'absolute',
+      bottom: 20,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      display: 'flex',
+      gap: 1,
+    }}
+  >
+    {images.map((_, index) => (
+      <Box
+        key={index}
+        sx={{
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          backgroundColor: currentImageIndex === index ? 'primary.main' : 'white',
+          cursor: 'pointer',
+        }}
+        onClick={() => setCurrentImageIndex(index)}
+      />
+    ))}
+  </Box>
+</Paper>
+
+</Grid>
+
 
           {/* Product Details */}
           <Grid item xs={12} md={7}>
