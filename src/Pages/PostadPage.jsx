@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Grid, Paper } from '@mui/material';
+import { Box, Typography, Button, Grid, Paper, Divider } from '@mui/material';
 import Navbar from '../Components/Navbar/Navbar';
 
 const PostAd = () => {
@@ -39,14 +39,23 @@ const PostAd = () => {
   return (
     <>
       <Navbar />
-      <Box dir="rtl" sx={{ width: '100%', maxWidth: '1200px', mx: 'auto', p: { xs: 2, sm: 3, md: 4 }, mt: 2 }}>
-        <Paper sx={{ p: { xs: 2, sm: 4 }, boxShadow: 'none', borderRadius: 2 }}>
-          <Typography variant="h4" gutterBottom textAlign="right">פרסם מודעה</Typography>
+      <Box dir="rtl" sx={{ width: '100%', maxWidth: '1400px', mx: 'auto', p: { xs: 3, sm: 4, md: 5 }, mt: 0 }}>
+        <Paper sx={{ p: { xs: 3, sm: 5 }, boxShadow: 'none', borderRadius: '10px', border: '1px solid #eee' }}>
+          <Typography variant="h3" gutterBottom textAlign="right" sx={{ fontWeight: 'bold', mb: 4 }}>
+            פרסם מודעה
+          </Typography>
 
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
+            {/* Product Information Section */}
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: '#333' }}>
+              פרטי המוצר
+            </Typography>
+            
+            <Grid container spacing={4}>
               <Grid item xs={12}>
-                <label>כותרת המוצר</label>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  כותרת המוצר*
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -54,11 +63,21 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="הזן כותרת"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
-               <Grid item xs={12} sm={6}>
-                <label>מיקום</label>
+
+              <Grid item xs={12} md={6}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  מיקום*
+                </label>
                 <input
                   type="text"
                   name="location"
@@ -66,13 +85,21 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="לדוגמה: תל אביב"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
 
-              
-              <Grid item xs={12} sm={6}>
-                <label>מחיר</label>
+              <Grid item xs={12} md={6}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  מחיר*
+                </label>
                 <input
                   type="number"
                   name="price"
@@ -80,18 +107,35 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="₪"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <label>קטגוריה</label>
+              <Grid item xs={12} md={6}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  קטגוריה*
+                </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   required
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    backgroundColor: 'white',
+                    boxSizing: 'border-box'
+                  }}
                 >
                   <option value="">בחר קטגוריה</option>
                   <option value="אלקטרוניקה">אלקטרוניקה</option>
@@ -101,61 +145,151 @@ const PostAd = () => {
                   <option value="אחר">אחר</option>
                 </select>
               </Grid>
-              <Grid item xs={12}>
-                <label>תיאור</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
-                  required
-                  placeholder="כתוב תיאור מפורט"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
-                />
-              </Grid>
 
-
-              <Grid item xs={12} sm={6}>
-                <label>מצב</label>
+              <Grid item xs={12} md={6}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  מצב*
+                </label>
                 <select
                   name="condition"
                   value={formData.condition}
                   onChange={handleChange}
                   required
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    backgroundColor: 'white',
+                    boxSizing: 'border-box'
+                  }}
                 >
                   <option value="יד שנייה">יד שנייה</option>
                   <option value="חדש">חדש</option>
                 </select>
               </Grid>
 
-             
-
               <Grid item xs={12}>
-                <label>העלה תמונות</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  style={{ display: 'block', marginTop: '10px' }}
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  תיאור*
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={5}
+                  required
+                  placeholder="כתוב תיאור מפורט"
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    resize: 'vertical',
+                    minHeight: '120px',
+                    boxSizing: 'border-box'
+                  }}
                 />
-                <Box display="flex" flexWrap="wrap" mt={2}>
-                  {imagePreviews.map((src, idx) => (
-                    <img
-                      key={idx}
-                      src={src}
-                      alt="preview"
-                      width={100}
-                      height={100}
-                      style={{ objectFit: 'cover', marginLeft: '10px', marginBottom: '10px', borderRadius: '8px' }}
-                    />
-                  ))}
-                </Box>
               </Grid>
+            </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <label>שם מלא</label>
+            {/* Image Upload Section */}
+            <Divider sx={{ my: 5 }} />
+            
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: '#333' }}>
+              תמונות
+            </Typography>
+            
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  העלה תמונות (עד 10)
+                </label>
+                <Box 
+                  sx={{ 
+                    border: '1px dashed #ddd', 
+                    borderRadius: '8px', 
+                    p: 4, 
+                    textAlign: 'center',
+                    backgroundColor: '#fafafa'
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload">
+                    <Button 
+                      variant="outlined" 
+                      component="span"
+                      sx={{ py: 1.5, px: 3, borderRadius: '8px' }}
+                    >
+                      בחר תמונות
+                    </Button>
+                  </label>
+                  <Typography variant="body2" sx={{ mt: 2, color: '#666' }}>
+                    גרור ושחרר תמונות לכאן או לחץ כדי לבחור
+                  </Typography>
+                </Box>
+                
+                {/* Image Previews */}
+                {imagePreviews.length > 0 && (
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="body1" sx={{ fontWeight: '600', mb: 2 }}>
+                      תמונות שנבחרו:
+                    </Typography>
+                    <Box 
+                      display="flex" 
+                      flexWrap="wrap" 
+                      gap={2}
+                    >
+                      {imagePreviews.map((src, idx) => (
+                        <Box
+                          key={idx}
+                          sx={{
+                            position: 'relative',
+                            width: 120,
+                            height: 120,
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            border: '1px solid #eee'
+                          }}
+                        >
+                          <img
+                            src={src}
+                            alt="preview"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover'
+                            }}
+                          />
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+              </Grid>
+            </Grid>
+
+            {/* Contact Information Section */}
+            <Divider sx={{ my: 5 }} />
+            
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, color: '#333' }}>
+              פרטי יצירת קשר
+            </Typography>
+            
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={4}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  שם מלא*
+                </label>
                 <input
                   type="text"
                   name="userName"
@@ -163,12 +297,21 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="לדוגמה: דוד לוי"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <label>דוא״ל</label>
+              <Grid item xs={12} md={4}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  דוא״ל*
+                </label>
                 <input
                   type="email"
                   name="userEmail"
@@ -176,12 +319,21 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="name@email.com"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={4}>
-                <label>טלפון</label>
+              <Grid item xs={12} md={4}>
+                <label style={{ fontSize: '16px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
+                  טלפון*
+                </label>
                 <input
                   type="tel"
                   name="userPhone"
@@ -189,18 +341,37 @@ const PostAd = () => {
                   onChange={handleChange}
                   required
                   placeholder="לדוגמה: 050-0000000"
-                  style={{ width: '100%', padding: '12px', marginTop: '5px', borderRadius: '8px', border: '1px solid #ccc' }}
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                    fontSize: '16px',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </Grid>
             </Grid>
 
-            <Grid item xs={12}>
-              <Box display="flex" justifyContent="start">
-                <Button variant="contained" color="primary" type="submit" sx={{ py: 1.5, mt: 2, borderRadius: '8px' }}>
-                  פרסם מודעה
-                </Button>
-              </Box>
-            </Grid>
+            {/* Submit Button */}
+            <Box sx={{ mt: 6, textAlign: 'center' }}>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                type="submit" 
+                size="large"
+                sx={{ 
+                  py: 2, 
+                  px: 6, 
+                  borderRadius: '8px', 
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  minWidth: '200px'
+                }}
+              >
+                פרסם מודעה
+              </Button>
+            </Box>
           </form>
         </Paper>
       </Box>
