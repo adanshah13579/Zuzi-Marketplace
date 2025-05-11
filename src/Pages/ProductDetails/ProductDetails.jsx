@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  Box, Typography, Paper, IconButton, Grid, Divider, Tooltip, 
-  useMediaQuery, useTheme, Button, Chip, Stack, Container,
-  InputAdornment, TextField, Select, MenuItem, FormControl, InputLabel
-} from '@mui/material';
+import { Box, Typography, Paper, IconButton, Grid, Divider, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
-import {
-  Favorite, FavoriteBorder, ArrowBackIos, ArrowForwardIos,
-  Bed, Layers, SquareFoot, LocalParking, Info,
-  Search, Tune, Home, Apartment, Villa, Store, FilterAlt
-} from '@mui/icons-material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import BedIcon from '@mui/icons-material/Bed';
+import FloorIcon from '@mui/icons-material/Layers';
+import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import InfoIcon from '@mui/icons-material/Info';
 import ProductCard from '../../Components/ProductDetails/ProductCard';
 
 const ProductDetails = () => {
@@ -22,13 +23,7 @@ const ProductDetails = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [filters, setFilters] = useState({
-    priceRange: [0, 1000000],
-    propertyType: '',
-    rooms: '',
-    location: ''
-  });
-
+  
   // Format price with commas
   const formatPrice = (price) => {
     return new Intl.NumberFormat('he-IL').format(price);
@@ -64,22 +59,20 @@ const ProductDetails = () => {
 
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
+    // After a short delay, move to next product
     setTimeout(() => {
       navigate(`/product/${nextProduct.id}`);
       setCurrentImageIndex(0);
       setIsFavorite(false);
-    }, 500);
+    }, 500); // 500ms delay to show the favorite state change
   };
 
   const handleSkip = () => {
+    // Navigate to next product
     navigate(`/product/${nextProduct.id}`);
+    // Reset states for new product
     setCurrentImageIndex(0);
     setIsFavorite(false);
-  };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
   };
 
   if (!product) {
@@ -98,134 +91,25 @@ const ProductDetails = () => {
   const similarProducts = Object.values(sampleListings)
     .flat()
     .filter(item => item.id !== parseInt(id))
-    .slice(0, 5);
+    .slice(0, 5); // Show 5 similar products
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
       
-      {/* Filter Section - Cloud-like Design */}
-      <Paper elevation={0} sx={{ 
-        backgroundColor: '#f5f7fa',
-        borderRadius: 3,
-        p: 3,
-        mb: 4,
-        mx: 'auto',
-        width: '95%',
-        maxWidth: '1200px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
-      }}>
-        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              placeholder="חיפוש לפי מיקום..."
-              variant="outlined"
-              size="small"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search color="action" />
-                  </InputAdornment>
-                ),
-                sx: { 
-                  borderRadius: 3,
-                  backgroundColor: 'white',
-                  '& fieldset': { border: 'none' }
-                }
-              }}
-            />
-          </Grid>
-          
-          <Grid item xs={6} md={2}>
-            <FormControl fullWidth size="small">
-              <InputLabel>סוג נכס</InputLabel>
-              <Select
-                value={filters.propertyType}
-                onChange={handleFilterChange}
-                name="propertyType"
-                label="סוג נכס"
-                sx={{ 
-                  borderRadius: 3,
-                  backgroundColor: 'white',
-                  '& fieldset': { border: 'none' }
-                }}
-              >
-                <MenuItem value=""><em>הכל</em></MenuItem>
-                <MenuItem value="apartment">דירה</MenuItem>
-                <MenuItem value="house">בית פרטי</MenuItem>
-                <MenuItem value="villa">וילה</MenuItem>
-                <MenuItem value="commercial">מסחרי</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          
-          <Grid item xs={6} md={2}>
-            <FormControl fullWidth size="small">
-              <InputLabel>חדרים</InputLabel>
-              <Select
-                value={filters.rooms}
-                onChange={handleFilterChange}
-                name="rooms"
-                label="חדרים"
-                sx={{ 
-                  borderRadius: 3,
-                  backgroundColor: 'white',
-                  '& fieldset': { border: 'none' }
-                }}
-              >
-                <MenuItem value=""><em>הכל</em></MenuItem>
-                <MenuItem value="1">1</MenuItem>
-                <MenuItem value="2">2</MenuItem>
-                <MenuItem value="3">3</MenuItem>
-                <MenuItem value="4+">4+</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          
-          <Grid item xs={12} md={3}>
-            <Stack direction="row" spacing={1} sx={{ height: '100%' }}>
-              <Button 
-                variant="contained" 
-                startIcon={<Tune />}
-                sx={{ 
-                  borderRadius: 3,
-                  px: 3,
-                  flex: 1,
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                פילטרים נוספים
-              </Button>
-              <Button 
-                variant="outlined" 
-                sx={{ 
-                  borderRadius: 3,
-                  px: 3,
-                  borderColor: '#ddd',
-                  backgroundColor: 'white'
-                }}
-              >
-                איפוס
-              </Button>
-            </Stack>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {/* Main Content */}
-      <Container maxWidth="xl" sx={{ flex: 1, py: 3 }}>
-        <Grid container spacing={4} direction="row-reverse">
+      <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+        <Grid container spacing={4}  direction="row-reverse">
           {/* Image Slider */}
           <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{
-              position: 'relative',
-              height: '500px',
-              width: '100%',
-              overflow: 'hidden',
-              borderRadius: 3,
-              boxShadow: '0 8px 24px rgba(0,0,0,0.1)'
-            }}>
+            <Paper 
+              elevation={3} 
+              sx={{ 
+                position: 'relative',
+                height: '400px',
+                overflow: 'hidden',
+                borderRadius: 2
+              }}
+            >
               <Box
                 component="img"
                 src={images[currentImageIndex]}
@@ -233,8 +117,7 @@ const ProductDetails = () => {
                 sx={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
-                  transition: 'opacity 0.3s ease'
+                  objectFit: 'cover'
                 }}
               />
               
@@ -243,58 +126,54 @@ const ProductDetails = () => {
                 onClick={handlePrevImage}
                 sx={{
                   position: 'absolute',
-                  left: 16,
+                  left: 10,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255,255,255,0.9)',
-                  '&:hover': { backgroundColor: 'white' },
-                  boxShadow: 1,
-                  width: 48,
-                  height: 48
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                  }
                 }}
               >
-                <ArrowBackIos fontSize="small" />
+                <ArrowBackIosNewIcon />
               </IconButton>
-
+              
               <IconButton
                 onClick={handleNextImage}
                 sx={{
                   position: 'absolute',
-                  right: 16,
+                  right: 10,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255,255,255,0.9)',
-                  '&:hover': { backgroundColor: 'white' },
-                  boxShadow: 1,
-                  width: 48,
-                  height: 48
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                  }
                 }}
               >
-                <ArrowForwardIos fontSize="small" />
+                <ArrowForwardIosIcon />
               </IconButton>
 
               {/* Image Dots */}
-              <Box sx={{
-                position: 'absolute',
-                bottom: 20,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                gap: 1,
-              }}>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 20,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  display: 'flex',
+                  gap: 1
+                }}
+              >
                 {images.map((_, index) => (
                   <Box
                     key={index}
                     sx={{
-                      width: 10,
-                      height: 10,
+                      width: 8,
+                      height: 8,
                       borderRadius: '50%',
-                      backgroundColor: currentImageIndex === index ? 'primary.main' : 'rgba(255,255,255,0.5)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        backgroundColor: currentImageIndex === index ? 'primary.dark' : 'rgba(255,255,255,0.8)'
-                      }
+                      backgroundColor: currentImageIndex === index ? 'primary.main' : 'white',
+                      cursor: 'pointer'
                     }}
                     onClick={() => setCurrentImageIndex(index)}
                   />
@@ -304,132 +183,112 @@ const ProductDetails = () => {
           </Grid>
 
           {/* Product Details */}
-          <Grid item xs={12} md={6}>
-            <Box sx={{ 
-              p: { xs: 2, md: 4 },
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <Box dir="rtl">
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                  <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-                    {product.name}
-                  </Typography>
-                  <Chip 
-                    label={product.type === 'new' ? 'חדש' : 'יד שנייה'} 
-                    color={product.type === 'new' ? 'success' : 'default'}
-                    size="small"
-                    sx={{ 
-                      alignSelf: 'flex-start',
-                      fontWeight: 600,
-                      fontSize: '0.75rem'
-                    }}
-                  />
-                </Stack>
+          <Grid item xs={12} md={7}>
+            <Box 
+              sx={{ 
+                p: 3,
+                borderRight: '1px solid',
+                borderColor: 'divider',
+                height: '100%'
+              }}
+            >
+              <Box sx={{ p: 2 }} dir="rtl">
+                <Typography variant="h4" gutterBottom>
+                  {product.name}
+                </Typography>
 
-                <Typography variant="h5" color="primary" sx={{ mb: 3, fontWeight: 700 }}>
+                <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
                   ₪{formatPrice(product.price)}
                 </Typography>
 
-                <Typography variant="body1" paragraph sx={{ color: 'text.secondary', mb: 3 }}>
+                <Typography variant="body1" paragraph>
                   {product.description}
                 </Typography>
 
                 {/* Property Details */}
-                <Paper elevation={0} sx={{ 
-                  p: 3, 
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: 1, 
                   mb: 4,
-                  borderRadius: 3,
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #eee'
+                  flexWrap: 'wrap',
+                  '& > *': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                  }
                 }}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={6} sm={3}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Bed color="primary" sx={{ fontSize: 20 }} />
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            חדרים
-                          </Typography>
-                          <Typography variant="body1" fontWeight={600}>
-                            {product.rooms || '3'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Layers color="primary" sx={{ fontSize: 20 }} />
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            קומה
-                          </Typography>
-                          <Typography variant="body1" fontWeight={600}>
-                            {product.floor || '2'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <SquareFoot color="primary" sx={{ fontSize: 20 }} />
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            גודל
-                          </Typography>
-                          <Typography variant="body1" fontWeight={600}>
-                            {product.size || '120'} מ"ר
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <LocalParking color="primary" sx={{ fontSize: 20 }} />
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            חניה
-                          </Typography>
-                          <Typography variant="body1" fontWeight={600}>
-                            {product.parking ? 'כן' : 'לא'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Paper>
+                  <Box>
+                    <InfoIcon color="action" sx={{ fontSize: 20 }} />
+                    <Typography variant="body2" color="text.secondary">
+                      פרטי הנכס
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <BedIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.rooms || '3'} חדרים
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <FloorIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      קומה {product.floor || '2'}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <SquareFootIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.size || '120'} מ"ר
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <LocalParkingIcon color="action" />
+                    <Typography variant="body2" color="text.secondary">
+                      {product.parking ? 'חניה' : 'ללא חניה'}
+                    </Typography>
+                  </Box>
+                </Box>
 
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                  <Box component="span" fontWeight={600}>מיקום:</Box> {product.location}
+                  מיקום: {product.location}
                 </Typography>
 
                 {/* Action Buttons */}
-                <Box sx={{ 
-                  display: 'flex', 
-                  gap: 2,
-                  justifyContent: 'space-between',
-                  mt: 'auto',
-                  pt: 3,
-                  flexDirection: isMobile ? 'column' : 'row'
-                }}>
-                  <Stack direction="row" spacing={2}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    justifyContent: 'center',
+                    mt: 4,
+                    flexDirection: isMobile ? 'column' : 'row',
+                    alignItems: 'center',
+                   
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 3,
+                      justifyContent: 'center',
+                      width: isMobile ? '100%' : 'auto',
+                    }}
+                  >
                     <Tooltip title={isFavorite ? "הסר מהמועדפים" : "הוסף למועדפים"}>
                       <IconButton
                         onClick={handleFavorite}
                         sx={{
                           backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                          width: 56,
-                          height: 56,
+                          width: isMobile ? '64px' : 56,
+                          height: isMobile ? '64px' : 56,
                           '&:hover': {
                             backgroundColor: 'rgba(0, 0, 0, 0.08)',
                           },
                         }}
                       >
                         {isFavorite ? (
-                          <Favorite color="error" sx={{ fontSize: 28 }} />
+                          <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
                         ) : (
-                          <FavoriteBorder sx={{ fontSize: 28 }} />
+                          <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
                         )}
                       </IconButton>
                     </Tooltip>
@@ -439,56 +298,28 @@ const ProductDetails = () => {
                         onClick={handleSkip}
                         sx={{
                           backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                          width: 56,
-                          height: 56,
+                          width: isMobile ? '64px' : 56,
+                          height: isMobile ? '64px' : 56,
                           '&:hover': {
                             backgroundColor: 'rgba(0, 0, 0, 0.08)',
                           },
                         }}
                       >
-                        <FilterAlt sx={{ fontSize: 28 }} />
+                        <ArrowCircleLeftIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
                       </IconButton>
                     </Tooltip>
-                  </Stack>
-                  
-                  <Button 
-                    variant="contained" 
-                    size="large" 
-                    fullWidth={isMobile}
-                    sx={{
-                      borderRadius: 3,
-                      px: 4,
-                      height: 56,
-                      fontSize: '1rem',
-                      fontWeight: 600
-                    }}
-                  >
-                    צור קשר עם המוכר
-                  </Button>
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </Grid>
-        </Grid>
 
-        {/* Similar Products Section */}
-        <Box sx={{ mt: 8 }}>
-          <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 4 }}>
-            נכסים דומים באזור
-          </Typography>
-          <Grid container spacing={3}>
-            {similarProducts.map((product) => (
-              <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-                <ProductCard product={product} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </Container>
+        </Grid>
+      </Box>
 
       <Footer />
     </Box>
   );
 };
 
-export default ProductDetails;
+export default ProductDetails; 

@@ -90,7 +90,7 @@ const Profile = () => {
       direction: 'rtl'
     }}>
       <Navbar />
-      <Container maxWidth="xl" sx={{ py: 16, flexGrow: 1 }}>
+      <Container maxWidth="xl" sx={{ py: 6, flexGrow: 1 }}>
         <Typography 
           variant="h3" 
           sx={{ 

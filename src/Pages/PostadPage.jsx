@@ -359,14 +359,14 @@ const PostAd = () => {
                 variant="contained" 
                 color="primary" 
                 type="submit" 
-                size="large"
+                size="medium"
                 sx={{ 
                   py: 2, 
-                  px: 6, 
+                  px: 4, 
                   borderRadius: '8px', 
-                  fontSize: '18px',
+                  fontSize: '14px',
                   fontWeight: '600',
-                  minWidth: '200px'
+                  minWidth: '150px'
                 }}
               >
                 פרסם מודעה
