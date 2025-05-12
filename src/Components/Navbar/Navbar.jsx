@@ -40,6 +40,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
             import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
             import { IoChatboxOutline } from "react-icons/io5";
 import { CiMenuBurger } from "react-icons/ci";
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import { FaRegHeart } from "react-icons/fa6";
 
 
@@ -443,18 +444,17 @@ const Navbar = () => {
         
         {/* Left Side - User actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
-          <IconButton onClick={() => navigate('/chat')} sx={{  color:"#36454F" ,fontSize:25}}>
+          <IconButton onClick={() => navigate('/chat')} sx={{  color:"#36454F" ,fontSize:23}}>
             <Badge badgeContent={2} color="error">
               <IoChatboxOutline sx={{ color:"#36454F" }} />
             </Badge>
           </IconButton>
-          <IconButton onClick={() => navigate('/favorites')} sx={{  color:"#36454F" ,fontSize:25}}>
+          <IconButton onClick={() => navigate('/favorites')} sx={{  color:"#36454F" ,fontSize:23}}>
             <FaRegHeart  />
           </IconButton>
-          <IconButton onClick={handleProfileMenuOpen} >
-            <Avatar sx={{ bgcolor: "#fff", color:"#36454F",width: 30, height: 30,border:"1px solid  #6C757D " }}>
-              <PersonIcon />
-            </Avatar>
+          <IconButton onClick={handleProfileMenuOpen} sx={{  color:"#36454F" }}>
+              <PermIdentityOutlinedIcon sx={{fontSize:28,color:"#36454F"}}/>
+            
           </IconButton>
 
   <Button
