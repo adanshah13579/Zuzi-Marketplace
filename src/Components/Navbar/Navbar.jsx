@@ -445,11 +445,11 @@ const Navbar = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
           <IconButton onClick={() => navigate('/chat')}>
             <Badge badgeContent={2} color="error">
-              <ChatBubbleOutlineIcon sx={{ color:"#36454F" }} />
+              <IoChatboxOutline sx={{ color:"#36454F" }} />
             </Badge>
           </IconButton>
           <IconButton onClick={() => navigate('/favorites')}>
-            <FavoriteBorderIcon sx={{  color:"#36454F" }} />
+            <FaRegHeart sx={{  color:"#36454F" }} />
           </IconButton>
           <IconButton onClick={handleProfileMenuOpen}>
             <Avatar sx={{ bgcolor: "#fff", color:"#36454F",width: 30, height: 30,border:"1px solid  #6C757D " }}>
