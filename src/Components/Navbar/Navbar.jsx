@@ -39,6 +39,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 
+
+
 const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -333,12 +335,11 @@ const Navbar = () => {
       minHeight: isMobile ? '64px' : '64px'
     }}
   >
-    {/* Mobile view layout */}
     {isMobile && (
       <>
-        {/* Right end - Menu icon */}
+        
         <IconButton onClick={toggleDrawer(true)} sx={{ order: 1 }}>
-          <MenuIcon sx={{ color: colors.primary }} />
+          <MenuIcon sx={{ color: "#36454F " }} />
         </IconButton>
         
         {/* Center area - Logo with Post Ad button to its right */}
@@ -359,16 +360,16 @@ const Navbar = () => {
             }}
             sx={{
               backgroundColor: "#fff",
-              color: colors.primary,
-              borderRadius: '4px',
+              color: "#36454F ",
+              borderRadius: '10px',
               minWidth: 'auto',
-              border:"1px solid #f4c724",
+              border:"1px solid #36454F ",
               padding: '4px 4px',
               mr: 3, // Increased margin-right for more spacing between button and logo
               '&:hover': {
                 backgroundColor: colors.primary + 'dd'
               },
-              fontWeight: 600
+              fontWeight: 900
             }}
           
           >
@@ -392,14 +393,14 @@ const Navbar = () => {
           
           {/* Favorites icon on left of logo */}
           <IconButton onClick={() => navigate('/favorites')} size="small" sx={{ ml: 3 }}> {/* Increased margin-left for more spacing */}
-            <FavoriteBorderIcon sx={{ color: colors.primary, fontSize: '28px' }} />
+            <FavoriteBorderIcon sx={{ color: "#36454F ", fontSize: '28px' }} />
           </IconButton>
         </Box>
         
         {/* Left end - Chat icon */}
         <IconButton onClick={() => navigate('/chat')} size="small" sx={{ order: 3 }}>
           <Badge badgeContent={2} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '10px' } }}>
-            <ChatBubbleOutlineIcon sx={{ color: colors.primary, fontSize: '22px' }} />
+            <ChatBubbleOutlineIcon sx={{ color: "#36454F", fontSize: '22px' }} />
           </Badge>
         </IconButton>
       </>
@@ -449,14 +450,14 @@ const Navbar = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
           <IconButton onClick={() => navigate('/chat')}>
             <Badge badgeContent={2} color="error">
-              <ChatBubbleOutlineIcon sx={{ color:"#6C757D" }} />
+              <ChatBubbleOutlineIcon sx={{ color:"#36454F" }} />
             </Badge>
           </IconButton>
           <IconButton onClick={() => navigate('/favorites')}>
-            <FavoriteBorderIcon sx={{  color:"#6C757D" }} />
+            <FavoriteBorderIcon sx={{  color:"#36454F" }} />
           </IconButton>
           <IconButton onClick={handleProfileMenuOpen}>
-            <Avatar sx={{ bgcolor: "#fff", color:"#6C757D",width: 30, height: 30,border:"1px solid  #6C757D " }}>
+            <Avatar sx={{ bgcolor: "#fff", color:"#36454F",width: 30, height: 30,border:"1px solid  #6C757D " }}>
               <PersonIcon />
             </Avatar>
           </IconButton>
@@ -468,19 +469,22 @@ const Navbar = () => {
     navigate("/select-category");
   }}
   sx={{
-    background: 'linear-gradient(0deg, #393E46 0%, #6C757D 100%)', // dark grey to muted grey
-    color: '#fff',
-    borderRadius: '1rem',
+    background: '#f4c724', 
+    color: '#000',
+    border:"1px solid  #f4c724",
+    borderRadius: '0.6rem',
     gap: 0.8,
+    mr:1,
     padding: '6px 9px',
-    height: '36px',
-    fontSize: '0.7rem',
-    fontWeight: 500,
-    boxShadow: '0 0.7em 1.5em -0.5em #393e4698',
+    height: '28px',
+    fontSize: '0.6rem',
+    fontWeight: 600,
+    boxShadow: '0 0.7em 1.5em -0.5emrgba(57, 62, 70, 0.05)',
     textTransform: 'none',
     '&:hover': {
-      background: 'linear-gradient(0deg, #2e343b 0%, #5a6268 100%)',
+      background: '#fff',
       boxShadow: '0 0.5em 1.5em -0.5em #393e4698',
+      color:"#000",
     },
     '&:active': {
       boxShadow: '0 0.3em 1em -0.5em #393e4698',
