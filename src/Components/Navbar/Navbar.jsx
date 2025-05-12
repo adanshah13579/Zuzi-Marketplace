@@ -37,6 +37,11 @@ import colors from '../../Style/colors';
 import { categories } from '../../data/data';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+            import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+            import { IoChatboxOutline } from "react-icons/io5";
+import { CiMenuBurger } from "react-icons/ci";
+import { FaRegHeart } from "react-icons/fa6";
+
 
 
 
@@ -106,11 +111,8 @@ const Navbar = () => {
     }
   };
   
-  // Handle category click to navigate
   const handleCategoryClick = (categoryId) => {
-    // Navigate to the category's all-listings page
     navigate(`/category/${categoryId}`);
-    // Close the menu
     handleMenuClose();
   };
 
@@ -338,11 +340,10 @@ const Navbar = () => {
     {isMobile && (
       <>
         
-        <IconButton onClick={toggleDrawer(true)} sx={{ order: 1 }}>
-          <MenuIcon sx={{ color: "#36454F " }} />
+        <IconButton onClick={toggleDrawer(true)} sx={{ order: 1 , color: "#36454F " ,fontSize:30,pt:1.5}}>
+          <CiMenuBurger sx={{ color: "#36454F " }} />
         </IconButton>
         
-        {/* Center area - Logo with Post Ad button to its right */}
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
@@ -350,7 +351,6 @@ const Navbar = () => {
           flex: 1,
           order: 2,gap:8
         }}>
-          {/* Post Ad button on right of logo */}
           <Button
             variant=""
             size="small"
@@ -364,8 +364,8 @@ const Navbar = () => {
               borderRadius: '10px',
               minWidth: 'auto',
               border:"1px solid #36454F ",
-              padding: '4px 4px',
-              mr: 3, // Increased margin-right for more spacing between button and logo
+              padding: '6px 6px',
+              mr: 3,
               '&:hover': {
                 backgroundColor: colors.primary + 'dd'
               },
@@ -376,14 +376,13 @@ const Navbar = () => {
             <AddIcon fontSize="small" />
           </Button>
           
-          {/* Logo in center */}
           <Box 
             component="img"
             src={zuziLogo}
             alt="Zuzi Logo"
             sx={{ 
-              width: '40px',
-              height: 'auto',
+              width: '38px',
+              height: '38px',
               borderRadius: '10%',
               cursor: 'pointer',
               zIndex: 2
@@ -391,22 +390,18 @@ const Navbar = () => {
             onClick={() => navigate('/')}
           />
           
-          {/* Favorites icon on left of logo */}
-          <IconButton onClick={() => navigate('/favorites')} size="small" sx={{ ml: 3 }}> {/* Increased margin-left for more spacing */}
-            <FavoriteBorderIcon sx={{ color: "#36454F ", fontSize: '28px' }} />
+          <IconButton onClick={() => navigate('/favorites')} size="small" sx={{ ml: 3 ,fontSize:32,color: "#36454F", }}> 
+                        <FaRegHeart sx={{ color: "#36454F ", fontSize: '34px' }} />
           </IconButton>
         </Box>
         
-        {/* Left end - Chat icon */}
-        <IconButton onClick={() => navigate('/chat')} size="small" sx={{ order: 3 }}>
-          <Badge badgeContent={2} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '10px' } }}>
-            <ChatBubbleOutlineIcon sx={{ color: "#36454F", fontSize: '22px' }} />
-          </Badge>
+        <IconButton onClick={() => navigate('/chat')} size="medium" sx={{ order: 3,fontSize:32,color: "#36454F",pt:1  }}>
+            <IoChatboxOutline sx={{  }} />
+      
         </IconButton>
       </>
     )}
     
-    {/* Desktop view layout - unchanged */}
     {!isMobile && (
       <>
         {/* Right Side - Logo */}

@@ -9,7 +9,13 @@ import {
   CardActionArea,
   Button,
   Chip,
+  Collapse,
+  IconButton,
 } from '@mui/material';
+import { 
+  ExpandMore as ExpandMoreIcon, 
+  ExpandLess as ExpandLessIcon 
+} from '@mui/icons-material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
@@ -20,27 +26,108 @@ const Subcategory = () => {
 
   const items = sampleListings[categoryId] || [];
 
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState({
+    search: '',
+    category: '',
+    minPrice: '',
+    maxPrice: '',
+    location: '',
+    propertyType: '',
+    roomCount: '',
+  });
 
-  const staticFilters = ['השכרה', 'ריהוט', 'חיות מחמד', 'רכב'];
+  const [openSections, setOpenSections] = useState({
+    mainCategory: true,
+    price: true,
+    realEstate: true,
+    additional: true
+  });
 
-  const addFilter = (filter) => {
-    if (!filters.includes(filter)) {
-      setFilters([...filters, filter]);
-    }
+  const [appliedFilters, setAppliedFilters] = useState([]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const removeFilter = (filterToRemove) => {
-    setFilters(filters.filter(f => f !== filterToRemove));
+  const toggleSection = (section) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const applyFilters = () => {
+    const activeFilters = Object.entries(filters)
+      .filter(([key, value]) => value !== '')
+      .map(([key, value]) => `${key}: ${value}`);
+    
+    setAppliedFilters(activeFilters);
   };
 
   const resetFilters = () => {
-    setFilters([]);
+    setFilters({
+      search: '',
+      category: '',
+      minPrice: '',
+      maxPrice: '',
+      location: '',
+      propertyType: '',
+      roomCount: '',
+    });
+    setAppliedFilters([]);
+  };
+
+  const removeFilter = (filterToRemove) => {
+    const updatedAppliedFilters = appliedFilters.filter(f => f !== filterToRemove);
+    setAppliedFilters(updatedAppliedFilters);
+    
+    const filterKey = filterToRemove.split(':')[0].trim();
+    setFilters(prev => ({
+      ...prev,
+      [filterKey]: ''
+    }));
   };
 
   const handleItemClick = (itemId) => {
     navigate(`/product/${itemId}`);
   };
+
+  const FilterSection = ({ title, section, children }) => (
+    <Box sx={{ mb: 2 }}>
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          cursor: 'pointer',
+          borderBottom: '1px solid rgba(0,0,0,0.1)',
+          pb: 1
+        }}
+        onClick={() => toggleSection(section)}
+      >
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            fontWeight: 600, 
+            color: 'black',
+            textAlign: 'right'
+          }}
+        >
+          {title}
+        </Typography>
+        {openSections[section] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </Box>
+      <Collapse in={openSections[section]}>
+        <Box sx={{ mt: 1 }}>
+          {children}
+        </Box>
+      </Collapse>
+    </Box>
+  );
 
   return (
     <Box
@@ -48,7 +135,7 @@ const Subcategory = () => {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        direction: 'ltr',
+        direction: 'rtl',
         fontFamily: '"Arial", sans-serif',
       }}
     >
@@ -57,121 +144,231 @@ const Subcategory = () => {
       <Box
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'row', md: "row-reverse" },
+          flexDirection: { xs: 'column', sm: 'row' },
           p: { xs: 2, sm: 3, md: 4 },
-          gap: 3,
+          gap: { xs: 2, sm: 3, md: 4 },
           width: '100%',
           backgroundColor: '#fff',
         }}
       >
+        {/* Filter Section */}
         <Box
           sx={{
-            width: { xs: '100%', md: '22%' },
-            backgroundColor: '#ffffff',
+            width: { xs: '100%', sm: '30%', md: '25%',lg:"23%" },
+            backgroundColor: '#FFD700',
             p: 2,
             borderRadius: 2,
-            height: '100vh',
+            height: 'auto',
             direction: 'rtl',
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#333', textAlign: 'right' }}>
-            סינון
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontWeight: 700, 
+              my: 2, 
+              textAlign: 'center', 
+              color: 'black' 
+            }}
+          >
+            סינון ומיון מוצרים
           </Typography>
 
-          {/* Title Search */}
-          <label style={{ display: 'block', marginBottom: '4px' }}>כותרת</label>
-          <input
-            type="text"
-            placeholder="חפש לפי כותרת..."
-            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
-          />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <FilterSection title="קטגוריה ראשית" section="mainCategory">
+              <input
+                type="text"
+                name="category"
+                value={filters.category}
+                onChange={handleFilterChange}
+                placeholder="בחר קטגוריה"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  marginBottom: '8px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: 'white',
+                  direction: 'rtl',
+                }}
+              />
+            </FilterSection>
 
-          {/* Price Range */}
-          <label style={{ display: 'block', marginBottom: '4px' }}>מחיר</label>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-            <input
-              type="number"
-              placeholder="מינ'"
-              style={{ width: "35%", padding: '8px', direction: 'rtl' }}
-            />
-            <input
-              type="number"
-              placeholder="מקס'"
-              style={{ width: "35%", padding: '8px', direction: 'rtl' }}
-            />
-          </div>
+            <FilterSection title="מחיר" section="price">
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <input
+                  type="number"
+                  name="minPrice"
+                  value={filters.minPrice}
+                  onChange={handleFilterChange}
+                  placeholder="מחיר מינ'"
+                  style={{
+                    width: '50%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: 'white',
+                    direction: 'rtl',
+                  }}
+                />
+                <input
+                  type="number"
+                  name="maxPrice"
+                  value={filters.maxPrice}
+                  onChange={handleFilterChange}
+                  placeholder="מחיר מקס'"
+                  style={{
+                    width: '50%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: 'white',
+                    direction: 'rtl',
+                  }}
+                />
+              </Box>
+            </FilterSection>
 
-          {/* Number of Rooms */}
-          <label style={{ display: 'block', marginBottom: '4px' }}>מס' חדרים</label>
-          <input
-            type="text"
-            placeholder="הכנס מספר חדרים"
-            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
-          />
+            <FilterSection title="נדל״ן" section="realEstate">
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <input
+                  type="text"
+                  name="propertyType"
+                  value={filters.propertyType}
+                  onChange={handleFilterChange}
+                  placeholder="סוג נכס"
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: 'white',
+                    direction: 'rtl',
+                  }}
+                />
+                <input
+                  type="number"
+                  name="roomCount"
+                  value={filters.roomCount}
+                  onChange={handleFilterChange}
+                  placeholder="מספר חדרים"
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: 'white',
+                    direction: 'rtl',
+                  }}
+                />
+              </Box>
+            </FilterSection>
 
-          {/* Location */}
-          <label style={{ display: 'block', marginBottom: '4px' }}>מיקום</label>
-          <input
-            type="text"
-            placeholder="הכנס מיקום..."
-            style={{ width: '70%', marginBottom: '16px', padding: '8px', direction: 'rtl' }}
-          />
+            <FilterSection title="פרטים נוספים" section="additional">
+              <input
+                type="text"
+                name="location"
+                value={filters.location}
+                onChange={handleFilterChange}
+                placeholder="מיקום"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  marginBottom: '8px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: 'white',
+                  direction: 'rtl',
+                }}
+              />
+              <input
+                type="text"
+                name="search"
+                value={filters.search}
+                onChange={handleFilterChange}
+                placeholder="חיפוש כללי"
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  backgroundColor: 'white',
+                  direction: 'rtl',
+                }}
+              />
+            </FilterSection>
 
-          {/* Static Filters */}
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1, color: '#333' }}>
-            קטגוריות
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, mb: 2, flexWrap: "wrap" }}>
-            {staticFilters.map((label) => (
-              <Button
-                key={label}
-                variant="outlined"
-                onClick={() => addFilter(label)}
-                sx={{
-                  textAlign: 'right',
-                  alignSelf: 'flex-start',
-                  paddingX: 2,
+            <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+              <Button 
+                variant="contained" 
+                onClick={applyFilters}
+                sx={{ 
+                  width: "100%", 
+                  mb: 1, 
+                  backgroundColor: 'black', 
+                  color: 'white',
+                  height: '48px',
+                  '&:hover': { backgroundColor: 'rgba(0,0,0,0.8)' }
                 }}
               >
-                {label}
+                החל סינון
               </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            <Button variant="contained" color="primary" sx={{ width: "40%" }}>
-              חיפוש
-            </Button>
-            <Button variant="outlined" color="secondary" sx={{ width: "40%" }} onClick={resetFilters}>
-              איפוס
-            </Button>
-          </Box>
-
-          <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1, color: '#333' }}>
-              פילטרים שנבחרו
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {filters.map((filter) => (
-                <Chip
-                  key={filter}
-                  label={filter}
-                  onDelete={() => removeFilter(filter)}
-                  variant="outlined"
-                  color="primary"
-                  sx={{ direction: 'rtl' }}
-                />
-              ))}
+              <Button 
+                variant="outlined" 
+                onClick={resetFilters}
+                sx={{ 
+                  width: "100%", 
+                  borderColor: 'black', 
+                  color: 'black',
+                  height: '48px',
+                  '&:hover': { backgroundColor: 'rgba(0,0,0,0.1)' }
+                }}
+              >
+                נקה הכל
+              </Button>
             </Box>
+
+            {appliedFilters.length > 0 && (
+              <Box mt={2}>
+                <Typography 
+                  variant="subtitle1" 
+                  sx={{ 
+                    fontWeight: 600, 
+                    mb: 1, 
+                    color: 'black',
+                    textAlign: 'right'
+                  }}
+                >
+                  מסננים שנבחרו
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {appliedFilters.map((filter) => (
+                    <Chip
+                      key={filter}
+                      label={filter}
+                      onDelete={() => removeFilter(filter)}
+                      variant="outlined"
+                      color="primary"
+                      sx={{ direction: 'rtl' }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
           </Box>
         </Box>
 
+        {/* Items Grid */}
         <Box
           sx={{
             flex: 1,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            gap: 2.5,
+            gridTemplateColumns: { 
+              xs: '1fr', 
+              sm: 'repeat(2, 1fr)', 
+              md: 'repeat(auto-fill, minmax(220px, 1fr))' 
+            },
+            gap: { xs: 2, sm: 2.5 },
             direction: 'rtl',
           }}
         >
@@ -179,7 +376,12 @@ const Subcategory = () => {
             <Card
               key={item.id}
               sx={{
-                height: '320px',
+                display: 'flex',
+                flexDirection: { xs: 'row', sm: 'column' },
+                height: { 
+                  xs: '200px', 
+                  sm: '320px' 
+                },
                 borderRadius: '10px',
                 overflow: 'hidden',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
@@ -193,15 +395,17 @@ const Subcategory = () => {
               <CardActionArea
                 onClick={() => handleItemClick(item.id)}
                 sx={{
-                  height: '100%',
                   display: 'flex',
-                  flexDirection: 'column',
+                  flexDirection: { xs: 'row', sm: 'column' },
+                  width: '100%',
+                  height: '100%',
                 }}
               >
                 <CardMedia
                   component="img"
                   sx={{
-                    height: '240px',
+                    width: { xs: '40%', sm: '100%' },
+                    height: { xs: '200px', sm: '240px' },
                     objectFit: 'cover',
                   }}
                   image={item.image}
@@ -209,8 +413,8 @@ const Subcategory = () => {
                 />
                 <CardContent
                   sx={{
+                    flex: 1,
                     p: 1.5,
-                    height: '100px',
                     backgroundColor: '#fff',
                     direction: 'rtl',
                     display: 'flex',
