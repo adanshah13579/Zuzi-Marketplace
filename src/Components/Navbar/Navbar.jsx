@@ -443,15 +443,15 @@ const Navbar = () => {
         
         {/* Left Side - User actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.7 }}>
-          <IconButton onClick={() => navigate('/chat')}>
+          <IconButton onClick={() => navigate('/chat')} sx={{  color:"#36454F" ,fontSize:25}}>
             <Badge badgeContent={2} color="error">
               <IoChatboxOutline sx={{ color:"#36454F" }} />
             </Badge>
           </IconButton>
-          <IconButton onClick={() => navigate('/favorites')}>
-            <FaRegHeart sx={{  color:"#36454F" }} />
+          <IconButton onClick={() => navigate('/favorites')} sx={{  color:"#36454F" ,fontSize:25}}>
+            <FaRegHeart  />
           </IconButton>
-          <IconButton onClick={handleProfileMenuOpen}>
+          <IconButton onClick={handleProfileMenuOpen} >
             <Avatar sx={{ bgcolor: "#fff", color:"#36454F",width: 30, height: 30,border:"1px solid  #6C757D " }}>
               <PersonIcon />
             </Avatar>
