@@ -79,6 +79,9 @@ const Subcategory = () => {
   const handleItemClick = (itemId) => {
     navigate(`/product/${itemId}`);
   };
+
+
+
   const inputStyle = {
   width: '100%',
   padding: '10px',
@@ -123,7 +126,7 @@ const toggleFilterTile = (field, value) => {
 <Box
   sx={{
     width: { xs: '100%', sm: '30%', md: '20%', lg: 280 },
-    backgroundColor: '#fff',
+    backgroundColor: '#f4c724',
     p: 2,
     border: "1px solid #36454F",
     borderRadius: 2,
@@ -137,7 +140,7 @@ const toggleFilterTile = (field, value) => {
     נדל״ן
   </Typography>
 
-  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+  <Box sx={{ display: 'flex', gap: 1, mb: 2 ,backgroundColor:"#f4c724"}}>
     <input
       type="number"
       name="minPrice"
@@ -156,7 +159,7 @@ const toggleFilterTile = (field, value) => {
     />
   </Box>
 
-  <Accordion>
+  <Accordion sx={{borderRadius:2,backgroundColor:"#f4c724",mb:1}} >
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography>עיר / רחוב / מילות מפתח</Typography>
     </AccordionSummary>
@@ -172,27 +175,34 @@ const toggleFilterTile = (field, value) => {
     </AccordionDetails>
   </Accordion>
 
-  <Accordion>
+  <Accordion sx={{borderRadius:2,backgroundColor:"#f4c724",mb:1}}>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography>סוג עסקה</Typography>
     </AccordionSummary>
     <AccordionDetails>
       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         {['מכירה', 'השכרה'].map((type) => (
-          <Chip
-            key={type}
-            label={type}
-            clickable
-            onClick={() => toggleFilterTile('transactionType', type)}
-            color={filters.transactionType === type ? 'primary' : 'default'}
-            variant={filters.transactionType === type ? 'filled' : 'outlined'}
-          />
+         <Chip
+  key={type}
+  label={type}
+  clickable
+  onClick={() => toggleFilterTile('transactionType', type)}
+  sx={{
+    backgroundColor: filters.transactionType === type ? 'black' : 'white',
+    color: filters.transactionType === type ? 'white' : 'black',
+    border: '1px solid black',
+    '&:hover': {
+      backgroundColor: filters.transactionType === type ? '#333' : '#f0f0f0',
+    },
+  }}
+/>
+
         ))}
       </Box>
     </AccordionDetails>
   </Accordion>
 
-  <Accordion>
+  <Accordion sx={{borderRadius:2,backgroundColor:"#f4c724",mb:1}}>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography>סוג נכס</Typography>
     </AccordionSummary>
@@ -200,19 +210,26 @@ const toggleFilterTile = (field, value) => {
       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         {['דירה', 'בית פרטי', 'מגרש', 'מסחרי'].map((type) => (
           <Chip
-            key={type}
-            label={type}
-            clickable
-            onClick={() => toggleFilterTile('propertyType', type)}
-            color={filters.propertyType === type ? 'primary' : 'default'}
-            variant={filters.propertyType === type ? 'filled' : 'outlined'}
-          />
+  key={type}
+  label={type}
+  clickable
+  onClick={() => toggleFilterTile('propertyType', type)}
+  sx={{
+    backgroundColor: filters.propertyType === type ? 'black' : 'white',
+    color: filters.propertyType === type ? 'white' : 'black',
+    border: '1px solid black',
+    '&:hover': {
+      backgroundColor: filters.propertyType === type ? '#333' : '#f0f0f0',
+    },
+  }}
+/>
+
         ))}
       </Box>
     </AccordionDetails>
   </Accordion>
 
-  <Accordion>
+  <Accordion sx={{borderRadius:2,backgroundColor:"#f4c724"}}>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography>מספר חדרים</Typography>
     </AccordionSummary>

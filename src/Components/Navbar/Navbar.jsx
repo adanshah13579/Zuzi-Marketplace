@@ -344,82 +344,55 @@ const Navbar = () => {
           minHeight: isMobile ? "64px" : "64px",
         }}
       >
-        {isMobile && (
-          <>
-            <IconButton
-              onClick={toggleDrawer(true)}
-              sx={{ order: 1, color: "#36454F ", fontSize: 34, pt: 1 ,fontWeight:900}}
-            >
-              < SlMenu sx={{ color: "#36454F " }} />
+      {isMobile && (
+<Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    px: 1,
+    height: 56,
+    backgroundColor: "white",
+    borderBottom: "1px solid #eee",
+    width: "100vw",
+    direction: "rtl", // 👈 This is key for RTL layout
+  }}
+>
+  {/* Logo on the RIGHT in RTL */}
+  <Box sx={{ display: "flex", alignItems: "center" }}>
+    <img src={zuziLogo} alt="Logo" style={{ height: 35,borderRadius:2 }} />
+  </Box>
 
-            </IconButton>
+  {/* Icons on the LEFT in RTL (they're still written in LTR order) */}
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <IconButton onClick={() => navigate("/favorites")} size="medium" sx={{ml:0}}>
+      <FaRegHeart />
+    </IconButton>
 
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flex: 1,
-                order: 2,
-                gap: 8,
-              }}
-            >
-              <Button
-                variant=""
-                size="small"
-                onClick={() => {
-                  handlePostAd();
-                  navigate("/post-ad");
-                }}
-                sx={{
-                  backgroundColor: "#fff",
-                  color: "#36454F ",
-                  borderRadius: "10px",
-                  minWidth: "auto",
-                  border: "2px solid #36454F ",
-                  padding: "6px 6px",
-                  mr: 3,
-                  "&:hover": {
-                    backgroundColor: colors.primary + "dd",
-                  },
-                  fontWeight: 900,
-                }}
-              >
-                <AddIcon fontSize="small" />
-              </Button>
+    <IconButton onClick={() => navigate("/chat")}size="medium"sx={{ml:1}} >
+      <TbMessageCircle />
+    </IconButton>
 
-              <Box
-                component="img"
-                src={zuziLogo}
-                alt="Zuzi Logo"
-                sx={{
-                  width: "38px",
-                  height: "38px",
-                  borderRadius: "10%",
-                  cursor: "pointer",
-                  zIndex: 2,
-                }}
-                onClick={() => navigate("/")}
-              />
+    <IconButton
+      onClick={() => {
+        handlePostAd();
+        navigate("/post-ad");
+      }}
+      size="small"
+      sx={{border:"1px solid #000",backgroundColor:"#f4c724",borderRadius:1,ml:1.2}}
+    >
+      <AddIcon   sx={{fontSize:12}}/>
+    </IconButton>
 
-              <IconButton
-                onClick={() => navigate("/favorites")}
-                size="small"
-                sx={{ ml: 3, fontSize: 34, color: "#36454F" }}
-              >
-                <FaRegHeart sx={{ color: "#36454F ", fontSize: "36px" }} />
-              </IconButton>
-            </Box>
+    <IconButton onClick={toggleDrawer(true)} size="medium">
+      <SlMenu />
+    </IconButton>
+  </Box>
+</Box>
 
-            <IconButton
-              onClick={() => navigate("/chat")}
-              size="medium"
-              sx={{ order: 3, fontSize: 36, color: "#36454F", pt: 1 }}
-            >
-              <TbMessageCircle sx={{}} />
-            </IconButton>
-          </>
-        )}
+
+)}
+
 
         {!isMobile && (
           <>
