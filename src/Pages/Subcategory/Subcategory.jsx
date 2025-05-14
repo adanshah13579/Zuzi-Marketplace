@@ -11,6 +11,9 @@ import {
   Chip,
   Collapse,
   IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import { 
   ExpandMore as ExpandMoreIcon, 
@@ -36,12 +39,7 @@ const Subcategory = () => {
     roomCount: '',
   });
 
-  const [openSections, setOpenSections] = useState({
-    mainCategory: true,
-    price: true,
-    realEstate: true,
-    additional: true
-  });
+
 
   const [appliedFilters, setAppliedFilters] = useState([]);
 
@@ -53,12 +51,7 @@ const Subcategory = () => {
     }));
   };
 
-  const toggleSection = (section) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
+ 
 
   const applyFilters = () => {
     const activeFilters = Object.entries(filters)
@@ -81,54 +74,29 @@ const Subcategory = () => {
     setAppliedFilters([]);
   };
 
-  const removeFilter = (filterToRemove) => {
-    const updatedAppliedFilters = appliedFilters.filter(f => f !== filterToRemove);
-    setAppliedFilters(updatedAppliedFilters);
-    
-    const filterKey = filterToRemove.split(':')[0].trim();
-    setFilters(prev => ({
-      ...prev,
-      [filterKey]: ''
-    }));
-  };
+  
 
   const handleItemClick = (itemId) => {
     navigate(`/product/${itemId}`);
   };
+  const inputStyle = {
+  width: '100%',
+  padding: '10px',
+  borderRadius: '6px',
+  border: '1px solid #36454F',
+  backgroundColor: 'white',
+  direction: 'rtl',
+};
 
-  const FilterSection = ({ title, section, children }) => (
-    <Box sx={{ mb: 2 }}>
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          cursor: 'pointer',
-          borderBottom: '1px solid rgba(0,0,0,0.1)',
-          pb: 1
-        }}
-        onClick={() => toggleSection(section)}
-      >
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            fontWeight: 600, 
-            color: 'black',
-            textAlign: 'right'
-          }}
-        >
-          {title}
-        </Typography>
-        {openSections[section] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </Box>
-      <Collapse in={openSections[section]}>
-        <Box sx={{ mt: 1 }}>
-          {children}
-        </Box>
-      </Collapse>
-    </Box>
-  );
+ 
 
+
+const toggleFilterTile = (field, value) => {
+  setFilters((prev) => ({
+    ...prev,
+    [field]: prev[field] === value ? '' : value,
+  }));
+};
   return (
     <Box
       sx={{
@@ -152,211 +120,144 @@ const Subcategory = () => {
         }}
       >
         {/* Filter Section */}
-        <Box
-          sx={{
-            width: { xs: '100%', sm: '30%', md: '25%',lg:"23%" },
-            backgroundColor: '#FFD700',
-            p: 2,
-            borderRadius: 2,
-            height: 'auto',
-            direction: 'rtl',
-          }}
-        >
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              fontWeight: 700, 
-              my: 2, 
-              textAlign: 'center', 
-              color: 'black' 
-            }}
-          >
-            סינון ומיון מוצרים
-          </Typography>
+<Box
+  sx={{
+    width: { xs: '100%', sm: '30%', md: '20%', lg: 280 },
+    backgroundColor: '#fff',
+    p: 2,
+    border: "1px solid #36454F",
+    borderRadius: 2,
+    direction: 'rtl',
+    mt:{xs:5,sm:0},
+ 
+  }}
+>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <FilterSection title="קטגוריה ראשית" section="mainCategory">
-              <input
-                type="text"
-                name="category"
-                value={filters.category}
-                onChange={handleFilterChange}
-                placeholder="בחר קטגוריה"
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  marginBottom: '8px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: 'white',
-                  direction: 'rtl',
-                }}
-              />
-            </FilterSection>
+  <Typography variant="h6" sx={{ fontWeight: 700, my: 2, textAlign: 'center', color: 'black' }}>
+    נדל״ן
+  </Typography>
 
-            <FilterSection title="מחיר" section="price">
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <input
-                  type="number"
-                  name="minPrice"
-                  value={filters.minPrice}
-                  onChange={handleFilterChange}
-                  placeholder="מחיר מינ'"
-                  style={{
-                    width: '50%',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    backgroundColor: 'white',
-                    direction: 'rtl',
-                  }}
-                />
-                <input
-                  type="number"
-                  name="maxPrice"
-                  value={filters.maxPrice}
-                  onChange={handleFilterChange}
-                  placeholder="מחיר מקס'"
-                  style={{
-                    width: '50%',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    backgroundColor: 'white',
-                    direction: 'rtl',
-                  }}
-                />
-              </Box>
-            </FilterSection>
+  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+    <input
+      type="number"
+      name="minPrice"
+      placeholder="מחיר מינימלי"
+      value={filters.minPrice}
+      onChange={handleFilterChange}
+      style={{ ...inputStyle, width: '50%' }}
+    />
+    <input
+      type="number"
+      name="maxPrice"
+      placeholder="מחיר מקסימלי"
+      value={filters.maxPrice}
+      onChange={handleFilterChange}
+      style={{ ...inputStyle, width: '50%' }}
+    />
+  </Box>
 
-            <FilterSection title="נדל״ן" section="realEstate">
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <input
-                  type="text"
-                  name="propertyType"
-                  value={filters.propertyType}
-                  onChange={handleFilterChange}
-                  placeholder="סוג נכס"
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    backgroundColor: 'white',
-                    direction: 'rtl',
-                  }}
-                />
-                <input
-                  type="number"
-                  name="roomCount"
-                  value={filters.roomCount}
-                  onChange={handleFilterChange}
-                  placeholder="מספר חדרים"
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    backgroundColor: 'white',
-                    direction: 'rtl',
-                  }}
-                />
-              </Box>
-            </FilterSection>
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>עיר / רחוב / מילות מפתח</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      <input
+        type="text"
+        name="search"
+        value={filters.search}
+        onChange={handleFilterChange}
+        placeholder="חפש..."
+        style={inputStyle}
+      />
+    </AccordionDetails>
+  </Accordion>
 
-            <FilterSection title="פרטים נוספים" section="additional">
-              <input
-                type="text"
-                name="location"
-                value={filters.location}
-                onChange={handleFilterChange}
-                placeholder="מיקום"
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  marginBottom: '8px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: 'white',
-                  direction: 'rtl',
-                }}
-              />
-              <input
-                type="text"
-                name="search"
-                value={filters.search}
-                onChange={handleFilterChange}
-                placeholder="חיפוש כללי"
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: 'white',
-                  direction: 'rtl',
-                }}
-              />
-            </FilterSection>
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>סוג עסקה</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+        {['מכירה', 'השכרה'].map((type) => (
+          <Chip
+            key={type}
+            label={type}
+            clickable
+            onClick={() => toggleFilterTile('transactionType', type)}
+            color={filters.transactionType === type ? 'primary' : 'default'}
+            variant={filters.transactionType === type ? 'filled' : 'outlined'}
+          />
+        ))}
+      </Box>
+    </AccordionDetails>
+  </Accordion>
 
-            <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
-              <Button 
-                variant="contained" 
-                onClick={applyFilters}
-                sx={{ 
-                  width: "100%", 
-                  mb: 1, 
-                  backgroundColor: 'black', 
-                  color: 'white',
-                  height: '48px',
-                  '&:hover': { backgroundColor: 'rgba(0,0,0,0.8)' }
-                }}
-              >
-                החל סינון
-              </Button>
-              <Button 
-                variant="outlined" 
-                onClick={resetFilters}
-                sx={{ 
-                  width: "100%", 
-                  borderColor: 'black', 
-                  color: 'black',
-                  height: '48px',
-                  '&:hover': { backgroundColor: 'rgba(0,0,0,0.1)' }
-                }}
-              >
-                נקה הכל
-              </Button>
-            </Box>
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>סוג נכס</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+        {['דירה', 'בית פרטי', 'מגרש', 'מסחרי'].map((type) => (
+          <Chip
+            key={type}
+            label={type}
+            clickable
+            onClick={() => toggleFilterTile('propertyType', type)}
+            color={filters.propertyType === type ? 'primary' : 'default'}
+            variant={filters.propertyType === type ? 'filled' : 'outlined'}
+          />
+        ))}
+      </Box>
+    </AccordionDetails>
+  </Accordion>
 
-            {appliedFilters.length > 0 && (
-              <Box mt={2}>
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    fontWeight: 600, 
-                    mb: 1, 
-                    color: 'black',
-                    textAlign: 'right'
-                  }}
-                >
-                  מסננים שנבחרו
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {appliedFilters.map((filter) => (
-                    <Chip
-                      key={filter}
-                      label={filter}
-                      onDelete={() => removeFilter(filter)}
-                      variant="outlined"
-                      color="primary"
-                      sx={{ direction: 'rtl' }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-        </Box>
+  <Accordion>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography>מספר חדרים</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      <input
+        type="number"
+        name="roomCount"
+        value={filters.roomCount}
+        onChange={handleFilterChange}
+        placeholder="לדוג׳ 3"
+        style={inputStyle}
+      />
+    </AccordionDetails>
+  </Accordion>
+
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      gap: 1,
+      mt: 3,
+      flexDirection: 'row-reverse',
+    }}
+  >
+    <Button
+      variant="contained"
+      onClick={applyFilters}
+      sx={{ backgroundColor: 'black', color: 'white', flex: 1,borderRadius:2 }}
+    >
+      התחלת חיפוש
+    </Button>
+    <Button
+      variant="outlined"
+      onClick={resetFilters}
+      sx={{ borderColor: 'black', color: 'black', flex: 1,borderRadius:2
+       }}
+    >
+      נקה הכל
+    </Button>
+  </Box>
+</Box>
+
+
+
+
 
         {/* Items Grid */}
         <Box

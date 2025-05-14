@@ -15,6 +15,8 @@ import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import InfoIcon from '@mui/icons-material/Info';
 import ProductCard from '../../Components/ProductDetails/ProductCard';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';  // Import ArrowBackIcon
+
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -87,11 +89,10 @@ const ProductDetails = () => {
     );
   }
 
-  // Get similar products (excluding current product)
-  const similarProducts = Object.values(sampleListings)
-    .flat()
-    .filter(item => item.id !== parseInt(id))
-    .slice(0, 5); // Show 5 similar products
+ const handleGoBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+ 
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -100,7 +101,7 @@ const ProductDetails = () => {
       <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         <Grid container spacing={4}  direction="row-reverse">
           {/* Image Slider */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} lg={20}>
             <Paper 
               elevation={3} 
               sx={{ 
@@ -183,7 +184,7 @@ const ProductDetails = () => {
           </Grid>
 
           {/* Product Details */}
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={7} lg={20}>
             <Box 
               sx={{ 
                 p: 3,
@@ -254,7 +255,7 @@ const ProductDetails = () => {
                 </Typography>
 
                 {/* Action Buttons */}
-                <Box
+               {isMobile && ( <Box
                   sx={{
                     display: 'flex',
                     gap: 1,
@@ -309,7 +310,35 @@ const ProductDetails = () => {
                       </IconButton>
                     </Tooltip>
                   </Box>
-                </Box>
+                </Box>)}
+                {!isMobile && (
+    <Box
+      sx={{
+        display: 'flex',
+        gap: 3,
+        justifyContent: 'center',
+        width: 'auto',
+      }}
+    >
+      <Tooltip title="חזור">
+        <IconButton
+          onClick={handleGoBack}
+          sx={{
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            width: '56px',
+            height: '56px',
+            
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.0)',
+              color:"#f4c724"
+            },
+          }}
+        >
+          <ArrowBackIcon sx={{ fontSize: 36 }} />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  )}
               </Box>
             </Box>
           </Grid>
