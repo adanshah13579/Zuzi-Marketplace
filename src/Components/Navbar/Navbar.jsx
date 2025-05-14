@@ -350,7 +350,8 @@ const Navbar = () => {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    px: 1,
+    pr: 1,
+    pl:0.5,
     height: 56,
     backgroundColor: "white",
     borderBottom: "1px solid #eee",
@@ -365,11 +366,20 @@ const Navbar = () => {
 
   {/* Icons on the LEFT in RTL (they're still written in LTR order) */}
   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-    <IconButton onClick={() => navigate("/favorites")} size="medium" sx={{ml:0}}>
+    <IconButton onClick={() => navigate("/favorites")} sx={{ml:0, padding: "3px",        // ↓ Padding reduced
+    width: 30,             // ↓ Width set
+    height: 30,            // ↓ Height set
+    minWidth: 0,           // ↓ Prevents expanding
+    minHeight: 0,}}>
       <FaRegHeart />
     </IconButton>
 
-    <IconButton onClick={() => navigate("/chat")}size="medium"sx={{ml:1}} >
+    <IconButton onClick={() => navigate("/chat")}sx={{ml:1, padding: "0px",        
+    width: 32,         
+    height: 32
+    ,            
+    minWidth: 0,           
+    minHeight: 0,}} >
       <TbMessageCircle />
     </IconButton>
 
@@ -378,8 +388,16 @@ const Navbar = () => {
         handlePostAd();
         navigate("/post-ad");
       }}
-      size="small"
-      sx={{border:"1px solid #000",backgroundColor:"#f4c724",borderRadius:1,ml:1.2}}
+   
+      sx={{  border: "1px solid #000",
+    backgroundColor: "#f4c724",
+    borderRadius: 1,
+    ml: 1.2,
+    padding: "2px",        // ↓ Padding reduced
+    width: 20,             // ↓ Width set
+    height: 20,            // ↓ Height set
+    minWidth: 0,           // ↓ Prevents expanding
+    minHeight: 0,}}
     >
       <AddIcon   sx={{fontSize:12}}/>
     </IconButton>
