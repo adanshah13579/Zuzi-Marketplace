@@ -31,15 +31,10 @@ import ChatIcon from "@mui/icons-material/Chat";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import zuziLogo from "../../assets/Zuzi.jpg";
 import colors from "../../Style/colors";
 import { categories } from "../../data/data";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
-import { IoChatboxOutline } from "react-icons/io5";
-import { CiMenuBurger } from "react-icons/ci";
+
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { FaRegHeart } from "react-icons/fa6";
 import { TbMessageCircle } from "react-icons/tb";
@@ -245,7 +240,7 @@ const Navbar = () => {
         </ListItem>
 
         {/* Favorites */}
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton
             onClick={() => {
               navigate("/favorites");
@@ -268,7 +263,7 @@ const Navbar = () => {
               sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
             />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
 
         <Divider sx={{ my: 1 }} />
 
@@ -299,7 +294,7 @@ const Navbar = () => {
         </ListItem>
 
         {/* Signup */}
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton
             onClick={() => {
               handleSignup();
@@ -322,7 +317,7 @@ const Navbar = () => {
               sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
             />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
       </List>
     </Box>
   );

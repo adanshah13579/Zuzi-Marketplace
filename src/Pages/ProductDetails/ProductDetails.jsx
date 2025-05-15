@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, IconButton, Grid, Divider, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, Paper, IconButton, Grid, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { sampleListings } from '../../data/data';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
@@ -14,9 +14,8 @@ import FloorIcon from '@mui/icons-material/Layers';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import InfoIcon from '@mui/icons-material/Info';
-import ProductCard from '../../Components/ProductDetails/ProductCard';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';  // Import ArrowBackIcon
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MobileProductView from './Mobileview';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -77,6 +76,10 @@ const ProductDetails = () => {
     setIsFavorite(false);
   };
 
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   if (!product) {
     return (
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -89,266 +92,207 @@ const ProductDetails = () => {
     );
   }
 
- const handleGoBack = () => {
-    navigate(-1); // Navigate back to the previous page
-  };
- 
-
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
       
-      <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        <Grid container spacing={4}  direction="row-reverse">
-          {/* Image Slider */}
-          <Grid item xs={12} md={6} lg={20}>
-            <Paper 
-              elevation={3} 
-              sx={{ 
-                position: 'relative',
-                height: '400px',
-                overflow: 'hidden',
-                borderRadius: 2
-              }}
-            >
-              <Box
-                component="img"
-                src={images[currentImageIndex]}
-                alt={product.name}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-              
-              {/* Navigation Arrows */}
-              <IconButton
-                onClick={handlePrevImage}
-                sx={{
-                  position: 'absolute',
-                  left: 10,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
-                  }
+      {isMobile ? (
+        // Mobile View with Tinder-like cards
+        <MobileProductView products={allProducts} currentProductId={id} />
+      ) : (
+        // Desktop View
+        <Box sx={{ flex: 1, p: 3, maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+          <Grid container spacing={4} direction="row-reverse">
+            {/* Image Slider */}
+            <Grid item xs={12} md={6} lg={20}>
+              <Paper 
+                elevation={3} 
+                sx={{ 
+                  position: 'relative',
+                  height: '400px',
+                  overflow: 'hidden',
+                  borderRadius: 2
                 }}
               >
-                <ArrowBackIosNewIcon />
-              </IconButton>
-              
-              <IconButton
-                onClick={handleNextImage}
-                sx={{
-                  position: 'absolute',
-                  right: 10,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
-                  }
-                }}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
-
-              {/* Image Dots */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: 20,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  display: 'flex',
-                  gap: 1
-                }}
-              >
-                {images.map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      backgroundColor: currentImageIndex === index ? 'primary.main' : 'white',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => setCurrentImageIndex(index)}
-                  />
-                ))}
-              </Box>
-            </Paper>
-          </Grid>
-
-          {/* Product Details */}
-          <Grid item xs={12} md={7} lg={20}>
-            <Box 
-              sx={{ 
-                p: 3,
-                borderRight: '1px solid',
-                borderColor: 'divider',
-                height: '100%'
-              }}
-            >
-              <Box sx={{ p: 2 }} dir="rtl">
-                <Typography variant="h4" gutterBottom>
-                  {product.name}
-                </Typography>
-
-                <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-                  ₪{formatPrice(product.price)}
-                </Typography>
-
-                <Typography variant="body1" paragraph>
-                  {product.description}
-                </Typography>
-
-                {/* Property Details */}
-                <Box sx={{ 
-                  display: 'flex', 
-                  gap: 1, 
-                  mb: 4,
-                  flexWrap: 'wrap',
-                  '& > *': {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1
-                  }
-                }}>
-                  <Box>
-                    <InfoIcon color="action" sx={{ fontSize: 20 }} />
-                    <Typography variant="body2" color="text.secondary">
-                      פרטי הנכס
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <BedIcon color="action" />
-                    <Typography variant="body2" color="text.secondary">
-                      {product.rooms || '3'} חדרים
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <FloorIcon color="action" />
-                    <Typography variant="body2" color="text.secondary">
-                      קומה {product.floor || '2'}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <SquareFootIcon color="action" />
-                    <Typography variant="body2" color="text.secondary">
-                      {product.size || '120'} מ"ר
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <LocalParkingIcon color="action" />
-                    <Typography variant="body2" color="text.secondary">
-                      {product.parking ? 'חניה' : 'ללא חניה'}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-                  מיקום: {product.location}
-                </Typography>
-
-                {/* Action Buttons */}
-               {isMobile && ( <Box
+                <Box
+                  component="img"
+                  src={images[currentImageIndex]}
+                  alt={product.name}
                   sx={{
-                    display: 'flex',
-                    gap: 1,
-                    justifyContent: 'center',
-                    mt: 4,
-                    flexDirection: isMobile ? 'column' : 'row',
-                    alignItems: 'center',
-                   
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
+                
+                {/* Navigation Arrows */}
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{
+                    position: 'absolute',
+                    left: 10,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                    }
                   }}
                 >
+                  <ArrowBackIosNewIcon />
+                </IconButton>
+                
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{
+                    position: 'absolute',
+                    right: 10,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                    }
+                  }}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+
+                {/* Image Dots */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 20,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    display: 'flex',
+                    gap: 1
+                  }}
+                >
+                  {images.map((_, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        backgroundColor: currentImageIndex === index ? 'primary.main' : 'white',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => setCurrentImageIndex(index)}
+                    />
+                  ))}
+                </Box>
+              </Paper>
+            </Grid>
+
+            {/* Product Details */}
+            <Grid item xs={12} md={7} lg={20}>
+              <Box 
+                sx={{ 
+                  p: 3,
+                  borderRight: '1px solid',
+                  borderColor: 'divider',
+                  height: '100%'
+                }}
+              >
+                <Box sx={{ p: 2 }} dir="rtl">
+                  <Typography variant="h4" gutterBottom>
+                    {product.name}
+                  </Typography>
+
+                  <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
+                    ₪{formatPrice(product.price)}
+                  </Typography>
+
+                  <Typography variant="body1" paragraph>
+                    {product.description}
+                  </Typography>
+
+                  {/* Property Details */}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    gap: 1, 
+                    mb: 4,
+                    flexWrap: 'wrap',
+                    '& > *': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1
+                    }
+                  }}>
+                    <Box>
+                      <InfoIcon color="action" sx={{ fontSize: 20 }} />
+                      <Typography variant="body2" color="text.secondary">
+                        פרטי הנכס
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <BedIcon color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {product.rooms || '3'} חדרים
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <FloorIcon color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        קומה {product.floor || '2'}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <SquareFootIcon color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {product.size || '120'} מ"ר
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <LocalParkingIcon color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {product.parking ? 'חניה' : 'ללא חניה'}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
+                    מיקום: {product.location}
+                  </Typography>
+
+                  {/* Back button for desktop */}
                   <Box
                     sx={{
                       display: 'flex',
                       gap: 3,
                       justifyContent: 'center',
-                      width: isMobile ? '100%' : 'auto',
+                      width: 'auto',
                     }}
                   >
-                    <Tooltip title={isFavorite ? "הסר מהמועדפים" : "הוסף למועדפים"}>
+                    <Tooltip title="חזור">
                       <IconButton
-                        onClick={handleFavorite}
+                        onClick={handleGoBack}
                         sx={{
                           backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                          width: isMobile ? '64px' : 56,
-                          height: isMobile ? '64px' : 56,
+                          width: '56px',
+                          height: '56px',
                           '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                            color: "#f4c724"
                           },
                         }}
                       >
-                        {isFavorite ? (
-                          <FavoriteIcon sx={{ color: 'primary.main', fontSize: isMobile ? 40 : 36 }} />
-                        ) : (
-                          <FavoriteBorderIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title="דלג למוצר הבא">
-                      <IconButton
-                        onClick={handleSkip}
-                        sx={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                          width: isMobile ? '64px' : 56,
-                          height: isMobile ? '64px' : 56,
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                          },
-                        }}
-                      >
-                        <ArrowCircleLeftIcon sx={{ fontSize: isMobile ? 40 : 36 }} />
+                        <ArrowBackIcon sx={{ fontSize: 36 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
-                </Box>)}
-                {!isMobile && (
-    <Box
-      sx={{
-        display: 'flex',
-        gap: 3,
-        justifyContent: 'center',
-        width: 'auto',
-      }}
-    >
-      <Tooltip title="חזור">
-        <IconButton
-          onClick={handleGoBack}
-          sx={{
-            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-            width: '56px',
-            height: '56px',
-            
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.0)',
-              color:"#f4c724"
-            },
-          }}
-        >
-          <ArrowBackIcon sx={{ fontSize: 36 }} />
-        </IconButton>
-      </Tooltip>
-    </Box>
-  )}
+                </Box>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
-
-        </Grid>
-      </Box>
+        </Box>
+      )}
 
       <Footer />
     </Box>
   );
 };
 
-export default ProductDetails; 
+export default ProductDetails;
