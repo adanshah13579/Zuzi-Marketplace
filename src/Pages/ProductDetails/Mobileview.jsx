@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Button,
+import {
+  Box,
+  Typography,
+  Paper,
+  IconButton,
   Fade
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -18,45 +18,32 @@ const MobileProductView = ({ products, currentProductId }) => {
   const [displayProducts, setDisplayProducts] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackType, setFeedbackType] = useState(null);
-  
-  // Format price with commas
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('he-IL').format(price);
   };
-  
-  // Find current product index
+
   useEffect(() => {
     if (products && products.length > 0) {
       const index = products.findIndex(item => item.id === parseInt(currentProductId));
       setCurrentIndex(index);
-      
-      // Set cards to display - current and next 2 products
-      const startIdx = index;
-      let cards = [];
-      for (let i = 0; i < 3; i++) {
-        const idx = (startIdx + i) % products.length;
-        cards.push(products[idx]);
-      }
-      setDisplayProducts(cards);
+      setDisplayProducts([products[index]]);
     }
   }, [products, currentProductId]);
 
   const swiped = (direction, productId) => {
     setLastDirection(direction);
-    
+
     if (direction === 'right') {
-      // Liked/favorited
       setFeedbackType('like');
       setShowFeedback(true);
     } else if (direction === 'left') {
-      // Skipped
       setFeedbackType('skip');
       setShowFeedback(true);
     }
-    
+
     setTimeout(() => {
       setShowFeedback(false);
-      // Find next product
       const currentIdx = products.findIndex(item => item.id === productId);
       const nextProduct = products[(currentIdx + 1) % products.length];
       navigate(`/product/${nextProduct.id}`);
@@ -82,8 +69,18 @@ const MobileProductView = ({ products, currentProductId }) => {
   };
 
   return (
-    <Box sx={{ position: 'relative', height: "90vh", overflow: 'hidden', width: '100%',py:10 }}>
-      {/* Swipe feedback overlay */}
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:' rgba(216, 218, 56, 0.2)',
+        overflow: 'hidden',
+        px: 2,
+      }}
+    >
+      {/* Feedback overlay */}
       <Fade in={showFeedback}>
         <Box
           sx={{
@@ -93,7 +90,6 @@ const MobileProductView = ({ products, currentProductId }) => {
             right: 0,
             bottom: 0,
             zIndex: 10,
-            
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -104,131 +100,151 @@ const MobileProductView = ({ products, currentProductId }) => {
             sx={{
               backgroundColor: 'white',
               borderRadius: '50%',
-              width: 100,
-              height: 100,
+              width: 120,
+              height: 120,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              boxShadow: '0px 6px 12px rgba(0,0,0,0.2)',
             }}
           >
             {feedbackType === 'like' ? (
-              <FavoriteIcon sx={{ fontSize: 60, color: '#f4c724' }} />
+              <FavoriteIcon sx={{ fontSize: 75, color: '#f4c724' }} />
             ) : (
-              <CloseIcon sx={{ fontSize: 60, color: 'red' }} />
+              <CloseIcon sx={{ fontSize: 75, color: 'red' }} />
             )}
           </Box>
         </Box>
       </Fade>
 
-      {/* Cards container */}
-      <Box sx={{ width: '100%', maxWidth: '360px',  margin: '1px auto' }}>
-        {displayProducts.map((product, index) => (
-          <TinderCard
-            className="swipe"
-            key={product.id}
-            onSwipe={(dir) => swiped(dir, product.id)}
-            onCardLeftScreen={() => outOfFrame(product.id)}
-            preventSwipe={['up', 'down']}
-          >
-            <Paper
-              elevation={4}
-              sx={{
-                position: 'absolute',
-                width: '100%',
-                height: '55vh',
-                borderRadius: 3,
-                overflow: 'hidden',
-                backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0) 50%), url(${product.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
-              {/* Property Details - Simplified and overlayed */}
-              <Box 
-                sx={{ 
-                  position: 'absolute',
-                  bottom: 0,
-                  width: '100%',
-                  p: 3, 
-                  color: 'white',
-                  direction: 'rtl',
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                }}
-              >
-                <Typography variant="h4" fontWeight="bold" gutterBottom>
-                  ₪{formatPrice(product.price)}
-                </Typography>
-                
-                <Typography variant="h5" gutterBottom>
-                  {product.name}
-                </Typography>
-                
-                <Typography variant="body1" sx={{ opacity: 0.9, maxHeight: '80px', overflow: 'hidden' }}>
-                  {product.description && product.description.length > 120 
-                    ? `${product.description.substring(0, 120)}...` 
-                    : product.description}
-                </Typography>
-              </Box>
-            </Paper>
-          </TinderCard>
-        ))}
-      </Box>
-      
-      {/* Tinder-style action buttons */}
+      {/* Card container */}
       <Box
         sx={{
-          position: 'absolute',
-          bottom: 100,
-          left: 0,
-          right: 0,
+          width: '100%',
+          maxWidth: { xs: '95%', sm: '400px' },
+          height: { xs: '92vh', sm: '92vh' },
           display: 'flex',
-          justifyContent: 'space-evenly',
-          px: 4,
+          justifyContent: 'center',
+          alignItems: 'center',
+          mt:40
         }}
       >
-        <Button
-          onClick={() => swipe('left')}
-          variant="contained"
-          startIcon={<CloseIcon sx={{color:"red"}}/>}
-          sx={{
-            backgroundColor: 'white',
-            color: '#000',
-            borderRadius: 3,
-            padding: '10px 24px',
-            fontWeight: 'bold',
-            boxShadow: 3,
-            border: '1px solid #000',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: '#ffebee',
-              border: '1px solid red',
-            },
-          }}
-        >
-          החלק שמאלה
-        </Button>
-        
-        <Button
-          onClick={() => swipe('right')}
-          variant="contained"
-          startIcon={<FavoriteIcon sx={{color:"#f4c724"}} />}
-          sx={{
-            backgroundColor: 'white',
-            color: '#000',
-            borderRadius: 3,
-            padding: '10px 24px',
-            fontWeight: 'bold',
-            boxShadow: 3,
-            border: '1px solid  #000',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: '#FFFFC5',
-              border: '1px solid ',
-            },
-          }}
-        >
-         החלק ימינה
-        </Button>
+        <Box sx={{ width: '100%', height: "100vh", position: 'relative' }}>
+          {displayProducts.map((product) => (
+            <Box key={product.id} sx={{ width: '100%', height: '100%', position: 'absolute' }}>
+              <TinderCard
+                className="swipe"
+                onSwipe={(dir) => swiped(dir, product.id)}
+                onCardLeftScreen={() => outOfFrame(product.id)}
+                preventSwipe={['up', 'down']}
+              >
+                <Paper
+                  elevation={12}
+                  sx={{
+                    width: '100%',
+                    height: '70vh',
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                  }}
+                >
+                  {/* Image section */}
+                  <Box
+                    sx={{
+                      flex: 1,
+                      backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0) 60%), url(${product.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        p: 3,
+                        color: 'white',
+                        direction: 'rtl',
+                        textShadow: '1px 1px 3px rgba(0,0,0,0.9)',
+                      }}
+                    >
+                      <Typography variant="h3" fontWeight="bold" gutterBottom>
+                        ₪{formatPrice(product.price)}
+                      </Typography>
+                      <Typography variant="h5" fontWeight="medium" gutterBottom>
+                        {product.name}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          opacity: 0.95,
+                          maxHeight: '80px',
+                          overflow: 'hidden',
+                          fontSize: '1rem',
+                          mb: 2,
+                        }}
+                      >
+                        {product.description && product.description.length > 120
+                          ? `${product.description.substring(0, 120)}...`
+                          : product.description}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Button section */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      backgroundColor: 'white',
+                      py: 2,
+                      borderTop: '1px solid rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    <IconButton
+                      onClick={() => swipe('left')}
+                      sx={{
+                        backgroundColor: 'white',
+                        width: 65,
+                        height: 65,
+                        boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                        border: '1px solid #ff1744',
+                        '&:hover': {
+                          backgroundColor: '#ffebee',
+                          transform: 'scale(1.05)',
+                          transition: 'transform 0.2s ease',
+                        },
+                      }}
+                    >
+                      <CloseIcon sx={{ fontSize: 35, color: '#ff1744' }} />
+                    </IconButton>
+
+                    <IconButton
+                      onClick={() => swipe('right')}
+                      sx={{
+                        backgroundColor: 'white',
+                        width: 65,
+                        height: 65,
+                        boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                        border: '1px solid #f4c724',
+                        '&:hover': {
+                          backgroundColor: '#FFFFC5',
+                          transform: 'scale(1.05)',
+                          transition: 'transform 0.2s ease',
+                        },
+                      }}
+                    >
+                      <FavoriteIcon sx={{ fontSize: 35, color: '#f4c724' }} />
+                    </IconButton>
+                  </Box>
+                </Paper>
+              </TinderCard>
+            </Box>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
