@@ -5,101 +5,61 @@ import {
   Box,
   Typography,
   Button,
-  Avatar,
-  Badge,
   IconButton,
   useTheme,
   useMediaQuery,
   Menu,
   MenuItem,
   ListItemIcon,
-  Paper,
   Fade,
   Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemButton,
-  Collapse,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SettingsIcon from "@mui/icons-material/Settings";
-import ChatIcon from "@mui/icons-material/Chat";
-import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import zuziLogo from "../../assets/Zuzi.jpg";
 import colors from "../../Style/colors";
 import { categories } from "../../data/data";
+import MobileNavbar from "./MobileNavbar";
 
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { FaRegHeart } from "react-icons/fa6";
 import { TbMessageCircle } from "react-icons/tb";
-import { SlMenu } from "react-icons/sl";
 
-const Navbar = () => {
+const Navbar = ({ activeCategory }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [categoryMenu, setCategoryMenu] = useState({
     anchorEl: null,
     category: null,
   });
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const [expandedCategory, setExpandedCategory] = useState(null);
-  const [activeCategory, setActiveCategory] = useState(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const categorySections = categories
-        .map((category) => {
-          const element = document.getElementById(`category-${category.id}`);
-          if (element) {
-            const rect = element.getBoundingClientRect();
-            return {
-              id: category.id,
-              top: rect.top,
-              bottom: rect.bottom,
-            };
-          }
-          return null;
-        })
-        .filter(Boolean);
+  // Get the current category ID from the URL
+  const getCurrentCategoryId = () => {
+    if (activeCategory) return activeCategory;
+    const pathParts = location.pathname.split('/');
+    if (pathParts[1] === 'category' && pathParts[2]) {
+      return parseInt(pathParts[2]);
+    }
+    return null;
+  };
 
-      const viewportHeight = window.innerHeight;
-      const viewportCenter = viewportHeight / 2;
-
-      const active = categorySections.find(
-        (section) =>
-          section.top <= viewportCenter && section.bottom >= viewportCenter
-      );
-
-      if (active) {
-        setActiveCategory(active.id);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const currentCategoryId = getCurrentCategoryId();
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Separate handlers for hover and click events
   const handleCategoryMenuOpen = (event, category) => {
-    // Close any previously open menu first
     if (categoryMenu.anchorEl && categoryMenu.category?.id === category.id) {
-      // If clicking the same category that's already open, close it
       handleMenuClose();
     } else {
-      // Otherwise open the new category menu
       setCategoryMenu({
         anchorEl: event.currentTarget,
         category,
@@ -129,475 +89,167 @@ const Navbar = () => {
   };
 
   const handlePostAd = () => {
-    navigate("/post-ad"); // Navigate to the post ad page
+    navigate("/post-ad");
   };
 
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-    setMobileDrawerOpen(open);
-  };
-
-  const drawerContent = (
-    <Box
-      sx={{
-        width: 250,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        overflowY: "auto",
-        direction: "rtl", // RTL support
-      }}
-      role="presentation"
-      onClick={(e) => e.stopPropagation()}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <Divider sx={{ my: 1 }} />
-
-        {categories.map((category) => (
-          <Box key={category.id}>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  // Navigate to category page
-                  navigate(`/category/${category.id}`);
-
-                  // Toggle expanded state for subcategories
-                  setExpandedCategory((prev) =>
-                    prev === category.id ? null : category.id
-                  );
-                }}
-                sx={{ flexDirection: "row-reverse" }}
-              >
-                <ListItemText
-                  primary={category.name}
-                  sx={{
-                    color:
-                      activeCategory === category.id
-                        ? colors.primary
-                        : colors.secondary,
-                    fontWeight: activeCategory === category.id ? 700 : 400,
-                    textAlign: "right",
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-
-            {expandedCategory === category.id &&
-              category.subcategories?.length > 0 && (
-                <List component="div" disablePadding sx={{ pr: 2 }}>
-                  {category.subcategories.map((sub) => (
-                    <ListItemButton
-                      key={sub.id}
-                      sx={{ flexDirection: "row-reverse", pr: 2 }}
-                      onClick={() => {
-                        navigate(`/category/${category.id}/${sub.id}`);
-                        setMobileDrawerOpen(false);
-                      }}
-                    >
-                      <ListItemText
-                        primary={sub.name}
-                        sx={{ textAlign: "right" }}
-                      />
-                    </ListItemButton>
-                  ))}
-                </List>
-              )}
-          </Box>
-        ))}
-
-        <Divider sx={{ my: 1 }} />
-
-        {/* Profile */}
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              navigate("/profile");
-              setMobileDrawerOpen(false);
-            }}
-            sx={{ flexDirection: "row-reverse" }}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: "flex-end",
-                minWidth: 0,
-                ml: 2,
-                order: 2, // Ensure icon is after text
-              }}
-            >
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="פרופיל"
-              sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
-            />
-          </ListItemButton>
-        </ListItem>
-
-        {/* Favorites */}
-        {/* <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              navigate("/favorites");
-              setMobileDrawerOpen(false);
-            }}
-            sx={{ flexDirection: "row-reverse" }}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: "flex-end",
-                minWidth: 0,
-                ml: 2,
-                order: 2, // Ensure icon is after text
-              }}
-            >
-              <FavoriteIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="פריטים מועדפים"
-              sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
-            />
-          </ListItemButton>
-        </ListItem> */}
-
-        <Divider sx={{ my: 1 }} />
-
-        {/* Login */}
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              handleLogin();
-              setMobileDrawerOpen(false);
-            }}
-            sx={{ flexDirection: "row-reverse" }}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: "flex-end",
-                minWidth: 0,
-                ml: 2,
-                order: 2, // Ensure icon is after text
-              }}
-            >
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="התחברות"
-              sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
-            />
-          </ListItemButton>
-        </ListItem>
-
-        {/* Signup */}
-        {/* <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              handleSignup();
-              setMobileDrawerOpen(false);
-            }}
-            sx={{ flexDirection: "row-reverse" }}
-          >
-            <ListItemIcon
-              sx={{
-                justifyContent: "flex-end",
-                minWidth: 0,
-                ml: 2,
-                order: 2, // Ensure icon is after text
-              }}
-            >
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="הרשמה"
-              sx={{ textAlign: "right", order: 1 }} // Ensure text is before icon
-            />
-          </ListItemButton>
-        </ListItem> */}
-      </List>
-    </Box>
-  );
+  if (isMobile) {
+    return (
+      <MobileNavbar 
+        categories={categories}
+        handleCategoryClick={handleCategoryClick}
+        activeCategory={currentCategoryId}
+        handlePostAd={handlePostAd}
+      />
+    );
+  }
 
   return (
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: "white",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        direction: "rtl",
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        direction: 'rtl',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+          zIndex: 0,
+        }
       }}
     >
       <Toolbar
         sx={{
-          justifyContent: "space-between",
-          padding: isMobile ? "0 8px" : "0 16px",
-          position: "relative",
-          minHeight: isMobile ? "64px" : "64px",
+          justifyContent: 'space-between',
+          padding: '0 16px',
+          position: 'relative',
+          minHeight: '64px',
+          zIndex: 1,
         }}
       >
-      {isMobile && (
-<Box
-  sx={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    pr: 1,
-    pl:0.5,
-    height: 56,
-    backgroundColor: "white",
-    borderBottom: "1px solid #eee",
-    width: "100vw",
-    direction: "rtl", // 👈 This is key for RTL layout
-  }}
->
-  {/* Logo on the RIGHT in RTL */}
-  <Box sx={{ display: "flex", alignItems: "center" }}>
-    <img src={zuziLogo} alt="Logo" style={{ height: 35,borderRadius:2 }} />
-  </Box>
+        {/* Right Side - Logo */}
+        <Box
+          component="img"
+          src={zuziLogo}
+          alt="Zuzi Logo"
+          sx={{
+            width: "50px",
+            height: "auto",
+            borderRadius: "10%",
+            cursor: "pointer",
+            zIndex: 2,
+          }}
+          onClick={() => navigate("/")}
+        />
 
-  {/* Icons on the LEFT in RTL (they're still written in LTR order) */}
-  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-    <IconButton onClick={() => navigate("/favorites")} sx={{ml:0, padding: "3px",        // ↓ Padding reduced
-    width: 30,             // ↓ Width set
-    height: 30,            // ↓ Height set
-    minWidth: 0,           // ↓ Prevents expanding
-    minHeight: 0,}}>
-      <FaRegHeart />
-    </IconButton>
-
-    <IconButton onClick={() => navigate("/chat")}sx={{ml:1, padding: "0px",        
-    width: 32,         
-    height: 32
-    ,            
-    minWidth: 0,           
-    minHeight: 0,}} >
-      <TbMessageCircle />
-    </IconButton>
-
-    <IconButton
-      onClick={() => {
-        handlePostAd();
-        navigate("/post-ad");
-      }}
-   
-      sx={{  border: "1px solid #000",
-    backgroundColor: "#f4c724",
-    borderRadius: 1,
-    ml: 1.2,
-    padding: "2px",        // ↓ Padding reduced
-    width: 20,             // ↓ Width set
-    height: 20,            // ↓ Height set
-    minWidth: 0,           // ↓ Prevents expanding
-    minHeight: 0,}}
-    >
-      <AddIcon   sx={{fontSize:12}}/>
-    </IconButton>
-
-    <IconButton onClick={toggleDrawer(true)} size="medium">
-      <SlMenu />
-    </IconButton>
-  </Box>
-</Box>
-
-
-)}
-
-
-        {!isMobile && (
-          <>
-            {/* Right Side - Logo */}
-            <Box
-              component="img"
-              src={zuziLogo}
-              alt="Zuzi Logo"
-              sx={{
-                width: "50px",
-                height: "auto",
-                borderRadius: "10%",
-                cursor: "pointer",
-                zIndex: 2,
-              }}
-              onClick={() => navigate("/")}
-            />
-
-            <Box sx={{ display: "flex", justifyContent: "center", flex: 1 }}>
-              <Box sx={{ display: "flex", gap: 1 }}>
-                {categories.map((category) => (
-                  <Button
-                    key={category.id}
-                    onClick={() => handleCategoryClick(category.id)}
-                    onMouseEnter={(e) => handleCategoryMenuOpen(e, category)}
-                    sx={{
-                      color:
-                        activeCategory === category.id
-                          ? colors.primary
-                          : colors.secondary,
-                      fontSize: "0.9rem",
-                      fontWeight: activeCategory === category.id ? 700 : 400,
-                      "&:hover": {
-                        color: colors.primary,
-                      },
-                    }}
-                  >
-                    {category.name}
-                  </Button>
-                ))}
-              </Box>
-            </Box>
-
-            {/* Left Side - User actions */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <IconButton
-                onClick={() => navigate("/chat")}
-                sx={{
-                  color: "#36454F",
-                  fontSize: 25,
-                 
-                  "&:hover": {
-                    color: "#f4c724",
-                    backgroundColor: "transparent", 
-                  }, 
-                }}
-              >
-               
-                  <TbMessageCircle sx={{ color: "#36454F",  }} />
-               
-              </IconButton>
-              <IconButton
-                onClick={() => navigate("/favorites")}
-                sx={{
-                  color: "#36454F",
-                  fontSize: 23,
-                  "&:hover": { color: "#f4c724",
-                    backgroundColor: "transparent", },
-                }}
-              >
-                <FaRegHeart />
-              </IconButton>
-              <IconButton
-                onClick={handleProfileMenuOpen}
-                sx={{
-                  color: "#36454F",
-                   "&:hover": { color: "#f4c724",backgroundColor: "transparent", },
-                  // Yellow on hover
-                }}
-              >
-                <PermIdentityOutlinedIcon
-                  sx={{
-                    fontSize: 28,
-                    color: "#36454F",
-                    "&:hover": { color: "#f4c724",backgroundColor: "transparent", },
-                  }}
-                />
-              </IconButton>
-
+        <Box sx={{ display: "flex", justifyContent: "center", flex: 1 }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {categories.map((category) => (
               <Button
-                startIcon={<AddIcon />}
-                onClick={() => {
-                  handlePostAd();
-                  navigate("/select-category");
-                }}
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
+                onMouseEnter={(e) => handleCategoryMenuOpen(e, category)}
                 sx={{
-                  background: "#f4c724",
-                  color: "#000",
-                  border: "1px solid #f4c724",
-                  borderRadius: "0.6rem",
-                  gap: 0.8,
-                  mr: 1,
-                  padding: "6px 9px",
-                  height: "28px",
-                  fontSize: "0.6rem",
-                  fontWeight: 600,
-                  boxShadow: "0 0.7em 1.5em -0.5em rgba(57, 62, 70, 0.05)",
-                  textTransform: "none",
+                  color: currentCategoryId === category.id ? colors.primary : colors.secondary,
+                  fontSize: "0.9rem",
+                  fontWeight: currentCategoryId === category.id ? 700 : 400,
                   "&:hover": {
-                    background: "#fff",
-                    boxShadow: "0 0.5em 1.5em -0.5em #393e4698",
-                    color: "#000",
-                  },
-                  "&:active": {
-                    boxShadow: "0 0.3em 1em -0.5em #393e4698",
+                    color: colors.primary,
                   },
                 }}
               >
-                פרסם מודעה
+                {category.name}
               </Button>
-            </Box>
-          </>
-        )}
+            ))}
+          </Box>
+        </Box>
 
-        {/* Mobile Categories Row */}
-        {isMobile && (
-          <Box
+        {/* Left Side - User actions */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+            onClick={() => navigate("/chat")}
             sx={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              backgroundColor: "white",
-              borderTop: "1px solid rgba(0,0,0,0.1)",
-              padding: "8px 0",
-              overflowX: "auto",
-              whiteSpace: "nowrap",
-              "&::-webkit-scrollbar": { display: "none" },
-              msOverflowStyle: "none",
-              scrollbarWidth: "none",
+              color: "#36454F",
+              fontSize: 26.5,
+              "&:hover": {
+                color: "#f4c724",
+                backgroundColor: "transparent", 
+              }, 
             }}
           >
-            <Box
+            <TbMessageCircle sx={{ color: "#36454F" }} />
+          </IconButton>
+          <IconButton
+            onClick={() => navigate("/favorites")}
+            sx={{
+              color: "#36454F",
+              fontSize: 24,
+              "&:hover": { 
+                color: "#f4c724",
+                backgroundColor: "transparent", 
+              },
+            }}
+          >
+            <FaRegHeart />
+          </IconButton>
+          <IconButton
+            onClick={handleProfileMenuOpen}
+            sx={{
+              color: "#36454F",
+              "&:hover": { 
+                color: "#f4c724",
+                backgroundColor: "transparent", 
+              },
+            }}
+          >
+            <PermIdentityOutlinedIcon
               sx={{
-                display: "flex",
-                gap: 1,
-                padding: "0 8px",
+                fontSize: 29,
+                color: "#36454F",
+                "&:hover": { 
+                  color: "#f4c724",
+                  backgroundColor: "transparent", 
+                },
               }}
-            >
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  onClick={() => {
-                    // On mobile, clicking the category should also navigate
-                    handleCategoryClick(category.id);
-                    // Show dropdown for subcategories
-                    handleCategoryMenuOpen(
-                      {
-                        currentTarget:
-                          document.getElementById(
-                            `mobile-cat-${category.id}`
-                          ) || null,
-                      },
-                      category
-                    );
-                  }}
-                  id={`mobile-cat-${category.id}`}
-                  endIcon={<ExpandMoreIcon />}
-                  sx={{
-                    color:
-                      activeCategory === category.id
-                        ? colors.primary
-                        : colors.secondary,
-                    fontSize: "0.9rem",
-                    fontWeight: activeCategory === category.id ? 700 : 400,
-                    whiteSpace: "nowrap",
-                    minWidth: "auto",
-                    padding: "4px 8px",
-                    borderRadius: "10px",
-                    border: `1px solid ${colors.secondary}20`,
-                    "&:hover": {
-                      backgroundColor: colors.primary + "10",
-                      borderColor: colors.primary,
-                    },
-                  }}
-                >
-                  {category.name}
-                </Button>
-              ))}
-            </Box>
-          </Box>
-        )}
+            />
+          </IconButton>
+
+          <Button
+            startIcon={<AddIcon />}
+            onClick={() => {
+              handlePostAd();
+              navigate("/select-category");
+            }}
+            sx={{
+              background: "#f4c724",
+              color: "#000",
+              border: "1px solid #f4c724",
+              borderRadius: "0.4rem",
+              gap: 0.7,
+              mr: 1,
+              padding: "6.5px 9px",
+              height: "22px",
+              fontSize: "0.5rem",
+              fontWeight: 600,
+              boxShadow: "0 0.7em 1.5em -0.5em rgba(57, 62, 70, 0.05)",
+              textTransform: "none",
+              "&:hover": {
+                background: "#fff",
+                boxShadow: "0 0.5em 1.5em -0.5em #393e4698",
+                color: "#000",
+              },
+              "&:active": {
+                boxShadow: "0 0.3em 1em -0.5em #393e4698",
+              },
+            }}
+          >
+            פרסם מודעה
+          </Button>
+        </Box>
       </Toolbar>
 
       {/* Category Dropdown Menu */}
@@ -606,7 +258,7 @@ const Navbar = () => {
         open={Boolean(categoryMenu.anchorEl)}
         onClose={handleMenuClose}
         MenuListProps={{
-          onMouseLeave: handleMenuClose, // Close menu when mouse leaves
+          onMouseLeave: handleMenuClose,
         }}
         TransitionComponent={Fade}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
@@ -624,18 +276,40 @@ const Navbar = () => {
       >
         {categoryMenu.category && (
           <Box sx={{ maxHeight: 400, overflowY: "auto", direction: "rtl" }}>
-            <Typography
-              variant="subtitle1"
+            <MenuItem
+              onClick={() => {
+                // Navigate to the first subcategory of the main category
+                if (categoryMenu.category.subcategories && categoryMenu.category.subcategories.length > 0) {
+                  navigate(`/category/${categoryMenu.category.id}/${categoryMenu.category.subcategories[0].id}`);
+                } else {
+                  navigate(`/category/${categoryMenu.category.id}`);
+                }
+                handleMenuClose();
+              }}
               sx={{
                 p: 2,
-                fontWeight: "bold",
-                color: colors.primary,
-                borderBottom: `1px solid ${colors.primary}20`,
                 textAlign: "right",
+                backgroundColor: currentCategoryId === categoryMenu.category.id ? colors.primary + "20" : "transparent",
+                "&:hover": {
+                  backgroundColor: colors.primary + "20",
+                  transform: "translateX(5px)",
+                  transition: "all 0.2s ease",
+                },
               }}
             >
-              {categoryMenu.category.name}
-            </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: "bold",
+                  color: currentCategoryId === categoryMenu.category.id ? colors.primary : "inherit",
+                  borderBottom: `1px solid ${colors.primary}20`,
+                  width: "100%",
+                  pb: 1,
+                }}
+              >
+                {categoryMenu.category.name}
+              </Typography>
+            </MenuItem>
             <Divider />
             {categoryMenu.category.subcategories.map((subcategory) => (
               <MenuItem
@@ -665,15 +339,6 @@ const Navbar = () => {
           </Box>
         )}
       </Menu>
-
-      {/* Mobile Drawer */}
-      <Drawer
-        anchor="right"
-        open={mobileDrawerOpen}
-        onClose={toggleDrawer(false)}
-      >
-        {drawerContent}
-      </Drawer>
 
       {/* Profile Menu */}
       <Menu

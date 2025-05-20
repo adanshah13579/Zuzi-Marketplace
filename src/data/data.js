@@ -18,6 +18,7 @@ export const categories = [
       { id: 105, name: 'נכסים מסחריים' }
     ]
   },
+  
   {
     id: 2,
         name: 'דירה להשכרה בחיפה',
