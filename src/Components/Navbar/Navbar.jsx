@@ -135,7 +135,7 @@ const Navbar = ({ activeCategory }) => {
           background: `
             radial-gradient(circle at 10% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
             radial-gradient(circle at 90% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
-            radial-gradient(circle at center, #FFE066 0%, #FFF8DC 100%)
+            radial-gradient(circle at center, rgba(255, 236, 139, 0.85) 0%, rgba(255, 248, 220, 0.85) 100%)
           `,
           animation: `${pulseGlow} 4s ease-in-out infinite`,
         }

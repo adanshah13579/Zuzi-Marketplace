@@ -94,7 +94,8 @@ const Favorites = () => {
             flexWrap: 'wrap',
             gap: 3,
             width: '100%',
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
+            flexDirection: 'row-reverse'
           }}>
             {favorites.map((product) => (
               <Box 

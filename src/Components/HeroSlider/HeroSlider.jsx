@@ -60,26 +60,16 @@ const HeroSection = () => {
         position: 'relative',
         overflow: 'hidden',
         // Base yellow gradient
-        background: 'linear-gradient(to bottom, #FFEC8B 0%, #FFF8DC 100%)',
+        background: 'linear-gradient(to bottom, rgba(255, 236, 139, 1) 100%, rgba(255, 248, 220, 0.87) 100%)',
         '&::before': {
           content: '""',
           position: 'absolute',
           width: '100%',
           height: '100%',
           background: `
-            radial-gradient(circle at 10% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
-            radial-gradient(circle at 90% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%)
+            radial-gradient(circle at 10% 100%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0) 60%),
+            radial-gradient(circle at 90% 100%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0) 60%)
           `,
-          zIndex: 0,
-          top: 0,
-          left: 0,
-        },
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)', 
           zIndex: 0,
           top: 0,
           left: 0,

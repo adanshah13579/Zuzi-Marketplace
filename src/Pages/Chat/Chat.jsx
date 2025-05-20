@@ -95,34 +95,12 @@ const Chat = () => {
         position="fixed"
         sx={{
           backgroundColor: 'white',
-                direction: 'ltr',
-
+          direction: 'ltr',
           boxShadow: 'none',
           borderBottom: `1px solid ${colors.primary}20`
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton
-              edge="start"
-              onClick={() => selectedChat && isMobile ? setSelectedChat(null) : navigate(-1)}
-              sx={{ color: colors.secondary }}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            <Typography
-              variant="h6"
-              sx={{
-                color: colors.secondary,
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontFamily: "'Poppins', sans-serif"
-              }}
-              onClick={() => navigate(-1)}
-            >
-              חזרה
-            </Typography>
-          </Box>
           <Box
             component="img"
             src={zuziLogo}
@@ -135,6 +113,27 @@ const Chat = () => {
             }}
             onClick={() => navigate('/')}
           />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: colors.secondary,
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontFamily: "'Poppins', sans-serif"
+              }}
+              onClick={() => navigate(-1)}
+            >
+              חזרה
+            </Typography>
+            <IconButton
+              edge="start"
+              onClick={() => selectedChat && isMobile ? setSelectedChat(null) : navigate(-1)}
+              sx={{ color: colors.secondary }}
+            >
+              <ArrowBackIcon sx={{ transform: 'scaleX(-1)' }} />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
