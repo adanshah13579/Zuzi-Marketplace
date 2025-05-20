@@ -13,7 +13,10 @@ import {
   Collapse,
   Typography,
   Button,
-  ListItemIcon
+  ListItemIcon,
+  keyframes,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -27,6 +30,18 @@ import { FaRegHeart } from "react-icons/fa6";
 import { TbMessageCircle } from "react-icons/tb";
 import { SlMenu } from "react-icons/sl";
 
+const pulseGlow = keyframes`
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.3;
+  }
+`;
+
 const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handlePostAd }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -35,6 +50,8 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
 
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [categoryMenuAnchor, setCategoryMenuAnchor] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Get the current category ID from the URL
   const getCurrentCategoryId = () => {
@@ -216,6 +233,22 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
     </Box>
   );
 
+  const handleCategoryMenuOpen = (category, event) => {
+    event.preventDefault();
+    setSelectedCategory(category);
+    setCategoryMenuAnchor(event.currentTarget);
+  };
+
+  const handleCategoryMenuClose = () => {
+    setCategoryMenuAnchor(null);
+    setSelectedCategory(null);
+  };
+
+  const handleSubcategoryClick = (categoryId, subcategoryId) => {
+    navigate(`/category/${categoryId}/${subcategoryId}`);
+    handleCategoryMenuClose();
+  };
+
   return (
     <>
     <Box
@@ -229,16 +262,32 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
         backgroundColor: "white",
         borderBottom: "1px solid #eee",
         width: "100vw",
-        direction: "rtl", // 👈 This is key for RTL layout
+        direction: "rtl",
+        position: "relative",
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+          zIndex: 0,
+          background: `
+            radial-gradient(circle at 10% 100%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0) 50%),
+            radial-gradient(circle at 90% 100%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0) 50%),
+            radial-gradient(circle at center, rgba(255, 236, 139, 0.3) 0%, rgba(255, 248, 220, 0.2) 100%)
+          `,
+          animation: `${pulseGlow} 4s ease-in-out infinite`,
+        }
       }}
     >
       {/* Logo on the RIGHT in RTL */}
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "center", position: "relative", zIndex: 1 }}>
         <img src={zuziLogo} alt="Logo" style={{ height: 35,borderRadius:2 }} />
       </Box>
 
-      {/* Icons on the LEFT in RTL (they're still written in LTR order) */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      {/* Icons on the LEFT in RTL */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, position: "relative", zIndex: 1 }}>
         <IconButton onClick={() => navigate("/favorites")} sx={{ml:0, padding: "3px",        // ↓ Padding reduced
         width: 30,             // ↓ Width set
         height: 30,            // ↓ Height set
@@ -284,18 +333,33 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
      {/* Mobile Categories Row */}
           <Box
             sx={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
+              position: "relative",
+              width: "100%",
               backgroundColor: "white",
               borderTop: "1px solid rgba(0,0,0,0.1)",
+              borderBottom: "1px solid rgba(0,0,0,0.1)",
               padding: "8px 0",
               overflowX: "auto",
               whiteSpace: "nowrap",
               "&::-webkit-scrollbar": { display: "none" },
               msOverflowStyle: "none",
               scrollbarWidth: "none",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: 0,
+                left: 0,
+                zIndex: -1,
+                background: `
+                  radial-gradient(circle at 10% 100%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0) 50%),
+                  radial-gradient(circle at 90% 100%, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0) 50%),
+                  radial-gradient(circle at center, rgba(255, 236, 139, 0.3) 0%, rgba(255, 248, 220, 0.2) 100%)
+                `,
+                opacity: 0.8
+              }
             }}
           >
             <Box
@@ -308,9 +372,7 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
               {categories.map((category) => (
                 <Button
                   key={category.id}
-                  onClick={() => {
-                    handleCategoryClick(category.id);
-                  }}
+                  onClick={(e) => handleCategoryMenuOpen(category, e)}
                   id={`mobile-cat-${category.id}`}
                   endIcon={<ExpandMoreIcon />}
                   sx={{
@@ -334,6 +396,85 @@ const MobileNavbar = ({ categories, handleCategoryClick, activeCategory, handleP
               ))}
             </Box>
           </Box>
+
+      {/* Category Dropdown Menu */}
+      <Menu
+        anchorEl={categoryMenuAnchor}
+        open={Boolean(categoryMenuAnchor)}
+        onClose={handleCategoryMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        PaperProps={{
+          sx: {
+            width: 250,
+            maxHeight: 400,
+            overflow: "hidden",
+            direction: "rtl",
+            "&::-webkit-scrollbar": { display: "none" },
+          },
+        }}
+      >
+        {selectedCategory && (
+          <Box sx={{ maxHeight: 400, overflowY: "auto", direction: "rtl" }}>
+            <MenuItem
+              onClick={() => {
+                navigate(`/category/${selectedCategory.id}`);
+                handleCategoryMenuClose();
+              }}
+              sx={{
+                p: 2,
+                textAlign: "right",
+                backgroundColor: currentCategoryId === selectedCategory.id ? colors.primary + "20" : "transparent",
+                "&:hover": {
+                  backgroundColor: colors.primary + "20",
+                  transform: "translateX(5px)",
+                  transition: "all 0.2s ease",
+                },
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: "bold",
+                  color: currentCategoryId === selectedCategory.id ? colors.primary : "inherit",
+                  borderBottom: `1px solid ${colors.primary}20`,
+                  width: "100%",
+                  pb: 1,
+                }}
+              >
+                {selectedCategory.name}
+              </Typography>
+            </MenuItem>
+            <Divider />
+            {selectedCategory.subcategories?.map((subcategory) => (
+              <MenuItem
+                key={subcategory.id}
+                onClick={() => handleSubcategoryClick(selectedCategory.id, subcategory.id)}
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  textAlign: "right",
+                  "&:hover": {
+                    backgroundColor: colors.primary + "20",
+                    transform: "translateX(5px)",
+                    transition: "all 0.2s ease",
+                  },
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {subcategory.name}
+                </Typography>
+              </MenuItem>
+            ))}
+          </Box>
+        )}
+      </Menu>
 
       {/* Mobile Drawer */}
       <Drawer

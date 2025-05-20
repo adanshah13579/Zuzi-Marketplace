@@ -6,10 +6,42 @@ import {
   Container,
   useMediaQuery,
   useTheme,
+  keyframes,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import colors from '../../Style/colors';
-import ptBg from '../../assets/ptbg.png';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const pulseGlow = keyframes`
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.3;
+  }
+`;
 
 const HeroSection = () => {
   const theme = useTheme();
@@ -20,7 +52,6 @@ const HeroSection = () => {
     <Box 
       sx={{
         width: '100%',
-        background: '#FFFDE7',
         minHeight: { xs: '40vh', sm: '45vh', md: '50vh' },
         display: 'flex',
         flexDirection: 'column',
@@ -28,35 +59,33 @@ const HeroSection = () => {
         padding: { xs: '2rem 1rem', sm: '3rem 2rem', md: '4rem 3rem' },
         position: 'relative',
         overflow: 'hidden',
-        backgroundImage: `url(${ptBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        // Base yellow gradient
+        background: 'linear-gradient(to bottom, #FFEC8B 0%, #FFF8DC 100%)',
         '&::before': {
           content: '""',
           position: 'absolute',
           width: '100%',
           height: '100%',
-          background: 'radial-gradient(circle at center, rgba(255,232,115,0.15) 0%, rgba(255,245,231,0) 70%)',
+          background: `
+            radial-gradient(circle at 10% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
+            radial-gradient(circle at 90% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%)
+          `,
+          zIndex: 0,
           top: 0,
           left: 0,
-          zIndex: 1,
-          pointerEvents: 'none',
-        }
-      }}
-    >
-      {/* Yellow glow effect in background */}
-      <Box
-        sx={{
+        },
+        '&::after': {
+          content: '""',
           position: 'absolute',
           width: '100%',
           height: '100%',
-          background: 'radial-gradient(circle at center, rgba(255,232,115,0.3) 0%, rgba(255,245,231,0) 70%)',
+          background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)', 
+          zIndex: 0,
           top: 0,
           left: 0,
-          zIndex: 0,
-        }}
-      />
-
+        }
+      }}
+    >
       <Container 
         maxWidth="lg"
         sx={{
@@ -78,6 +107,7 @@ const HeroSection = () => {
             color: '#000',
             mb: 2,
             letterSpacing: '-0.5px',
+            animation: `${fadeIn} 1s ease-out, ${slideUp} 1s ease-out`,
           }}
         >
           ZUZI
@@ -92,6 +122,7 @@ const HeroSection = () => {
             fontSize: { xs: '1.5rem', sm: '2rem', md: '2.25rem' },
             color: '#000',
             mb: 3,
+            animation: `${fadeIn} 1s ease-out 0.3s both, ${slideUp} 1s ease-out 0.3s both`,
           }}
         >
           חיים מודרניים
@@ -105,6 +136,7 @@ const HeroSection = () => {
             color: '#333',
             mb: 4,
             maxWidth: '75%',
+            animation: `${fadeIn} 1s ease-out 0.6s both, ${slideUp} 1s ease-out 0.6s both`,
           }}
         >
           קנייה אם אתם רוצים שתוכלו לשתף באותו אתר
@@ -115,8 +147,8 @@ const HeroSection = () => {
           variant="contained"
           onClick={() => navigate('/get-started')}
           sx={{
-            background: '#000',
-            color: '#E6C235',
+            background: '#F7D144',
+            color: '#000',
             fontWeight: 700,
             fontSize: { xs: '0.875rem', sm: '1rem' },
             borderRadius: '0.6rem',
@@ -124,17 +156,20 @@ const HeroSection = () => {
             textTransform: 'none',
             boxShadow: 'none',
             mb: 4,
+            animation: `${fadeIn} 1s ease-out 0.9s both, ${slideUp} 1s ease-out 0.9s both`,
+            transition: 'all 0.3s ease',
             '&:hover': {
               background: '#E6C235',
               boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              transform: 'translateY(-2px)',
+            },
+            '&:active': {
+              transform: 'translateY(0)',
             },
           }}
         >
           חח חיי המסע שלך
         </Button>
-
-        {/* Dot Navigation Indicators */}
-    
       </Container>
     </Box>
   );

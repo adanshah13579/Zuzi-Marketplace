@@ -13,6 +13,7 @@ import {
   ListItemIcon,
   Fade,
   Divider,
+  keyframes,
 } from "@mui/material";
 import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
@@ -27,6 +28,18 @@ import MobileNavbar from "./MobileNavbar";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { FaRegHeart } from "react-icons/fa6";
 import { TbMessageCircle } from "react-icons/tb";
+
+const pulseGlow = keyframes`
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.3;
+  }
+`;
 
 const Navbar = ({ activeCategory }) => {
   const theme = useTheme();
@@ -119,6 +132,12 @@ const Navbar = ({ activeCategory }) => {
           top: 0,
           left: 0,
           zIndex: 0,
+          background: `
+            radial-gradient(circle at 10% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
+            radial-gradient(circle at 90% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 35%),
+            radial-gradient(circle at center, #FFE066 0%, #FFF8DC 100%)
+          `,
+          animation: `${pulseGlow} 4s ease-in-out infinite`,
         }
       }}
     >
